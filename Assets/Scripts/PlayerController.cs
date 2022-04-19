@@ -7,11 +7,15 @@ public class PlayerController : MonoBehaviour
     //Movement
     public float speed;
     public float speedMod;
+    public float speedometer = 0;
     public float rotationMod;
     public float jumpPower;
     public float jumpNumber;
     float jumpsRemaining;
     private Rigidbody2D rb;
+    private Vector3 previousPosition;
+    private Vector3 currentPosition;
+    private int count;
     float moveVelocity = 0;
     public string state;
 
@@ -25,6 +29,11 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         state = "start";
+        if (previousPosition == null)
+        {
+            previousPosition = rb.transform.position;
+        }
+        count = 0;
     }
         void Update()
     {
@@ -34,8 +43,8 @@ public class PlayerController : MonoBehaviour
         {
             if (grounded || jumpsRemaining > 0)
             {
-                rb.velocity = new Vector2(rb.velocity.x, jumpPower);
-                rb.rotation = 15;
+                rb.AddForce(Vector2.up * jumpPower); // = new Vector2(rb.velocity.x, jumpPower);
+                rb.rotation += 15;
                 jumpsRemaining -= 1;
             }
         }
@@ -76,7 +85,9 @@ public class PlayerController : MonoBehaviour
                 rb.rotation -= rotationMod;
             }
         }
+        checkSpeed();
     }
+
     //Check if Grounded
     void isGrounded()
     {
@@ -90,5 +101,22 @@ public class PlayerController : MonoBehaviour
         {
             state = "airborn";
         }
+    }
+    void checkSpeed()
+    {
+        if (count > 10)
+        {
+            currentPosition = rb.transform.position;
+            Vector2 v1 = new Vector2(previousPosition.x, previousPosition.y);
+            Vector2 v2 = new Vector2(currentPosition.x, currentPosition.y);
+            speedometer = Vector2.Distance(v1, v2);
+            previousPosition = currentPosition;
+            count = 0;
+        }
+        else
+        {
+            count += 1;
+        }
+        
     }
 }
