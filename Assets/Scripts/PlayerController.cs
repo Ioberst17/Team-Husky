@@ -7,33 +7,54 @@ public class PlayerController : MonoBehaviour
     //Movement
     public float speed;
     public float speedMod;
-    public float speedometer = 0;
+    private float speedometer = 0;
     public float rotationMod;
     public float jumpPower;
     public float jumpNumber;
+
+    [SerializeField] private int startingHP;
+    private int HealthPoints;
+
     float jumpsRemaining;
     private Rigidbody2D rb;
+
+    //this is for personal use in checking speed
     private Vector3 previousPosition;
     private Vector3 currentPosition;
     private int count;
+
+
     float moveVelocity = 0;
-    public string state;
+    private string state;
 
     public Transform GroundChecker; // circle collider located under the player object, used to check if on the ground
     public LayerMask GroundLayer;
+    public LayerMask DeathPlane;
+
+    [SerializeField] private Transform spawnPoint;
+    
 
     //Grounded Vars
     bool grounded = true;
 
+    //Event reporting system
+    //public delegate void MyDelegate();
+    //public event MyDelegate onDeath;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        HealthPoints = startingHP;
         state = "start";
         if (previousPosition == null)
         {
             previousPosition = rb.transform.position;
         }
         count = 0;
+        if(state == "start")
+        {
+            //filler method to remove warnings for now
+        }
     }
         void Update()
     {
@@ -86,6 +107,11 @@ public class PlayerController : MonoBehaviour
             }
         }
         checkSpeed();
+        if (isDead())
+        {
+            Death();
+        }
+        
     }
 
     //Check if Grounded
@@ -102,6 +128,16 @@ public class PlayerController : MonoBehaviour
             state = "airborn";
         }
     }
+    //checks if player is dead
+    bool isDead()
+    {
+        if (Physics2D.OverlapCircle(GroundChecker.position, GroundChecker.GetComponent<CircleCollider2D>().radius, DeathPlane))
+            {
+            return true;
+            }
+        return false;
+    }
+
     void checkSpeed()
     {
         if (count > 10)
@@ -118,5 +154,18 @@ public class PlayerController : MonoBehaviour
             count += 1;
         }
         
+    }
+    
+    //reports the Death event
+    void Death()
+    {
+        //onDeath.Invoke();
+        Debug.Log("The Player Has died");
+        rb.velocity = new Vector2(0, 0);
+        rb.rotation = 0;
+        rb.transform.position = spawnPoint.position;
+
+        HealthPoints = startingHP;
+
     }
 }
