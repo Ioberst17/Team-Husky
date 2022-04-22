@@ -7,33 +7,40 @@ public class PlayerController : MonoBehaviour
     //Movement
     public float speed;
     public float speedMod;
-    private float speedometer = 0;
+    
     public float rotationMod;
     public float jumpPower;
     public float jumpNumber;
-
-    [SerializeField] private int startingHP;
-    private int HealthPoints;
-
     float jumpsRemaining;
     private Rigidbody2D rb;
+    private BoxCollider2D HurtBox;
+
+    //Number crunching variables
+    [SerializeField] private int startingHP;
+    public int HealthPoints;
+
 
     //this is for personal use in checking speed
+    private float speedometer = 0;
     private Vector3 previousPosition;
     private Vector3 currentPosition;
     private int count;
 
+    public UIController UIController;
 
     float moveVelocity = 0;
     private string state;
 
     public Transform GroundChecker; // circle collider located under the player object, used to check if on the ground
+
+    //Different Layers used
     public LayerMask GroundLayer;
     public LayerMask DeathPlane;
+    public LayerMask Enemies;
+
 
     [SerializeField] private Transform spawnPoint;
     
-
     //Grounded Vars
     bool grounded = true;
 
@@ -44,13 +51,18 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        HurtBox = GetComponent<BoxCollider2D>();
         HealthPoints = startingHP;
+        
         state = "start";
         if (previousPosition == null)
         {
             previousPosition = rb.transform.position;
         }
+        UIController.levelStart();
         count = 0;
+
+
         if(state == "start")
         {
             //filler method to remove warnings for now
@@ -106,6 +118,10 @@ public class PlayerController : MonoBehaviour
                 rb.rotation -= rotationMod;
             }
         }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            takeDamage(1);
+        }
         checkSpeed();
         if (isDead())
         {
@@ -131,7 +147,7 @@ public class PlayerController : MonoBehaviour
     //checks if player is dead
     bool isDead()
     {
-        if (Physics2D.OverlapCircle(GroundChecker.position, GroundChecker.GetComponent<CircleCollider2D>().radius, DeathPlane))
+        if (HurtBox.IsTouchingLayers(DeathPlane))
             {
             return true;
             }
@@ -154,6 +170,16 @@ public class PlayerController : MonoBehaviour
             count += 1;
         }
         
+    }
+    
+    public void takeDamage(int damageNumber)
+    {
+        HealthPoints -= damageNumber;
+        if(HealthPoints<= 0)
+        {
+            Death();
+        }
+        UIController.updateHealth();
     }
     
     //reports the Death event

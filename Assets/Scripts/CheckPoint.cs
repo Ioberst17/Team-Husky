@@ -16,8 +16,6 @@ public class CheckPoint : MonoBehaviour
     // called whenever another collider enters our zone (if layers match)
     void OnTriggerEnter2D(Collider2D collider)
     {
-
-
         // check we haven't been triggered yet!
         if (!triggered)
         {
