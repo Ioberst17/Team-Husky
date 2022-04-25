@@ -2,13 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CheckPoint : MonoBehaviour
+public class EndOfLevelController : MonoBehaviour
 {
-    // have we been triggered?
+    public PlayerController PlayerController;
+    public UIController UIController;
     bool triggered;
-
-    [SerializeField] private SpriteRenderer triggerIndicator;
-    [SerializeField] private Transform spawnPoint;
 
     void Awake()
     {
@@ -20,7 +18,7 @@ public class CheckPoint : MonoBehaviour
         // check we haven't been triggered yet!
         if (!triggered)
         {
-            
+
             if (collider.gameObject.layer
                 == LayerMask.NameToLayer("Player"))
             {
@@ -30,11 +28,9 @@ public class CheckPoint : MonoBehaviour
     }
     void Trigger()
     {
-        triggerIndicator.color = new Color(1, 0, 0, 1);
+        PlayerController.gameState = "levelComplete";
         triggered = true;
-        spawnPoint.transform.position = this.transform.position;
-        Debug.Log("Checkpoint Triggered");
+        Debug.Log("Level Over!");
     }
-    
-    
+
 }

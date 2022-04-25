@@ -7,17 +7,23 @@ public class PlayerController : MonoBehaviour
     //Movement
     public float speed;
     public float speedMod;
-    
+
     public float rotationMod;
     public float jumpPower;
     public float jumpNumber;
     float jumpsRemaining;
+
+    //getting references for different parts of the player entity
     private Rigidbody2D rb;
     private BoxCollider2D HurtBox;
 
     //Number crunching variables
     [SerializeField] private int startingHP;
     public int HealthPoints;
+
+    //sets the ammount of invincibility frames given after a hit and tracks them
+    [SerializeField] private int invincibilityValue;
+    private int invincibilityTimer = 0;
 
 
     //this is for personal use in checking speed
@@ -29,7 +35,12 @@ public class PlayerController : MonoBehaviour
     public UIController UIController;
 
     float moveVelocity = 0;
-    private string state;
+
+    //Holds the state of the game from among: running, paused, levelComplete
+    public string gameState;
+
+    //Holds the state of the game from among: grounded, airborn
+    public string playerState;
 
     public Transform GroundChecker; // circle collider located under the player object, used to check if on the ground
 
@@ -40,7 +51,7 @@ public class PlayerController : MonoBehaviour
 
 
     [SerializeField] private Transform spawnPoint;
-    
+
     //Grounded Vars
     bool grounded = true;
 
@@ -53,8 +64,8 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         HurtBox = GetComponent<BoxCollider2D>();
         HealthPoints = startingHP;
-        
-        state = "start";
+
+        playerState = "Start";
         if (previousPosition == null)
         {
             previousPosition = rb.transform.position;
@@ -63,71 +74,88 @@ public class PlayerController : MonoBehaviour
         count = 0;
 
 
-        if(state == "start")
+        if (playerState == "Start")
         {
             //filler method to remove warnings for now
         }
     }
-        void Update()
+
+
+    void Update()
     {
-        isGrounded();
-        //Jumping
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.W))
+        if (gameState != "Paused" && gameState != "levelComplete")
         {
-            if (grounded || jumpsRemaining > 0)
+            isGrounded();
+            //Jumping
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.W))
             {
-                rb.AddForce(Vector2.up * jumpPower); // = new Vector2(rb.velocity.x, jumpPower);
-                rb.rotation += 15;
-                jumpsRemaining -= 1;
-            }
-        }
-
-        if (moveVelocity < speed)
-        {
-            moveVelocity += speedMod / 10;
-        }else if (moveVelocity > speed)
-        {
-            moveVelocity -= speedMod / 10;
-        }
-
-        //Left Right Movement
-        if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && moveVelocity > speed/1.5)
-        {
-            moveVelocity = moveVelocity - speedMod;
-        }
-        if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && moveVelocity < speed*1.5)
-        {
-            moveVelocity = moveVelocity + speedMod;
-        }
-
-        rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
-
-        if (!grounded)
-        {
-            if (rb.rotation > 25)
-            {
-                rb.rotation = 25;
-            }
-            else if (rb.rotation < -25)
-            {
-                rb.rotation = -25;
+                if (grounded || jumpsRemaining > 0)
+                {
+                    rb.AddForce(Vector2.up * jumpPower); // = new Vector2(rb.velocity.x, jumpPower);
+                    rb.rotation += 15;
+                    jumpsRemaining -= 1;
+                }
             }
 
-            if (rb.rotation > -25)
+            //Controlls the base and maximum speed
+            if (moveVelocity < speed)
             {
-                rb.rotation -= rotationMod;
+                moveVelocity += speedMod / 10;
             }
+            else if (moveVelocity > speed)
+            {
+                moveVelocity -= speedMod / 10;
+            }
+
+            //Left Right acceleration 
+            if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && moveVelocity > speed / 1.5)
+            {
+                moveVelocity = moveVelocity - speedMod;
+            }
+            if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && moveVelocity < speed * 1.5)
+            {
+                moveVelocity = moveVelocity + speedMod;
+            }
+            //setting the new speed
+            rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
+
+
+            //control the rotation of the player in the air
+            if (!grounded)
+            {
+                if (rb.rotation > 25)
+                {
+                    rb.rotation = 25;
+                }
+                else if (rb.rotation < -25)
+                {
+                    rb.rotation = -25;
+                }
+
+                if (rb.rotation > -25)
+                {
+                    rb.rotation -= rotationMod;
+                }
+            }
+
+            //this are testing functions to be removed later.
+            if (Input.GetKeyDown(KeyCode.Q))
+            {
+                takeDamage(1);
+            }
+
+            checkSpeed();
+
+            handleInvincibilityTimer();
+
+            //manages deaths from deathplanes
+            if (isDead())
+            {
+                Death();
+            }
+
+            
         }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            takeDamage(1);
-        }
-        checkSpeed();
-        if (isDead())
-        {
-            Death();
-        }
-        
     }
 
     //Check if Grounded
@@ -137,23 +165,24 @@ public class PlayerController : MonoBehaviour
         if (grounded)
         {
             jumpsRemaining = jumpNumber;
-            state = "grounded";
+            playerState = "grounded";
         }
         else
         {
-            state = "airborn";
+            playerState = "airborn";
         }
     }
     //checks if player is dead
     bool isDead()
     {
         if (HurtBox.IsTouchingLayers(DeathPlane))
-            {
+        {
             return true;
-            }
+        }
         return false;
     }
 
+    //a testing function to be removed later. Calculates speed
     void checkSpeed()
     {
         if (count > 10)
@@ -169,20 +198,40 @@ public class PlayerController : MonoBehaviour
         {
             count += 1;
         }
-        
+
     }
-    
+
+    //processes if the player should take damage, and if so, how much, then calculates for death. 
     public void takeDamage(int damageNumber)
     {
-        HealthPoints -= damageNumber;
-        if(HealthPoints<= 0)
+        if (invincibilityTimer <= 0)
         {
-            Death();
+            HealthPoints -= damageNumber;
+            if (HealthPoints <= 0)
+            {
+                Death();
+            }
+            else
+            {
+                invincibilityTimer = invincibilityValue;
+
+            }
+            UIController.updateHealth();
         }
-        UIController.updateHealth();
+
     }
-    
-    //reports the Death event
+
+    private void handleInvincibilityTimer()
+    {
+        if (invincibilityTimer > 0)
+        {
+            invincibilityTimer -= 1;
+        }
+    }
+
+
+
+    //reports the Death event and respawns the player
     void Death()
     {
         //onDeath.Invoke();
@@ -191,7 +240,11 @@ public class PlayerController : MonoBehaviour
         rb.rotation = 0;
         rb.transform.position = spawnPoint.position;
 
+        //resetting all values
+
+        invincibilityTimer = 0;
         HealthPoints = startingHP;
+        UIController.updateHealth();
 
     }
 }
