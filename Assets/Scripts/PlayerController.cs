@@ -21,12 +21,20 @@ public class PlayerController : MonoBehaviour
     //Grounded Vars
     bool grounded = true;
 
+    //Generic powerup-related
+    public bool hasPowerup;
+    private float powerupTime = 10.0f;
+    public PowerUpType currentPowerUp = PowerUpType.None; // used to determine which logic to enable for the player when a powerup is collected
+    // public GameObject powerupIndicator; // placeholder for animation asset
+
+
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         state = "start";
     }
-        void Update()
+    void Update()
     {
         isGrounded();
         //Jumping
@@ -76,6 +84,14 @@ public class PlayerController : MonoBehaviour
                 rb.rotation -= rotationMod;
             }
         }
+
+        // Powerup-related
+
+        if (Input.GetKeyDown(KeyCode.R)) // for invinicibility
+        {
+            
+            Invincibility();
+        }
     }
     //Check if Grounded
     void isGrounded()
@@ -90,5 +106,19 @@ public class PlayerController : MonoBehaviour
         {
             state = "airborn";
         }
+    }
+
+    void Invincibility()
+    {
+
+    }
+
+    IEnumerator PowerupCountdownRoutine() // is called by the trigger event for powerups to countdown how long the power lasts
+    {
+        yield return new WaitForSeconds(powerupTime); // waits a certain number of seconds
+
+        // sets relevants Powerup conditions (e.g. visual indicator and bool for logic) back to 0
+        currentPowerUp = PowerUpType.None; // sets powerup type back to None vs. an active one like pushback or rockets
+        hasPowerup = false;
     }
 }
