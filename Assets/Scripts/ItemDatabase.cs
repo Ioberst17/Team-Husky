@@ -24,6 +24,7 @@ public class ItemDatabase : MonoBehaviour
         {
             new Item( // 1st item
                 0, "Musher", "Grants 3 speed boosts", //id, title, description
+                0, // initial amount
                 new Dictionary<string, int> // stats
                     {
                         {"Power", 15 },
@@ -31,6 +32,7 @@ public class ItemDatabase : MonoBehaviour
                     }),
             new Item( // 2nd item
                 1, "Invincibility", "Grants temporary invincibility", //id, title, description
+                0, // initial amount
                 new Dictionary<string, int> // stats
                     {
                         {"Power", 15 },
@@ -38,6 +40,7 @@ public class ItemDatabase : MonoBehaviour
                     }),
             new Item( // 3rd item
                 2, "Golden", "Grants zero slow down in all terrains", //id, title, description
+                0, // initial amount
                 new Dictionary<string, int> // stats
                     {
                         {"Power", 15 },

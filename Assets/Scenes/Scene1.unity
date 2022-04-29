@@ -379,7 +379,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemDatabase: {fileID: 1923940807}
-  inventoryUI: {fileID: 925145421}
   musherNum: {fileID: 676147904}
   invincibilityNum: {fileID: 190770243}
   goldenNum: {fileID: 953905405}
@@ -1197,8 +1196,7 @@ MonoBehaviour:
   GroundLayer:
     serializedVersion: 2
     m_Bits: 64
-  hasPowerup: 0
-  currentPowerUp: 0
+  inventory: {fileID: 51744005}
 --- !u!23 &856879047
 MeshRenderer:
   m_ObjectHideFlags: 0

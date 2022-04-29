@@ -5,8 +5,8 @@ public class PlayerController : MonoBehaviour
 {
 
     //Movement
-    public float speed;
-    public float speedMod;
+    private float speed = 15;
+    private float speedMod = 0.1f;
     public float rotationMod;
     public float jumpPower;
     public float jumpNumber;
@@ -21,17 +21,20 @@ public class PlayerController : MonoBehaviour
     //Grounded Vars
     bool grounded = true;
 
-    //Generic powerup-related
-    public bool hasPowerup;
-    private float powerupTime = 10.0f;
-    public PowerUpType currentPowerUp = PowerUpType.None; // used to determine which logic to enable for the player when a powerup is collected
-    // public GameObject powerupIndicator; // placeholder for animation asset
+    //Inventory
+    public Inventory inventory;
+
+    //Mushing related
+    private bool canMush = true;
+    private float mushingCooldown = 1.0f;
+    private float mushForce = 70;
 
 
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        inventory = GetComponentInParent<Inventory>();
         state = "start";
     }
     void Update()
@@ -48,25 +51,30 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (moveVelocity < speed)
-        {
-            moveVelocity += speedMod / 10;
-        }else if (moveVelocity > speed)
-        {
-            moveVelocity -= speedMod / 10;
-        }
 
-        //Left Right Movement
-        if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && moveVelocity > speed/1.5)
-        {
-            moveVelocity = moveVelocity - speedMod;
-        }
-        if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && moveVelocity < speed*1.5)
-        {
-            moveVelocity = moveVelocity + speedMod;
-        }
+        if (canMush == true) // speed modifiers should only apply while mush isn't effect
+        { 
+            if (moveVelocity < speed)  
+            {
+                moveVelocity += speedMod / 10;
+            }
+            else if (moveVelocity > speed) 
+            {
+                moveVelocity -= speedMod / 10;
+            }
 
-        rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
+            //Left Right Movement
+            if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && moveVelocity > speed / 1.5)
+            {
+                moveVelocity = moveVelocity - speedMod;
+            }
+            if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && moveVelocity < speed * 1.5)
+            {
+                moveVelocity = moveVelocity + speedMod;
+            }
+
+            rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
+        }
 
         if (!grounded)
         {
@@ -87,10 +95,12 @@ public class PlayerController : MonoBehaviour
 
         // Powerup-related
 
-        if (Input.GetKeyDown(KeyCode.R)) // for invinicibility
+        if (Input.GetKeyDown(KeyCode.F) && canMush == true && inventory.characterItems[0].amount > 1) // for mushing
         {
-            
-            Invincibility();
+            rb.AddForce(transform.right * mushForce, ForceMode2D.Impulse);
+            canMush = false;
+            StartCoroutine(MushingRoutine());
+            inventory.RemoveItem(0);
         }
     }
     //Check if Grounded
@@ -110,15 +120,12 @@ public class PlayerController : MonoBehaviour
 
     void Invincibility()
     {
-
+        // to do later
     }
 
-    IEnumerator PowerupCountdownRoutine() // is called by the trigger event for powerups to countdown how long the power lasts
+    IEnumerator MushingRoutine() // is called by the trigger event for powerups to countdown how long the power lasts
     {
-        yield return new WaitForSeconds(powerupTime); // waits a certain number of seconds
-
-        // sets relevants Powerup conditions (e.g. visual indicator and bool for logic) back to 0
-        currentPowerUp = PowerUpType.None; // sets powerup type back to None vs. an active one like pushback or rockets
-        hasPowerup = false;
+        yield return new WaitForSeconds(mushingCooldown); // waits a certain number of seconds
+        canMush = true;
     }
 }

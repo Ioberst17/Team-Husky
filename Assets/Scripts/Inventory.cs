@@ -21,24 +21,50 @@ public class Inventory : MonoBehaviour
 
     private void Start()
     {
+        // initialize inventory items
         AddItem(0);
         AddItem(1);
-        RemoveItem(0);
+        musherNum.text = characterItems[0].ToString();
+        invincibilityNum.text = characterItems[1].ToString();
+        goldenNum.text = characterItems[2].ToString();
+
+        //for testing
         AddItem(0);
+        AddItem(0);
+        AddItem(0);
+        AddItem(1);
+        AddItem(2);
     }
 
     public void AddItem(int id) // add item to inventory using item id
     {
         Item itemToAdd = itemDatabase.GetItem(id);
         
+
         if(id == 0)
         {
-            characterItems.Add(itemToAdd);
+            if (null == ItemChecker(id)) // check if item is not in list
+            {
+                characterItems.Add(itemToAdd); // if so, add it
+            }
+            else
+            {
+                characterItems[id].amount += 3; // if it is, just increment amount
+                musherNum.text = ItemChecker(id).amount.ToString(); //update UI
+            }
         }
         else if (id == 1 || id == 2)
         {
-            characterItems.Add(itemToAdd);
-            
+            if (null == ItemChecker(id)) // check if item is not in list
+            {
+                characterItems.Add(itemToAdd); // if so, add it
+            }
+            else
+            {
+                characterItems[id].amount += 1; // if it is, just increment amount
+                if(id == 1) invincibilityNum.text = ItemChecker(id).amount.ToString();
+                else goldenNum.text = ItemChecker(id).amount.ToString();
+            }
         }
         Debug.Log("Added item: " + itemToAdd.title);
     }
@@ -48,15 +74,23 @@ public class Inventory : MonoBehaviour
         return characterItems.Find(item => item.id == id);
     }
 
-    //RemoveItem: NEEDS MORE TESTING TO MAKE SURE CHARACTER ITEMS ARE ACTUALLY REMOVED (they are checked, but not removed)
-    public void RemoveItem(int id) // remove item in inventory based on item name; 
+    public void RemoveItem(int id) // remove item in inventory based on item id, only works with amount / UI elements 
     {
-        Item itemToRemove = ItemChecker(id);
-        Debug.Log("Item Checked-in:" + itemToRemove.title);
-        if (itemToRemove.title != null)
+        characterItems[id].amount -= 1; // decrement inventory
+
+        //update UI
+        switch (id)
         {
-            characterItems.Remove(itemToRemove);
-            Debug.Log("Item removed: " + itemToRemove.title);
+            case 0:
+                musherNum.text = (characterItems[id].amount).ToString();
+                break;
+            case 1:
+                invincibilityNum.text = (characterItems[id].amount).ToString();
+                break;
+            case 2:
+                goldenNum.text = (characterItems[id].amount).ToString();
+                break;
+
         }
     }
 }
