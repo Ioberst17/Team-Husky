@@ -12,7 +12,7 @@ public class Stopwatch : MonoBehaviour
     private bool running = false;
     private bool paused = false;
 
-    void Update()
+    void FixedUpdate()
     {
         if (running)
         {

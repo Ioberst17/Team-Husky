@@ -28,7 +28,7 @@ public class EndOfLevelController : MonoBehaviour
     }
     void Trigger()
     {
-        PlayerController.gameState = "levelComplete";
+        PlayerController.levelComplete = true;
         triggered = true;
         Debug.Log("Level Over!");
     }

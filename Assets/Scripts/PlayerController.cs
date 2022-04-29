@@ -27,16 +27,17 @@ public class PlayerController : MonoBehaviour
 
 
     //this is for personal use in checking speed
-    private float speedometer = 0;
+    public float speedometer = 0;
     private Vector3 previousPosition;
     private Vector3 currentPosition;
     private int count;
 
     public UIController UIController;
+    public bool levelComplete;
 
     float moveVelocity = 0;
 
-    //Holds the state of the game from among: running, paused, levelComplete
+    //Holds the state of the game from among: running, paused
     public string gameState;
 
     //Holds the state of the game from among: grounded, airborn
@@ -52,6 +53,14 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Transform spawnPoint;
 
+
+    //variables for transmitting user input into fixed update
+    private bool jumpInput;
+    private int accelerationInput;
+
+    //makes sure to leave a gap between jump inputs
+    private int jumpTimer;
+
     //Grounded Vars
     bool grounded = true;
 
@@ -66,12 +75,15 @@ public class PlayerController : MonoBehaviour
         HealthPoints = startingHP;
 
         playerState = "Start";
+        gameState = "running";
+        levelComplete = false;
         if (previousPosition == null)
         {
             previousPosition = rb.transform.position;
         }
         UIController.levelStart();
         count = 0;
+        jumpTimer = 0;
 
 
         if (playerState == "Start")
@@ -80,62 +92,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     void Update()
     {
-        if (gameState != "Paused" && gameState != "levelComplete")
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            isGrounded();
+            Debug.Log("esc");
+            pauseHandler();
+        }
+        if (gameState != "Paused" && !levelComplete)
+        {
             //Jumping
+            if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.Z) || Input.GetKeyUp(KeyCode.W))
+            {
+                jumpInput = false;
+            }
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.W))
             {
-                if (grounded || jumpsRemaining > 0)
-                {
-                    rb.AddForce(Vector2.up * jumpPower); // = new Vector2(rb.velocity.x, jumpPower);
-                    rb.rotation += 15;
-                    jumpsRemaining -= 1;
-                }
+                jumpInput = true;
             }
-
-            //Controlls the base and maximum speed
-            if (moveVelocity < speed)
-            {
-                moveVelocity += speedMod / 10;
-            }
-            else if (moveVelocity > speed)
-            {
-                moveVelocity -= speedMod / 10;
-            }
-
+            
             //Left Right acceleration 
-            if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)) && moveVelocity > speed / 1.5)
+            if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)))
             {
-                moveVelocity = moveVelocity - speedMod;
+                
+                accelerationInput = -1;
             }
-            if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)) && moveVelocity < speed * 1.5)
+            else if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)))
             {
-                moveVelocity = moveVelocity + speedMod;
+                
+                accelerationInput = 1;
             }
-            //setting the new speed
-            rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
-
-
-            //control the rotation of the player in the air
-            if (!grounded)
+            else
             {
-                if (rb.rotation > 25)
-                {
-                    rb.rotation = 25;
-                }
-                else if (rb.rotation < -25)
-                {
-                    rb.rotation = -25;
-                }
-
-                if (rb.rotation > -25)
-                {
-                    rb.rotation -= rotationMod;
-                }
+                accelerationInput = 0;
             }
 
             //this are testing functions to be removed later.
@@ -143,20 +132,93 @@ public class PlayerController : MonoBehaviour
             {
                 takeDamage(1);
             }
-
-            checkSpeed();
-
-            handleInvincibilityTimer();
-
-            //manages deaths from deathplanes
-            if (isDead())
-            {
-                Death();
-            }
-
-            
         }
     }
+
+
+    void FixedUpdate()
+    {
+        isGrounded();
+        //Controlls the base and maximum speed
+        if (moveVelocity < speed)
+        {
+            moveVelocity += speedMod;
+        }
+        else if (moveVelocity > speed)
+        {
+            moveVelocity -= speedMod;
+        }
+
+
+        Jump(jumpInput);
+
+        Accelerate(accelerationInput);
+        //setting the new speed
+        rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
+
+        //control the rotation of the player in the air
+        if (!grounded)
+        {
+            if (rb.rotation > 25)
+            {
+                rb.rotation = 25;
+            }
+            else if (rb.rotation < -25)
+            {
+                rb.rotation = -25;
+            }
+
+            if (rb.rotation > -25)
+            {
+                rb.rotation -= rotationMod;
+            }
+        }
+
+        checkSpeed();
+
+        handleInvincibilityTimer();
+
+        //manages deaths from deathplanes
+        if (isDead())
+        {
+            Death();
+        }
+    }
+
+    //handles acceleration inputs
+    void Accelerate(int accelInput)
+    {
+        if(accelInput == -1 && moveVelocity > speed / 2.5)
+        {
+            moveVelocity = moveVelocity - speedMod;
+        }
+        if(accelInput == 1 && moveVelocity < speed * 2.5)
+        {
+            moveVelocity = moveVelocity + speedMod;
+        }
+    }
+
+    //handles jumping
+    void Jump(bool jInput)
+    {
+        if (jInput)
+        {
+            if ((grounded || jumpsRemaining > 0) && jumpTimer == 0)
+            {
+                rb.AddForce(Vector2.up * jumpPower); // = new Vector2(rb.velocity.x, jumpPower);
+                rb.rotation += 15;
+                jumpsRemaining -= 1;
+                jumpTimer = 10;
+                jumpInput = false;
+            }
+        }
+        if(jumpTimer > 0)
+        {
+            jumpTimer -= 1;
+        }
+    }
+    
+
 
     //Check if Grounded
     void isGrounded()
@@ -246,5 +308,20 @@ public class PlayerController : MonoBehaviour
         HealthPoints = startingHP;
         UIController.updateHealth();
 
+    }
+    void pauseHandler()
+    {
+        if(gameState != "paused")
+        {
+            Time.timeScale = 0;
+            gameState = "paused";
+
+        }
+        else
+        {
+            Time.timeScale = 1;
+            gameState = "running";
+        }
+        
     }
 }

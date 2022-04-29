@@ -10,6 +10,7 @@ public class UIController : MonoBehaviour
     public Text timerText;
     public Stopwatch Stopwatch;
     public PlayerController PlayerController;
+    public GameObject pauseMenu;
 
 
     public void levelStart()
@@ -27,15 +28,25 @@ public class UIController : MonoBehaviour
     }
     public void Update()
     {
-        if(PlayerController.gameState != "paused" && PlayerController.gameState !=  "levelComplete")
+        if(PlayerController.gameState != "paused" && PlayerController.levelComplete !=  true)
         {
             Stopwatch.Unpause();
             timerText.text = Stopwatch.GetMinutes().ToString() + ":" + (Stopwatch.GetSeconds()  + Mathf.Round(Stopwatch.GetMilliseconds()*100.0f)*0.01f -(60*Stopwatch.GetMinutes())).ToString();
         }
-        else
+        if (PlayerController.levelComplete == true)
         {
             Stopwatch.Pause();
         }
-        
+        if (PlayerController.gameState == "paused")
+        {
+            Stopwatch.Pause();
+            pauseMenu.SetActive(true);
+        }
+        if (PlayerController.gameState == "running")
+        {
+            pauseMenu.SetActive(false);
+        }
+
+
     }
 }
