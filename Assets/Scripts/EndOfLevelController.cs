@@ -6,7 +6,9 @@ public class EndOfLevelController : MonoBehaviour
 {
     public PlayerController PlayerController;
     public UIController UIController;
+    public MusicController MusicController;
     bool triggered;
+    
 
     void Awake()
     {
@@ -30,6 +32,7 @@ public class EndOfLevelController : MonoBehaviour
     {
         PlayerController.levelComplete = true;
         triggered = true;
+        MusicController.levelEnd();
         Debug.Log("Level Over!");
     }
 

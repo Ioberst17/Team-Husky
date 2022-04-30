@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 currentPosition;
     private int count;
 
+    public MusicController MusicController;
     public UIController UIController;
     public bool levelComplete;
 
@@ -82,6 +83,7 @@ public class PlayerController : MonoBehaviour
             previousPosition = rb.transform.position;
         }
         UIController.levelStart();
+        MusicController.levelStart();
         count = 0;
         jumpTimer = 0;
 
