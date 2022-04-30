@@ -24,6 +24,7 @@ public class Inventory : MonoBehaviour
         // initialize inventory items
         AddItem(0);
         AddItem(1);
+        AddItem(2);
         musherNum.text = characterItems[0].ToString();
         invincibilityNum.text = characterItems[1].ToString();
         goldenNum.text = characterItems[2].ToString();
