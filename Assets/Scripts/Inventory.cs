@@ -13,7 +13,6 @@ public class Inventory : MonoBehaviour
 
     public List<Item> characterItems = new List<Item>(); // creates a list of Items (defined in class Items.cs) used for inventory 
     public ItemDatabase itemDatabase; // reference to item database; attached to same named game object in scene
-    public UIInventory inventoryUI; // reference to UI Inventory class
     public TextMeshProUGUI musherNum; // assigned in Inspector
     public TextMeshProUGUI invincibilityNum; // assigned in Inspector
     public TextMeshProUGUI goldenNum; // assigned in Inspector
@@ -40,7 +39,6 @@ public class Inventory : MonoBehaviour
     public void AddItem(int id) // add item to inventory using item id
     {
         Item itemToAdd = itemDatabase.GetItem(id);
-        
 
         if(id == 0)
         {
