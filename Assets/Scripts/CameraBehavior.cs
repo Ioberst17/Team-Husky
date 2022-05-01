@@ -15,7 +15,7 @@ public class CameraBehavior : MonoBehaviour
     }
 
     // Update is called once per frame
-    void LateUpdate()
+    void Update()
     {
         if (((transform.position.x) - (player.position.x)) > Hleeway)
         {
