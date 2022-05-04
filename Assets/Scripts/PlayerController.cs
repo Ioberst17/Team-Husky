@@ -59,8 +59,10 @@ public class PlayerController : MonoBehaviour
     private bool jumpInput;
     private int accelerationInput;
 
-    //makes sure to leave a gap between jump inputs
+    //makes sure to leave a gap between jump inputs and landing
     private int jumpTimer;
+    public int landingTimer;
+
 
     //Grounded Vars
     bool grounded = true;
@@ -86,6 +88,7 @@ public class PlayerController : MonoBehaviour
         MusicController.levelStart();
         count = 0;
         jumpTimer = 0;
+        landingTimer = 0;
 
 
         if (playerState == "Start")
@@ -135,6 +138,11 @@ public class PlayerController : MonoBehaviour
                 takeDamage(1);
             }
         }
+        if (levelComplete)
+        {
+            accelerationInput = 0;
+            jumpInput = false;
+        }
     }
 
 
@@ -144,11 +152,11 @@ public class PlayerController : MonoBehaviour
         //Controlls the base and maximum speed
         if (moveVelocity < speed)
         {
-            moveVelocity += speedMod;
+            moveVelocity += speedMod/10;
         }
         else if (moveVelocity > speed)
         {
-            moveVelocity -= speedMod;
+            moveVelocity -= speedMod/10;
         }
 
 
@@ -181,7 +189,7 @@ public class PlayerController : MonoBehaviour
         handleInvincibilityTimer();
 
         //manages deaths from deathplanes
-        if (isDead())
+        if (isOutOfBounds())
         {
             Death();
         }
@@ -205,12 +213,16 @@ public class PlayerController : MonoBehaviour
     {
         if (jInput)
         {
-            if ((grounded || jumpsRemaining > 0) && jumpTimer == 0)
+            if ((grounded || jumpsRemaining > 0) && jumpTimer == 0 && landingTimer == 0)
             {
+                if (rb.velocity.y < 0)
+                {
+                    rb.velocity = new Vector2(moveVelocity, 0);
+                }
                 rb.AddForce(Vector2.up * jumpPower); // = new Vector2(rb.velocity.x, jumpPower);
                 rb.rotation += 15;
                 jumpsRemaining -= 1;
-                jumpTimer = 10;
+                jumpTimer = 15;
                 jumpInput = false;
             }
         }
@@ -225,19 +237,33 @@ public class PlayerController : MonoBehaviour
     //Check if Grounded
     void isGrounded()
     {
+        bool isLanding = false;
+        if(playerState == "airborn")
+        {
+            isLanding = true;
+        }
         grounded = Physics2D.OverlapCircle(GroundChecker.position, GroundChecker.GetComponent<CircleCollider2D>().radius, GroundLayer);
         if (grounded)
         {
             jumpsRemaining = jumpNumber;
             playerState = "grounded";
+            if (landingTimer > 0)
+            {
+                landingTimer -= 1;
+            }
+            if (isLanding)
+            {
+                landingTimer = 5;
+            }
         }
         else
         {
             playerState = "airborn";
         }
     }
+
     //checks if player is dead
-    bool isDead()
+    bool isOutOfBounds()
     {
         if (HurtBox.IsTouchingLayers(DeathPlane))
         {
@@ -305,8 +331,12 @@ public class PlayerController : MonoBehaviour
         rb.transform.position = spawnPoint.position;
 
         //resetting all values
-
+        moveVelocity = 0;
+        accelerationInput = 0;
+        jumpInput = false;
         invincibilityTimer = 0;
+        jumpTimer = 0;
+        landingTimer = 0;
         HealthPoints = startingHP;
         UIController.updateHealth();
 

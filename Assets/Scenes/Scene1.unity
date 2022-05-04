@@ -1831,7 +1831,7 @@ MonoBehaviour:
   jumpNumber: 1
   startingHP: 100
   HealthPoints: 0
-  invincibilityValue: 180
+  invincibilityValue: 60
   speedometer: 0
   MusicController: {fileID: 1372260676}
   UIController: {fileID: 1504781968}
@@ -1849,6 +1849,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   spawnPoint: {fileID: 1238749312}
+  landingTimer: 0
 --- !u!23 &856879047
 MeshRenderer:
   m_ObjectHideFlags: 0
