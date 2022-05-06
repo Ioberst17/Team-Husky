@@ -16,6 +16,7 @@ public class PlayerController : MonoBehaviour
     //getting references for different parts of the player entity
     private Rigidbody2D rb;
     private BoxCollider2D HurtBox;
+    private Animator animator;
 
     //Number crunching variables
     [SerializeField] private int startingHP;
@@ -59,9 +60,10 @@ public class PlayerController : MonoBehaviour
     private bool jumpInput;
     private int accelerationInput;
 
-    //makes sure to leave a gap between jump inputs and landing
+    //Verious timer values
     private int jumpTimer;
-    public int landingTimer;
+    private int readySetGoTimer;
+    private int landingTimer;
 
 
     //Grounded Vars
@@ -75,10 +77,11 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         HurtBox = GetComponent<BoxCollider2D>();
+        animator = GetComponent<Animator>();
         HealthPoints = startingHP;
 
         playerState = "Start";
-        gameState = "running";
+        gameState = "Starting";
         levelComplete = false;
         if (previousPosition == null)
         {
@@ -89,6 +92,8 @@ public class PlayerController : MonoBehaviour
         count = 0;
         jumpTimer = 0;
         landingTimer = 0;
+        readySetGoTimer = 0;
+        readySetGo();
 
 
         if (playerState == "Start")
@@ -104,7 +109,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("esc");
             pauseHandler();
         }
-        if (gameState != "Paused" && !levelComplete)
+        if (gameState != "Paused" && !levelComplete && gameState != "Starting")
         {
             //Jumping
             if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.Z) || Input.GetKeyUp(KeyCode.W))
@@ -135,12 +140,12 @@ public class PlayerController : MonoBehaviour
             //this are testing functions to be removed later.
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                takeDamage(1);
+                takeDamage(50);
             }
         }
         if (levelComplete)
         {
-            accelerationInput = 0;
+            accelerationInput = -1;
             jumpInput = false;
         }
     }
@@ -148,25 +153,23 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
+        readySetGo();
         isGrounded();
         //Controlls the base and maximum speed
-        if (moveVelocity < speed)
+        if (moveVelocity < 0)
         {
-            moveVelocity += speedMod/10;
+            moveVelocity = 0;
         }
         else if (moveVelocity > speed)
         {
             moveVelocity -= speedMod/10;
         }
 
-
         Jump(jumpInput);
 
         Accelerate(accelerationInput);
-        //setting the new speed
-        rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
 
-        //control the rotation of the player in the air
+        //control the rotation of the player        
         if (!grounded)
         {
             if (rb.rotation > 25)
@@ -177,12 +180,12 @@ public class PlayerController : MonoBehaviour
             {
                 rb.rotation = -25;
             }
-
             if (rb.rotation > -25)
             {
                 rb.rotation -= rotationMod;
             }
         }
+        
 
         checkSpeed();
 
@@ -198,78 +201,55 @@ public class PlayerController : MonoBehaviour
     //handles acceleration inputs
     void Accelerate(int accelInput)
     {
-        if(accelInput == -1 && moveVelocity > speed / 2.5)
-        {
-            moveVelocity = moveVelocity - speedMod;
-        }
-        if(accelInput == 1 && moveVelocity < speed * 2.5)
-        {
-            moveVelocity = moveVelocity + speedMod;
-        }
-    }
-
-    //handles jumping
-    void Jump(bool jInput)
-    {
-        if (jInput)
-        {
-            if ((grounded || jumpsRemaining > 0) && jumpTimer == 0 && landingTimer == 0)
-            {
-                if (rb.velocity.y < 0)
-                {
-                    rb.velocity = new Vector2(moveVelocity, 0);
-                }
-                rb.AddForce(Vector2.up * jumpPower); // = new Vector2(rb.velocity.x, jumpPower);
-                rb.rotation += 15;
-                jumpsRemaining -= 1;
-                jumpTimer = 15;
-                jumpInput = false;
-            }
-        }
-        if(jumpTimer > 0)
-        {
-            jumpTimer -= 1;
-        }
-    }
-    
-
-
-    //Check if Grounded
-    void isGrounded()
-    {
-        bool isLanding = false;
-        if(playerState == "airborn")
-        {
-            isLanding = true;
-        }
-        grounded = Physics2D.OverlapCircle(GroundChecker.position, GroundChecker.GetComponent<CircleCollider2D>().radius, GroundLayer);
         if (grounded)
         {
-            jumpsRemaining = jumpNumber;
-            playerState = "grounded";
-            if (landingTimer > 0)
+            //if holding back and with positive velocity, slow down
+            if (accelInput == -1 && moveVelocity > 0)
             {
-                landingTimer -= 1;
+                moveVelocity = moveVelocity - speedMod;
+                if (moveVelocity < 0)
+                {
+                    moveVelocity = 0;
+                }
             }
-            if (isLanding)
+            //if holding forward and not exceeding the maximum, speed up
+            if (accelInput == 1 && moveVelocity < speed * 2.5)
             {
-                landingTimer = 5;
+                moveVelocity = moveVelocity + speedMod;
             }
+            //handles the animation states
+            if(landingTimer == 0 && invincibilityTimer == 0)
+            {
+                if (moveVelocity < 1)
+                {
+                    animator.Play("PlayerRestIan");
+                }
+                else
+                {
+                    animator.Play("PlayerRunningIan");
+                }
+            }
+            
         }
         else
         {
-            playerState = "airborn";
+            //Air control is reduced
+            if (accelInput == -1 && moveVelocity > 0)
+            {
+                moveVelocity = moveVelocity - speedMod/5;
+                if (moveVelocity < 0)
+                {
+                    moveVelocity = 0;
+                }
+            }
+            if (accelInput == 1 && moveVelocity < speed * 2.5)
+            {
+                moveVelocity = moveVelocity + speedMod/5;
+            }
         }
-    }
 
-    //checks if player is dead
-    bool isOutOfBounds()
-    {
-        if (HurtBox.IsTouchingLayers(DeathPlane))
-        {
-            return true;
-        }
-        return false;
+        //setting the new speed
+        rb.velocity = new Vector2(moveVelocity, rb.velocity.y);
     }
 
     //a testing function to be removed later. Calculates speed
@@ -291,6 +271,144 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    //reports the Death event and respawns the player
+    void Death()
+    {
+        //onDeath.Invoke();
+        Debug.Log("The Player Has died");
+        rb.velocity = new Vector2(0, 0);
+        rb.rotation = 0;
+        rb.transform.position = spawnPoint.position;
+
+        //resetting all values
+        animator.Play("PlayerRestIan");
+        moveVelocity = 0;
+        accelerationInput = 0;
+        jumpInput = false;
+        invincibilityTimer = 0;
+        jumpTimer = 0;
+        landingTimer = 0;
+        HealthPoints = startingHP;
+        UIController.updateHealth();
+
+    }
+
+    private void handleInvincibilityTimer()
+    {
+        if (invincibilityTimer > 0)
+        {
+            invincibilityTimer -= 1;
+        }
+    }
+
+    //Check if Grounded
+    void isGrounded()
+    {
+        bool isLanding = false;
+        if (playerState == "airborn")
+        {
+            isLanding = true;
+        }
+        grounded = Physics2D.OverlapCircle(GroundChecker.position, GroundChecker.GetComponent<CircleCollider2D>().radius, GroundLayer);
+        if (grounded)
+        {
+            jumpsRemaining = jumpNumber;
+            playerState = "grounded";
+            if (landingTimer > 0)
+            {
+                landingTimer -= 1;
+            }
+            
+            if (isLanding)
+            {
+                landingTimer = 5;
+                animator.Play("PlayerLandIan");
+            }
+        }
+        else
+        {
+            playerState = "airborn";
+        }
+    }
+
+
+
+    //checks if player is dead
+    bool isOutOfBounds()
+    {
+        if (HurtBox.IsTouchingLayers(DeathPlane))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    //handles jumping
+    void Jump(bool jInput)
+    {
+        if (jInput)
+        {
+            if ((grounded || jumpsRemaining > 0) && jumpTimer == 0 && landingTimer == 0)
+            {
+                if (rb.velocity.y < 0)
+                {
+                    rb.velocity = new Vector2(moveVelocity, 0);
+                }
+                animator.Play("PlayerJumpIan");
+                rb.AddForce(Vector2.up * jumpPower); // = new Vector2(rb.velocity.x, jumpPower);
+                rb.rotation += 15;
+                jumpsRemaining -= 1;
+                jumpTimer = 15;
+                jumpInput = false;
+            }
+        }
+        if (jumpTimer > 0)
+        {
+            jumpTimer -= 1;
+        }
+    }
+
+    void pauseHandler()
+    {
+        if (gameState != "paused")
+        {
+            Time.timeScale = 0;
+            gameState = "paused";
+
+        }
+        else
+        {
+            Time.timeScale = 1;
+            gameState = "running";
+        }
+
+    }
+    
+    private void readySetGo()
+    {
+        if (readySetGoTimer <= 180)
+        {
+            if (readySetGoTimer == 0)
+            {
+                UIController.readySetGoText.text = "Ready";
+            }
+            else if (readySetGoTimer == 60)
+            {
+                UIController.readySetGoText.text = "Set";
+            }
+            else if (readySetGoTimer == 120)
+            {
+                UIController.readySetGoText.text = "Go!";
+                gameState = "running";
+            }
+            else if (readySetGoTimer == 180)
+            {
+                UIController.readySetGoText.text = "";
+            }
+            readySetGoTimer += 1;
+        }
+    }
+    
     //processes if the player should take damage, and if so, how much, then calculates for death. 
     public void takeDamage(int damageNumber)
     {
@@ -304,56 +422,11 @@ public class PlayerController : MonoBehaviour
             else
             {
                 invincibilityTimer = invincibilityValue;
+                animator.Play("PlayerDamageIan");
 
             }
             UIController.updateHealth();
         }
 
-    }
-
-    private void handleInvincibilityTimer()
-    {
-        if (invincibilityTimer > 0)
-        {
-            invincibilityTimer -= 1;
-        }
-    }
-
-
-
-    //reports the Death event and respawns the player
-    void Death()
-    {
-        //onDeath.Invoke();
-        Debug.Log("The Player Has died");
-        rb.velocity = new Vector2(0, 0);
-        rb.rotation = 0;
-        rb.transform.position = spawnPoint.position;
-
-        //resetting all values
-        moveVelocity = 0;
-        accelerationInput = 0;
-        jumpInput = false;
-        invincibilityTimer = 0;
-        jumpTimer = 0;
-        landingTimer = 0;
-        HealthPoints = startingHP;
-        UIController.updateHealth();
-
-    }
-    void pauseHandler()
-    {
-        if(gameState != "paused")
-        {
-            Time.timeScale = 0;
-            gameState = "paused";
-
-        }
-        else
-        {
-            Time.timeScale = 1;
-            gameState = "running";
-        }
-        
     }
 }

@@ -8,9 +8,12 @@ public class UIController : MonoBehaviour
     private int HP; 
     public Text HPtext;
     public Text timerText;
+    public Text readySetGoText;
     public Stopwatch Stopwatch;
     public PlayerController PlayerController;
     public GameObject pauseMenu;
+    private int readySetGoTimer;
+    
 
 
     public void levelStart()
