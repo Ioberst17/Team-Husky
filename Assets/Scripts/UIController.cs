@@ -18,13 +18,17 @@ public class UIController : MonoBehaviour
 
     public void levelStart()
     {
-        Stopwatch.Begin();
+        
         
         HP = PlayerController.HealthPoints;
         HPtext.text = HP.ToString();
         timerText.text = "Go";
     }
-    public void updateHealth()
+    public void timerStart()
+    {
+        Stopwatch.Begin();
+    }
+        public void updateHealth()
     {
         HP = PlayerController.HealthPoints;
         HPtext.text = HP.ToString();

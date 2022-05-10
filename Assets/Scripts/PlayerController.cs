@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
     public string playerState;
 
     public Transform GroundChecker; // circle collider located under the player object, used to check if on the ground
+    public Transform GroundChecker2; 
 
     //Different Layers used
     public LayerMask GroundLayer;
@@ -68,6 +69,7 @@ public class PlayerController : MonoBehaviour
 
     //Grounded Vars
     bool grounded = true;
+    bool grounded2 = true;
 
     //Event reporting system
     //public delegate void MyDelegate();
@@ -170,7 +172,7 @@ public class PlayerController : MonoBehaviour
         Accelerate(accelerationInput);
 
         //control the rotation of the player        
-        if (!grounded)
+        if (!grounded && !grounded2)
         {
             if (rb.rotation > 25)
             {
@@ -201,7 +203,7 @@ public class PlayerController : MonoBehaviour
     //handles acceleration inputs
     void Accelerate(int accelInput)
     {
-        if (grounded)
+        if (grounded && grounded2)
         {
             //if holding back and with positive velocity, slow down
             if (accelInput == -1 && moveVelocity > 0)
@@ -310,7 +312,8 @@ public class PlayerController : MonoBehaviour
             isLanding = true;
         }
         grounded = Physics2D.OverlapCircle(GroundChecker.position, GroundChecker.GetComponent<CircleCollider2D>().radius, GroundLayer);
-        if (grounded)
+        grounded2 = Physics2D.OverlapCircle(GroundChecker2.position, GroundChecker2.GetComponent<CircleCollider2D>().radius, GroundLayer);
+        if (grounded && grounded2)
         {
             jumpsRemaining = jumpNumber;
             playerState = "grounded";
@@ -348,7 +351,7 @@ public class PlayerController : MonoBehaviour
     {
         if (jInput)
         {
-            if ((grounded || jumpsRemaining > 0) && jumpTimer == 0 && landingTimer == 0)
+            if (((grounded && grounded2) || jumpsRemaining > 0) && jumpTimer == 0 && landingTimer == 0)
             {
                 if (rb.velocity.y < 0)
                 {
@@ -400,6 +403,7 @@ public class PlayerController : MonoBehaviour
             {
                 UIController.readySetGoText.text = "Go!";
                 gameState = "running";
+                UIController.timerStart();
             }
             else if (readySetGoTimer == 180)
             {
