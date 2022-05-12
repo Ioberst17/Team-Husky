@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         HurtBox = GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
-        inventory = GetComponentInParent<InventoryIan>();
+        inventory = inventory = GetComponentInParent<InventoryIan>();
         HealthPoints = startingHP;
 
         playerState = "Start";
