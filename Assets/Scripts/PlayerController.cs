@@ -71,6 +71,14 @@ public class PlayerController : MonoBehaviour
     bool grounded = true;
     bool grounded2 = true;
 
+    //Inventory
+    public InventoryIan inventory;
+
+    //Mushing related
+    private bool canMush = true;
+    [SerializeField] private float mushingCooldown;
+    [SerializeField] private float mushForce;
+
     //Event reporting system
     //public delegate void MyDelegate();
     //public event MyDelegate onDeath;
@@ -80,6 +88,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         HurtBox = GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
+        inventory = GetComponentInParent<InventoryIan>();
         HealthPoints = startingHP;
 
         playerState = "Start";
@@ -143,6 +152,16 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 takeDamage(50);
+            }
+
+            // Powerup-related
+
+            if (Input.GetKeyDown(KeyCode.F) && canMush == true && inventory.characterItems[0].amount > 1) // for mushing
+            {
+                rb.AddForce(transform.right * mushForce, ForceMode2D.Impulse);
+                canMush = false;
+                StartCoroutine(MushingRoutine());
+                inventory.RemoveItem(0);
             }
         }
         if (levelComplete)
@@ -432,5 +451,11 @@ public class PlayerController : MonoBehaviour
             UIController.updateHealth();
         }
 
+    }
+
+    IEnumerator MushingRoutine() // is called by the trigger event for powerups to countdown how long the power lasts
+    {
+        yield return new WaitForSeconds(mushingCooldown); // waits a certain number of seconds
+        canMush = true;
     }
 }
