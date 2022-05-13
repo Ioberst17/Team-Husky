@@ -12,17 +12,34 @@ public class UIController : MonoBehaviour
     public Stopwatch Stopwatch;
     public PlayerController PlayerController;
     public GameObject pauseMenu;
+    public GameObject debugMenu;
     private int readySetGoTimer;
+    [SerializeField] private Transform checkpoint1;
     
 
 
     public void levelStart()
     {
-        
-        
         HP = PlayerController.HealthPoints;
         HPtext.text = HP.ToString();
         timerText.text = "Go";
+    }
+    public void toggleDebugMenu()
+    {
+        if (debugMenu.activeSelf)
+        {
+            debugMenu.SetActive(false);
+        }
+        else
+        {
+            debugMenu.SetActive(true);
+        }
+    }
+    public void goToCheckpoint1()
+    {
+        PlayerController.rb.transform.position = checkpoint1.position;
+        toggleDebugMenu();
+
     }
     public void timerStart()
     {
