@@ -8,20 +8,27 @@ public class UIController : MonoBehaviour
     private int HP; 
     public Text HPtext;
     public Text timerText;
+    public Text readySetGoText;
     public Stopwatch Stopwatch;
     public PlayerController PlayerController;
     public GameObject pauseMenu;
+    private int readySetGoTimer;
+    
 
 
     public void levelStart()
     {
-        Stopwatch.Begin();
+        
         
         HP = PlayerController.HealthPoints;
         HPtext.text = HP.ToString();
         timerText.text = "Go";
     }
-    public void updateHealth()
+    public void timerStart()
+    {
+        Stopwatch.Begin();
+    }
+        public void updateHealth()
     {
         HP = PlayerController.HealthPoints;
         HPtext.text = HP.ToString();
