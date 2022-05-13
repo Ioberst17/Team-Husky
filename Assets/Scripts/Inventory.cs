@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class InventoryIan : MonoBehaviour
+public class Inventory : MonoBehaviour
 {
     // Manages player inventory (a list of the class Items) in a specific scene
     // n.b. GameManager should deal with data in inventory between scene transitions

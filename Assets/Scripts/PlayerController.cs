@@ -5,13 +5,13 @@ public class PlayerController : MonoBehaviour
 {
 
     //Movement
-    public float speed;
-    public float speedMod;
-
-    public float rotationMod;
-    public float jumpPower;
-    public float jumpNumber;
+    [SerializeField] private float speed;
+    [SerializeField] private float speedMod;
+    [SerializeField] private float rotationMod;
+    [SerializeField] private float jumpPower;
+    [SerializeField] private float jumpNumber;
     float jumpsRemaining;
+    float moveVelocity = 0;
 
     //getting references for different parts of the player entity
     private Rigidbody2D rb;
@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
 
     //Number crunching variables
     [SerializeField] private int startingHP;
+    [SerializeField] private int landingLag;
+    [SerializeField] private float maxSpeedMult;
+    [SerializeField] private float airControlMod;
     public int HealthPoints;
 
     //sets the ammount of invincibility frames given after a hit and tracks them
@@ -33,11 +36,12 @@ public class PlayerController : MonoBehaviour
     private Vector3 currentPosition;
     private int count;
 
+    //various different controllers from around the scene.
     public MusicController MusicController;
     public UIController UIController;
-    public bool levelComplete;
 
-    float moveVelocity = 0;
+    
+    public bool levelComplete;
 
     //Holds the state of the game from among: running, paused
     public string gameState;
@@ -46,7 +50,8 @@ public class PlayerController : MonoBehaviour
     public string playerState;
 
     public Transform GroundChecker; // circle collider located under the player object, used to check if on the ground
-    public Transform GroundChecker2; 
+    public Transform GroundChecker2;
+    public Transform GroundChecker3;
 
     //Different Layers used
     public LayerMask GroundLayer;
@@ -60,6 +65,7 @@ public class PlayerController : MonoBehaviour
     //variables for transmitting user input into fixed update
     private bool jumpInput;
     private int accelerationInput;
+    private int powerupInput;
 
     //Verious timer values
     private int jumpTimer;
@@ -70,9 +76,10 @@ public class PlayerController : MonoBehaviour
     //Grounded Vars
     bool grounded = true;
     bool grounded2 = true;
+    bool grounded3= true;
 
     //Inventory
-    public InventoryIan inventory;
+    public Inventory inventory;
 
     //Mushing related
     private bool canMush = true;
@@ -88,7 +95,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         HurtBox = GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
-        inventory = inventory = GetComponentInParent<InventoryIan>();
+        inventory = GetComponentInParent<Inventory>();
         HealthPoints = startingHP;
 
         playerState = "Start";
@@ -104,15 +111,12 @@ public class PlayerController : MonoBehaviour
         jumpTimer = 0;
         landingTimer = 0;
         readySetGoTimer = 0;
+        powerupInput = 0; ;
         readySetGo();
 
-
-        if (playerState == "Start")
-        {
-            //filler method to remove warnings for now
-        }
     }
 
+    //update is largely focused on user input
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -158,11 +162,14 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.F) && canMush == true && inventory.characterItems[0].amount > 1) // for mushing
             {
-                rb.AddForce(transform.right * mushForce, ForceMode2D.Impulse);
-                canMush = false;
-                StartCoroutine(MushingRoutine());
-                inventory.RemoveItem(0);
+                powerupInput = 1;
+                Debug.Log(inventory.characterItems[0].amount);
             }
+        }
+        if (Input.GetKeyDown(KeyCode.BackQuote) && gameState == "paused")
+        {
+            Debug.Log("debugMenu");
+            debugMenu();
         }
         if (levelComplete)
         {
@@ -171,28 +178,36 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    //Fixed update is where all physics happens
     void FixedUpdate()
     {
         readySetGo();
         isGrounded();
-        //Controlls the base and maximum speed
-        if (moveVelocity < 0)
+        if (canMush)
         {
-            moveVelocity = 0;
+            //Controlls the base and maximum speed if not using a powerup
+            if (moveVelocity < 0)
+            {
+                moveVelocity = 0;
+            }
+            else if (moveVelocity > speed)
+            {
+                moveVelocity -= speedMod / 10;
+            }
+            Accelerate(accelerationInput);
         }
-        else if (moveVelocity > speed)
-        {
-            moveVelocity -= speedMod/10;
-        }
+        
 
         Jump(jumpInput);
 
-        Accelerate(accelerationInput);
+        
+
+        UsePowerup();
 
         //control the rotation of the player        
-        if (!grounded && !grounded2)
+        if (!grounded && !grounded2 && !grounded3)
         {
+            rb.freezeRotation = true;
             if (rb.rotation > 25)
             {
                 rb.rotation = 25;
@@ -206,7 +221,6 @@ public class PlayerController : MonoBehaviour
                 rb.rotation -= rotationMod;
             }
         }
-        
 
         checkSpeed();
 
@@ -222,7 +236,7 @@ public class PlayerController : MonoBehaviour
     //handles acceleration inputs
     void Accelerate(int accelInput)
     {
-        if (grounded && grounded2)
+        if ((grounded && grounded2 && grounded3) && jumpTimer == 0)
         {
             //if holding back and with positive velocity, slow down
             if (accelInput == -1 && moveVelocity > 0)
@@ -234,7 +248,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
             //if holding forward and not exceeding the maximum, speed up
-            if (accelInput == 1 && moveVelocity < speed * 2.5)
+            if (accelInput == 1 && moveVelocity < speed * maxSpeedMult)
             {
                 moveVelocity = moveVelocity + speedMod;
             }
@@ -243,11 +257,11 @@ public class PlayerController : MonoBehaviour
             {
                 if (moveVelocity < 1)
                 {
-                    animator.Play("PlayerRestIan");
+                    animator.Play("PlayerRest");
                 }
                 else
                 {
-                    animator.Play("PlayerRunningIan");
+                    animator.Play("PlayerRunning");
                 }
             }
             
@@ -257,15 +271,15 @@ public class PlayerController : MonoBehaviour
             //Air control is reduced
             if (accelInput == -1 && moveVelocity > 0)
             {
-                moveVelocity = moveVelocity - speedMod/5;
+                moveVelocity = moveVelocity - speedMod/airControlMod;
                 if (moveVelocity < 0)
                 {
                     moveVelocity = 0;
                 }
             }
-            if (accelInput == 1 && moveVelocity < speed * 2.5)
+            if (accelInput == 1 && moveVelocity < speed * maxSpeedMult)
             {
-                moveVelocity = moveVelocity + speedMod/5;
+                moveVelocity = moveVelocity + speedMod/airControlMod;
             }
         }
 
@@ -302,7 +316,7 @@ public class PlayerController : MonoBehaviour
         rb.transform.position = spawnPoint.position;
 
         //resetting all values
-        animator.Play("PlayerRestIan");
+        animator.Play("PlayerRest");
         moveVelocity = 0;
         accelerationInput = 0;
         jumpInput = false;
@@ -312,6 +326,11 @@ public class PlayerController : MonoBehaviour
         HealthPoints = startingHP;
         UIController.updateHealth();
 
+    }
+
+    void debugMenu()
+    {
+       //empty for now, but will do things as the game is developed. 
     }
 
     private void handleInvincibilityTimer()
@@ -332,10 +351,16 @@ public class PlayerController : MonoBehaviour
         }
         grounded = Physics2D.OverlapCircle(GroundChecker.position, GroundChecker.GetComponent<CircleCollider2D>().radius, GroundLayer);
         grounded2 = Physics2D.OverlapCircle(GroundChecker2.position, GroundChecker2.GetComponent<CircleCollider2D>().radius, GroundLayer);
-        if (grounded && grounded2)
+        grounded3 = Physics2D.OverlapCircle(GroundChecker3.position, GroundChecker3.GetComponent<CircleCollider2D>().radius, GroundLayer);
+        if (grounded || grounded2 || grounded3)
+        {
+            rb.freezeRotation = false;
+        }
+        if (grounded && grounded2 && grounded3)
         {
             jumpsRemaining = jumpNumber;
             playerState = "grounded";
+            
             if (landingTimer > 0)
             {
                 landingTimer -= 1;
@@ -343,8 +368,8 @@ public class PlayerController : MonoBehaviour
             
             if (isLanding)
             {
-                landingTimer = 5;
-                animator.Play("PlayerLandIan");
+                landingTimer = landingLag;
+                animator.Play("PlayerLand");
             }
         }
         else
@@ -370,14 +395,14 @@ public class PlayerController : MonoBehaviour
     {
         if (jInput)
         {
-            if (((grounded && grounded2) || jumpsRemaining > 0) && jumpTimer == 0 && landingTimer == 0)
+            if (((grounded && grounded2 && grounded3) || jumpsRemaining > 0) && jumpTimer == 0 && landingTimer == 0)
             {
                 if (rb.velocity.y < 0)
                 {
                     rb.velocity = new Vector2(moveVelocity, 0);
                 }
-                animator.Play("PlayerJumpIan");
-                rb.AddForce(Vector2.up * jumpPower); // = new Vector2(rb.velocity.x, jumpPower);
+                animator.Play("PlayerJump");
+                rb.AddForce(Vector2.up * jumpPower); 
                 rb.rotation += 15;
                 jumpsRemaining -= 1;
                 jumpTimer = 15;
@@ -390,7 +415,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void pauseHandler()
+    public void pauseHandler()
     {
         if (gameState != "paused")
         {
@@ -445,12 +470,29 @@ public class PlayerController : MonoBehaviour
             else
             {
                 invincibilityTimer = invincibilityValue;
-                animator.Play("PlayerDamageIan");
+                animator.Play("PlayerDamage");
 
             }
             UIController.updateHealth();
         }
 
+    }
+
+    void UsePowerup()
+    {
+        switch (powerupInput)
+        {
+            case 0:
+                break;
+            case 1:
+                rb.AddForce(transform.right * mushForce, ForceMode2D.Impulse);
+                canMush = false;
+                StartCoroutine(MushingRoutine());
+                inventory.RemoveItem(0);
+                powerupInput = 0;
+                break;
+        }
+        
     }
 
     IEnumerator MushingRoutine() // is called by the trigger event for powerups to countdown how long the power lasts
