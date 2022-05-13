@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
     float moveVelocity = 0;
 
     //getting references for different parts of the player entity
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private BoxCollider2D HurtBox;
     private Animator animator;
 
@@ -124,6 +124,13 @@ public class PlayerController : MonoBehaviour
             Debug.Log("esc");
             pauseHandler();
         }
+
+        if (Input.GetKeyDown(KeyCode.BackQuote) && gameState == "paused")
+        {
+            Debug.Log("debugMenu");
+            UIController.toggleDebugMenu();
+        }
+
         if (gameState != "Paused" && !levelComplete && gameState != "Starting")
         {
             //Jumping
@@ -166,11 +173,8 @@ public class PlayerController : MonoBehaviour
                 Debug.Log(inventory.characterItems[0].amount);
             }
         }
-        if (Input.GetKeyDown(KeyCode.BackQuote) && gameState == "paused")
-        {
-            Debug.Log("debugMenu");
-            debugMenu();
-        }
+
+        
         if (levelComplete)
         {
             accelerationInput = -1;
@@ -328,10 +332,7 @@ public class PlayerController : MonoBehaviour
 
     }
 
-    void debugMenu()
-    {
-       //empty for now, but will do things as the game is developed. 
-    }
+    
 
     private void handleInvincibilityTimer()
     {
