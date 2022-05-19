@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int landingLag;
     [SerializeField] private float maxSpeedMult;
     [SerializeField] private float airControlMod;
+    public int HPSliderMax;
     public int HealthPoints;
 
     //sets the ammount of invincibility frames given after a hit and tracks them
@@ -96,6 +97,7 @@ public class PlayerController : MonoBehaviour
         HurtBox = GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
         inventory = GetComponentInParent<Inventory>();
+        HPSliderMax = startingHP;
         HealthPoints = startingHP;
 
         playerState = "Start";
