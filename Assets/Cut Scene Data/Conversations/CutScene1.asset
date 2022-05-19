@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e389fe81dbee8a4eadc46a4747b31d6, type: 3}
+  m_Name: CutScene1
+  m_EditorClassIdentifier: 
+  speakerLeft: {fileID: 11400000, guid: ad534b7f8d42a954c951134f9dd5829e, type: 2}
+  speakerRight: {fileID: 11400000, guid: ee335bdd33ea6e74b891d43e3b0c4b5c, type: 2}
+  lines:
+  - character: {fileID: 11400000, guid: ad534b7f8d42a954c951134f9dd5829e, type: 2}
+    text: "Grandma was telling us all about the dog sled run across the vast ice
+      of Alaska\u2026"
+  - character: {fileID: 11400000, guid: ad534b7f8d42a954c951134f9dd5829e, type: 2}
+    text: "\u201CAnd then,\u201D Grandma said, \u201Che turned himself into a pickle.\u201D
+      She paused to laugh. \u201CIt was the funniest shit I\u2019d ever seen.\u201D "
