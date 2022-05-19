@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    private int HP; 
+    private int HP;
+    public Slider healthBar;
+    private int maxHP;
     public Text HPtext;
     public Text timerText;
     public Text readySetGoText;
@@ -20,6 +22,7 @@ public class UIController : MonoBehaviour
 
     public void levelStart()
     {
+        healthBar.maxValue = PlayerController.HPSliderMax;
         HP = PlayerController.HealthPoints;
         HPtext.text = HP.ToString();
         timerText.text = "Go";
@@ -48,6 +51,7 @@ public class UIController : MonoBehaviour
         public void updateHealth()
     {
         HP = PlayerController.HealthPoints;
+        healthBar.value = HP;
         HPtext.text = HP.ToString();
     }
     public void Update()
