@@ -169,10 +169,9 @@ public class PlayerController : MonoBehaviour
 
             // Powerup-related
 
-            if (Input.GetKeyDown(KeyCode.F) && canMush == true && inventory.characterItems[0].amount > 1) // for mushing
+            if (Input.GetKeyDown(KeyCode.F) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
             {
                 powerupInput = 1;
-                Debug.Log(inventory.characterItems[0].amount);
             }
         }
 
