@@ -15,7 +15,9 @@ public class GameManager : MonoBehaviour
     // this is also known as Singleton structure
 
     public int timesPlayed;
-
+    public int currentSceneID;
+    public float totalScore;
+    public int totalTime;
 
     /* FUNCTIONS */
 
@@ -38,6 +40,9 @@ public class GameManager : MonoBehaviour
     class SaveData // data to be saved between sessions in Json format
     {
         public int timesPlayed;
+        public int currentSceneID;
+        public float totalScore;
+        public int totalTime;
     }
 
     public void DataSaver() // used to save data to a file

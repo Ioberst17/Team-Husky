@@ -13,6 +13,7 @@ public class UIController : MonoBehaviour
     public PlayerController PlayerController;
     public GameObject pauseMenu;
     public GameObject debugMenu;
+    public GameObject endLevelMenu;
     private int readySetGoTimer;
     [SerializeField] private Transform checkpoint1;
     
@@ -71,6 +72,6 @@ public class UIController : MonoBehaviour
             pauseMenu.SetActive(false);
         }
 
-
+        endLevelMenu.SetActive(PlayerController.levelComplete);
     }
 }
