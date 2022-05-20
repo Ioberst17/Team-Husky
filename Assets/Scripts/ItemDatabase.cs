@@ -45,7 +45,16 @@ public class ItemDatabase : MonoBehaviour
                     {
                         {"Power", 15 },
                         {"Defense", 10 }
+                    }),
+            new Item( // 4th item
+                3, "Toolkit", "Repairs the sled by 10 HP", //id, title, description
+                0, // initial amount
+                new Dictionary<string, int> // stats
+                    {
+                        {"Power", 15 },
+                        {"Defense", 10 }
                     })
+
         };
     }
 
