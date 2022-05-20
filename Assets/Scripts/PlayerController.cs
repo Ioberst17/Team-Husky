@@ -86,6 +86,10 @@ public class PlayerController : MonoBehaviour
     private bool canMush = true;
     [SerializeField] private float mushingCooldown;
     [SerializeField] private float mushForce;
+    public ParticleSystem mushUse;
+
+    //Toolkit related
+    public ParticleSystem toolkitUse;
 
     //Event reporting system
     //public delegate void MyDelegate();
@@ -172,6 +176,11 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
             {
                 powerupInput = 1;
+            }
+
+            if(Input.GetKeyDown(KeyCode.V) && inventory.characterItems[3].amount > 0) // for toolkit
+            {
+                powerupInput = 4;
             }
         }
 
@@ -488,9 +497,17 @@ public class PlayerController : MonoBehaviour
                 break;
             case 1:
                 rb.AddForce(transform.right * mushForce, ForceMode2D.Impulse);
+                mushUse.Play();
                 canMush = false;
                 StartCoroutine(MushingRoutine());
                 inventory.RemoveItem(0);
+                powerupInput = 0;
+                break;
+            case 4:
+                HealthPoints += 10;
+                toolkitUse.Play();
+                inventory.RemoveItem(3);
+                UIController.updateHealth();
                 powerupInput = 0;
                 break;
         }

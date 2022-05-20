@@ -38,7 +38,11 @@ public class Inventory : MonoBehaviour
         AddItem(1);
         AddItem(2);
         AddItem(3);
-        RemoveItem(3);
+        AddItem(3);
+        AddItem(3);
+        AddItem(3);
+        AddItem(3);
+        AddItem(3);
     }
 
     public void AddItem(int id) // add item to inventory using item id
