@@ -94,6 +94,14 @@ public class PlayerController : MonoBehaviour
     private bool invincibilityOn = false;
     public ParticleSystem invincibilityUse;
 
+    //golden powerup related
+    [SerializeField] private float goldenLength;
+    private float goldenCounter = 0;
+    private bool goldenOn = false;
+    public ParticleSystem golden1Use;
+    public ParticleSystem golden2Use;
+
+
     //Toolkit related
     public ParticleSystem toolkitUse;
 
@@ -187,6 +195,11 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.G) && invincibilityOn == false && inventory.characterItems[1].amount > 0) // for invincibility
             {
                 powerupInput = 2;
+            }
+
+            if (Input.GetKeyDown(KeyCode.B) && goldenOn == false) //&& inventory.characterItems[2].amount > 0) // for golden
+            { 
+                powerupInput = 3;
             }
 
             if (Input.GetKeyDown(KeyCode.V) && inventory.characterItems[3].amount > 0) // for toolkit
@@ -523,6 +536,15 @@ public class PlayerController : MonoBehaviour
                 powerupInput = 0;
                 break;
             case 3: //golden
+                goldenOn = true;
+                golden1Use.Stop();
+                golden2Use.Stop();
+                golden1Use.Play();
+                golden2Use.Play();
+                StartCoroutine(GoldenRoutine());
+                goldenCounter = 0;
+                inventory.RemoveItem(2);
+                powerupInput = 0;
                 break;
             case 4: //toolkit
                 HealthPoints += 10;
@@ -555,4 +577,20 @@ public class PlayerController : MonoBehaviour
         invincibilityUse.Stop();
         yield return null;
     } 
+
+    IEnumerator GoldenRoutine()
+    {
+        while (goldenCounter < goldenLength)
+        {
+            if (gameState != "paused")
+            {
+                goldenCounter += Time.deltaTime;
+                yield return null;
+            }
+        }
+        goldenOn = false;
+        golden1Use.Stop();
+        golden2Use.Stop();
+        yield return null;
+    }
 }
