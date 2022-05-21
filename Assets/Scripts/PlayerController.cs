@@ -197,7 +197,7 @@ public class PlayerController : MonoBehaviour
                 powerupInput = 2;
             }
 
-            if (Input.GetKeyDown(KeyCode.B) && goldenOn == false) //&& inventory.characterItems[2].amount > 0) // for golden
+            if (Input.GetKeyDown(KeyCode.B) && goldenOn == false && inventory.characterItems[2].amount > 0) // for golden
             { 
                 powerupInput = 3;
             }
