@@ -12,7 +12,8 @@ public class EnemyController : MonoBehaviour
     public Rigidbody2D rb;
     [SerializeField] private float fallSpeed;
     [SerializeField] private bool isIcicle;
-    [SerializeField] private Vector3 startingLocation;
+    [SerializeField] private bool isHazard;
+    private Vector3 startingLocation;
     private bool fallTrigger;
 
     // Start is called before the first frame update
@@ -22,7 +23,6 @@ public class EnemyController : MonoBehaviour
         fallTrigger = !isIcicle;
         startingLocation = transform.position;
         PlayerController.onDeath += OnRespawn;
-        Debug.Log(name + " starting location is " + startingLocation);
     }
     private void OnDisable()
     {
@@ -40,7 +40,27 @@ public class EnemyController : MonoBehaviour
             }
             else
             {
-                PlayerController.takeDamage(damageValue);
+                if (isHazard)
+                {
+                    //do nothing, the ontriggerstay function will handle it
+                }
+                else
+                {
+                    PlayerController.takeDamage(damageValue, 0);
+                }
+                
+            }
+        }
+    }
+    private void OnTriggerStay2D(Collider2D collider)
+    {
+        if (collider.gameObject.layer
+                == LayerMask.NameToLayer("Player"))
+        {
+            if (isHazard)
+            {
+                PlayerController.takeDamage(damageValue, 1);
+
             }
         }
     }

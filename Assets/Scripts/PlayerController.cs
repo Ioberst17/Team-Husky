@@ -164,7 +164,7 @@ public class PlayerController : MonoBehaviour
             //this are testing functions to be removed later.
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                takeDamage(50);
+                takeDamage(50, 0);
             }
 
             // Powerup-related
@@ -490,36 +490,57 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    //processes if the player should take damage, and if so, how much, then calculates for death. 
-    public void takeDamage(int damageNumber)
+    //processes if the player should take damage, and if so, how much, then calculates for death. damageType Numbers: 0 is one hit damage, 1 is damage over time.
+    public void takeDamage(int damageNumber, int damageType)
     {
-        MusicController.DamageFunction();
         if (invincibilityTimer <= 0)
         {
-            HealthPoints -= damageNumber;
-            if (HealthPoints <= 0)
+            switch (damageType)
             {
-                Death();
+                case 0:
+                    HealthPoints -= damageNumber;
+                    if (HealthPoints <= 0)
+                    {
+                        Death();
+                        break;
+                    }
+                    MusicController.DamageFunction();
+                    invincibilityTimer = invincibilityValue;
+                    if (groundedUnified)
+                    {
+                        animator.Play("PlayerRunningDamage_Ian");
+                    }
+                    else
+                    {
+                        animator.Play("PlayerJumpDamage_Ian");
+                    }
+                    break;
+                case 1:
+                    if(speedometer >= 1)
+                    {
+                        HealthPoints -= damageNumber;
+                        if (HealthPoints <= 0)
+                        {
+                            Death();
+                            break;
+                        }
+                        MusicController.DamageFunction();
+                        invincibilityTimer = invincibilityValue / 2;
+                        if (groundedUnified)
+                        {
+                            animator.Play("PlayerRunningDamage_Ian");
+                        }
+                        else
+                        {
+                            animator.Play("PlayerJumpDamage_Ian");
+                        }
+                    }
+                    break;
             }
-            else
-            {
-                invincibilityTimer = invincibilityValue;
-                if (groundedUnified)
-                {
-                    animator.Play("PlayerRunningDamage_Ian");
-                }
-                else
-                {
-                    animator.Play("PlayerJumpDamage_Ian");
-                }
-                
-
-            }
-            UIController.updateHealth();
         }
-
+    UIController.updateHealth();
     }
-
+    
     void UsePowerup()
     {
         switch (powerupInput)
@@ -535,9 +556,7 @@ public class PlayerController : MonoBehaviour
                 powerupInput = 0;
                 break;
         }
-        
     }
-   
 
     IEnumerator MushingRoutine() // is called by the trigger event for powerups to countdown how long the power lasts
     {
