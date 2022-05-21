@@ -8,6 +8,11 @@ public class MusicController : MonoBehaviour
     public AudioClip LevelTheme;
     public AudioClip PowerupTheme;
     public AudioClip EndLevelTheme;
+    public AudioClip OutOfBoundsClip;
+    public AudioClip DamageClip;
+    public AudioClip JumpClip;
+    public AudioClip SpeedBoostClip;
+    public AudioClip ReadySetGoClip;
 
     public void levelStart()
     {
@@ -22,5 +27,25 @@ public class MusicController : MonoBehaviour
     {
         AudioSource.Stop();
         AudioSource.PlayOneShot(EndLevelTheme);
+    }
+    public void outOfBoundsFunction()
+    {
+        AudioSource.PlayOneShot(OutOfBoundsClip);
+    }
+    public void DamageFunction()
+    {
+        AudioSource.PlayOneShot(DamageClip);
+    }
+    public void JumpFunction()
+    {
+        AudioSource.PlayOneShot(JumpClip);
+    }
+    public void SpeedBoostFunction()
+    {
+        AudioSource.PlayOneShot(SpeedBoostClip);
+    }
+    public void ReadySetGoFunction()
+    {
+        AudioSource.PlayOneShot(ReadySetGoClip);
     }
 }

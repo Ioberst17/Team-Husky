@@ -36,12 +36,12 @@ public class PlayerController : MonoBehaviour
     private Vector3 previousPosition;
     private Vector3 currentPosition;
     private int count;
+    public int stuckCount;
 
     //various different controllers from around the scene.
     public MusicController MusicController;
     public UIController UIController;
 
-    
     public bool levelComplete;
 
     //Holds the state of the game from among: running, paused
@@ -78,6 +78,7 @@ public class PlayerController : MonoBehaviour
     bool grounded = true;
     bool grounded2 = true;
     bool grounded3= true;
+    bool groundedUnified = true;
 
     //Inventory
     public Inventory inventory;
@@ -106,8 +107,8 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem toolkitUse;
 
     //Event reporting system
-    //public delegate void MyDelegate();
-    //public event MyDelegate onDeath;
+    public delegate void MyDelegate();
+    public static event MyDelegate onDeath;
 
     private void Start()
     {
@@ -128,6 +129,7 @@ public class PlayerController : MonoBehaviour
         UIController.levelStart();
         MusicController.levelStart();
         count = 0;
+        stuckCount = 0;
         jumpTimer = 0;
         landingTimer = 0;
         readySetGoTimer = 0;
@@ -182,7 +184,7 @@ public class PlayerController : MonoBehaviour
             //this are testing functions to be removed later.
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                takeDamage(50);
+                takeDamage(50, 0);
             }
 
             // Powerup-related
@@ -242,7 +244,15 @@ public class PlayerController : MonoBehaviour
 
         UsePowerup();
 
-        //control the rotation of the player        
+        //control the rotation of the player    
+        if(rb.rotation > 55)
+        {
+            rb.rotation = 55;
+        }
+        if (rb.rotation < -55)
+        {
+            rb.rotation = -55;
+        }
         if (!grounded && !grounded2 && !grounded3)
         {
             rb.freezeRotation = true;
@@ -260,6 +270,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
+
         checkSpeed();
 
         handleInvincibilityTimer();
@@ -274,7 +285,7 @@ public class PlayerController : MonoBehaviour
     //handles acceleration inputs
     void Accelerate(int accelInput)
     {
-        if ((grounded && grounded2 && grounded3) && jumpTimer == 0)
+        if ((groundedUnified) && jumpTimer == 0)
         {
             //if holding back and with positive velocity, slow down
             if (accelInput == -1 && moveVelocity > 0)
@@ -302,6 +313,7 @@ public class PlayerController : MonoBehaviour
                     animator.Play("PlayerRunning");
                 }
             }
+            rb.AddForce(Vector2.down * 50);
             
         }
         else
@@ -336,6 +348,20 @@ public class PlayerController : MonoBehaviour
             speedometer = Vector2.Distance(v1, v2);
             previousPosition = currentPosition;
             count = 0;
+            if(speedometer <= 0.5f && !groundedUnified)
+            {
+                stuckCount += 1;
+            }
+            else
+            {
+                stuckCount = 0;
+            }
+            if(stuckCount >= 1)
+            {
+                stuckCount = 0;
+                rb.velocity = new Vector2(-1, -1);
+                moveVelocity = 0;
+            }
         }
         else
         {
@@ -347,7 +373,7 @@ public class PlayerController : MonoBehaviour
     //reports the Death event and respawns the player
     void Death()
     {
-        //onDeath.Invoke();
+        onDeath?.Invoke();
         Debug.Log("The Player Has died");
         rb.velocity = new Vector2(0, 0);
         rb.rotation = 0;
@@ -387,11 +413,12 @@ public class PlayerController : MonoBehaviour
         grounded = Physics2D.OverlapCircle(GroundChecker.position, GroundChecker.GetComponent<CircleCollider2D>().radius, GroundLayer);
         grounded2 = Physics2D.OverlapCircle(GroundChecker2.position, GroundChecker2.GetComponent<CircleCollider2D>().radius, GroundLayer);
         grounded3 = Physics2D.OverlapCircle(GroundChecker3.position, GroundChecker3.GetComponent<CircleCollider2D>().radius, GroundLayer);
+        groundedUnified = (grounded && grounded2 && grounded3);
         if (grounded || grounded2 || grounded3)
         {
             rb.freezeRotation = false;
         }
-        if (grounded && grounded2 && grounded3)
+        if (groundedUnified) 
         {
             jumpsRemaining = jumpNumber;
             playerState = "grounded";
@@ -420,6 +447,7 @@ public class PlayerController : MonoBehaviour
     {
         if (HurtBox.IsTouchingLayers(DeathPlane))
         {
+            MusicController.outOfBoundsFunction();
             return true;
         }
         return false;
@@ -430,15 +458,16 @@ public class PlayerController : MonoBehaviour
     {
         if (jInput)
         {
-            if (((grounded && grounded2 && grounded3) || jumpsRemaining > 0) && jumpTimer == 0 && landingTimer == 0)
+            if (((groundedUnified) || jumpsRemaining > 0) && jumpTimer == 0 && landingTimer == 0)
             {
                 if (rb.velocity.y < 0)
                 {
                     rb.velocity = new Vector2(moveVelocity, 0);
                 }
+                MusicController.JumpFunction();
                 animator.Play("PlayerJump");
                 rb.AddForce(Vector2.up * jumpPower); 
-                rb.rotation += 15;
+                rb.rotation = 25;
                 jumpsRemaining -= 1;
                 jumpTimer = 15;
                 jumpInput = false;
@@ -456,12 +485,14 @@ public class PlayerController : MonoBehaviour
         {
             Time.timeScale = 0;
             gameState = "paused";
+            MusicController.AudioSource.Pause();
 
         }
         else
         {
             Time.timeScale = 1;
             gameState = "running";
+            MusicController.AudioSource.UnPause();
         }
 
     }
@@ -472,6 +503,7 @@ public class PlayerController : MonoBehaviour
         {
             if (readySetGoTimer == 0)
             {
+                MusicController.ReadySetGoFunction();
                 UIController.readySetGoText.text = "Ready";
             }
             else if (readySetGoTimer == 60)
@@ -492,34 +524,66 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    //processes if the player should take damage, and if so, how much, then calculates for death. 
-    public void takeDamage(int damageNumber)
+    //processes if the player should take damage, and if so, how much, then calculates for death. damageType Numbers: 0 is one hit damage, 1 is damage over time.
+    public void takeDamage(int damageNumber, int damageType)
     {
         if (invincibilityTimer <= 0 && invincibilityOn == false)
         {
-            HealthPoints -= damageNumber;
-            if (HealthPoints <= 0)
+            switch (damageType)
             {
-                Death();
+                case 0:
+                    HealthPoints -= damageNumber;
+                    if (HealthPoints <= 0)
+                    {
+                        Death();
+                        break;
+                    }
+                    MusicController.DamageFunction();
+                    invincibilityTimer = invincibilityValue;
+                    if (groundedUnified)
+                    {
+                        animator.Play("PlayerRunningDamage_Ian");
+                    }
+                    else
+                    {
+                        animator.Play("PlayerJumpDamage_Ian");
+                    }
+                    break;
+                case 1:
+                    if(speedometer >= 1)
+                    {
+                        HealthPoints -= damageNumber;
+                        if (HealthPoints <= 0)
+                        {
+                            Death();
+                            break;
+                        }
+                        MusicController.DamageFunction();
+                        invincibilityTimer = invincibilityValue / 2;
+                        if (groundedUnified)
+                        {
+                            animator.Play("PlayerRunningDamage_Ian");
+                        }
+                        else
+                        {
+                            animator.Play("PlayerJumpDamage_Ian");
+                        }
+                    }
+                    break;
             }
-            else
-            {
-                invincibilityTimer = invincibilityValue;
-                animator.Play("PlayerDamage");
-
-            }
-            UIController.updateHealth();
         }
-
+    UIController.updateHealth();
     }
-
+    
     void UsePowerup()
     {
         switch (powerupInput)
         {
             case 0:
                 break;
-            case 1: //musher
+
+            case 1:
+                MusicController.SpeedBoostFunction();
                 rb.AddForce(transform.right * mushForce, ForceMode2D.Impulse);
                 mushUse.Play();
                 canMush = false;
@@ -554,7 +618,6 @@ public class PlayerController : MonoBehaviour
                 powerupInput = 0;
                 break;
         }
-        
     }
 
     IEnumerator MushingRoutine() // is called by the trigger event for powerups to countdown how long the power lasts
