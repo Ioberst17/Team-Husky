@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int landingLag;
     [SerializeField] private float maxSpeedMult;
     [SerializeField] private float airControlMod;
+    public int HPSliderMax;
     public int HealthPoints;
 
     //sets the ammount of invincibility frames given after a hit and tracks them
@@ -86,6 +87,24 @@ public class PlayerController : MonoBehaviour
     private bool canMush = true;
     [SerializeField] private float mushingCooldown;
     [SerializeField] private float mushForce;
+    public ParticleSystem mushUse;
+
+    //Invincibility powerup related
+    [SerializeField] private float invincibilityLength;
+    private float invincibilityCounter = 0;
+    private bool invincibilityOn = false;
+    public ParticleSystem invincibilityUse;
+
+    //golden powerup related
+    [SerializeField] private float goldenLength;
+    private float goldenCounter = 0;
+    private bool goldenOn = false;
+    public ParticleSystem golden1Use;
+    public ParticleSystem golden2Use;
+
+
+    //Toolkit related
+    public ParticleSystem toolkitUse;
 
     //Event reporting system
     public delegate void MyDelegate();
@@ -97,6 +116,7 @@ public class PlayerController : MonoBehaviour
         HurtBox = GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
         inventory = GetComponentInParent<Inventory>();
+        HPSliderMax = startingHP;
         HealthPoints = startingHP;
 
         playerState = "Start";
@@ -169,10 +189,24 @@ public class PlayerController : MonoBehaviour
 
             // Powerup-related
 
-            if (Input.GetKeyDown(KeyCode.F) && canMush == true && inventory.characterItems[0].amount > 1) // for mushing
+            if (Input.GetKeyDown(KeyCode.F) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
             {
                 powerupInput = 1;
-                Debug.Log(inventory.characterItems[0].amount);
+            }
+
+            if (Input.GetKeyDown(KeyCode.G) && invincibilityOn == false && inventory.characterItems[1].amount > 0) // for invincibility
+            {
+                powerupInput = 2;
+            }
+
+            if (Input.GetKeyDown(KeyCode.B) && goldenOn == false && inventory.characterItems[2].amount > 0) // for golden
+            { 
+                powerupInput = 3;
+            }
+
+            if (Input.GetKeyDown(KeyCode.V) && inventory.characterItems[3].amount > 0) // for toolkit
+            {
+                powerupInput = 4;
             }
         }
 
@@ -493,7 +527,7 @@ public class PlayerController : MonoBehaviour
     //processes if the player should take damage, and if so, how much, then calculates for death. damageType Numbers: 0 is one hit damage, 1 is damage over time.
     public void takeDamage(int damageNumber, int damageType)
     {
-        if (invincibilityTimer <= 0)
+        if (invincibilityTimer <= 0 && invincibilityOn == false)
         {
             switch (damageType)
             {
@@ -547,12 +581,40 @@ public class PlayerController : MonoBehaviour
         {
             case 0:
                 break;
+
             case 1:
                 MusicController.SpeedBoostFunction();
                 rb.AddForce(transform.right * mushForce, ForceMode2D.Impulse);
+                mushUse.Play();
                 canMush = false;
                 StartCoroutine(MushingRoutine());
                 inventory.RemoveItem(0);
+                powerupInput = 0;
+                break;
+            case 2: //invincibility
+                invincibilityOn = true;
+                invincibilityUse.Play();
+                StartCoroutine(InvincibilityRoutine());
+                invincibilityCounter = 0;
+                inventory.RemoveItem(1);
+                powerupInput = 0;
+                break;
+            case 3: //golden
+                goldenOn = true;
+                golden1Use.Stop();
+                golden2Use.Stop();
+                golden1Use.Play();
+                golden2Use.Play();
+                StartCoroutine(GoldenRoutine());
+                goldenCounter = 0;
+                inventory.RemoveItem(2);
+                powerupInput = 0;
+                break;
+            case 4: //toolkit
+                HealthPoints += 10;
+                toolkitUse.Play();
+                inventory.RemoveItem(3);
+                UIController.updateHealth();
                 powerupInput = 0;
                 break;
         }
@@ -562,5 +624,36 @@ public class PlayerController : MonoBehaviour
     {
         yield return new WaitForSeconds(mushingCooldown); // waits a certain number of seconds
         canMush = true;
+    }
+
+    IEnumerator InvincibilityRoutine() // is called by the trigger event for powerupts to countdown how long 
+    {
+        while (invincibilityCounter < invincibilityLength)
+        {
+            if (gameState != "paused")
+            {
+                invincibilityCounter += Time.deltaTime;
+                yield return null;
+            }
+        }
+        invincibilityOn = false;
+        invincibilityUse.Stop();
+        yield return null;
+    } 
+
+    IEnumerator GoldenRoutine()
+    {
+        while (goldenCounter < goldenLength)
+        {
+            if (gameState != "paused")
+            {
+                goldenCounter += Time.deltaTime;
+                yield return null;
+            }
+        }
+        goldenOn = false;
+        golden1Use.Stop();
+        golden2Use.Stop();
+        yield return null;
     }
 }

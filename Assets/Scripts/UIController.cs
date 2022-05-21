@@ -5,7 +5,9 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
-    private int HP; 
+    private int HP;
+    public Slider healthBar;
+    private int maxHP;
     public Text HPtext;
     public Text timerText;
     public Text readySetGoText;
@@ -21,6 +23,7 @@ public class UIController : MonoBehaviour
 
     public void levelStart()
     {
+        healthBar.maxValue = PlayerController.HPSliderMax;
         HP = PlayerController.HealthPoints;
         HPtext.text = HP.ToString();
         timerText.text = "Go";
@@ -49,6 +52,7 @@ public class UIController : MonoBehaviour
         public void updateHealth()
     {
         HP = PlayerController.HealthPoints;
+        healthBar.value = HP;
         HPtext.text = HP.ToString();
     }
     public void Update()
@@ -56,7 +60,12 @@ public class UIController : MonoBehaviour
         if(PlayerController.gameState != "paused" && PlayerController.levelComplete !=  true)
         {
             Stopwatch.Unpause();
-            timerText.text = Stopwatch.GetMinutes().ToString() + ":" + (Stopwatch.GetSeconds()  + Mathf.Round(Stopwatch.GetMilliseconds()*100.0f)*0.01f -(60*Stopwatch.GetMinutes())).ToString();
+
+            // formats time based on the fact Unity uses seconds as a basis for time.time (see Stopwatch.cs for methods)
+            timerText.text = string.Format("{0:0}:{1:00}:{2:00}",
+                                                Stopwatch.GetMinutes(),
+                                                Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
+                                                (Stopwatch.GetMilliseconds()*100.00f)%100.00f);
         }
         if (PlayerController.levelComplete == true)
         {

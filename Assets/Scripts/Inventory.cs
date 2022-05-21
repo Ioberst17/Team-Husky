@@ -16,6 +16,7 @@ public class Inventory : MonoBehaviour
     public TextMeshProUGUI musherNum; // assigned in Inspector
     public TextMeshProUGUI invincibilityNum; // assigned in Inspector
     public TextMeshProUGUI goldenNum; // assigned in Inspector
+    public TextMeshProUGUI toolkitNum; // assigned in Inspector
 
 
     private void Start()
@@ -24,9 +25,11 @@ public class Inventory : MonoBehaviour
         AddItem(0);
         AddItem(1);
         AddItem(2);
+        AddItem(3);
         musherNum.text = characterItems[0].ToString();
         invincibilityNum.text = characterItems[1].ToString();
         goldenNum.text = characterItems[2].ToString();
+        toolkitNum.text = characterItems[3].ToString();
 
         //for testing
         AddItem(0);
@@ -34,6 +37,12 @@ public class Inventory : MonoBehaviour
         AddItem(0);
         AddItem(1);
         AddItem(2);
+        AddItem(3);
+        AddItem(3);
+        AddItem(3);
+        AddItem(3);
+        AddItem(3);
+        AddItem(3);
     }
 
     public void AddItem(int id) // add item to inventory using item id
@@ -52,7 +61,7 @@ public class Inventory : MonoBehaviour
                 musherNum.text = ItemChecker(id).amount.ToString(); //update UI
             }
         }
-        else if (id == 1 || id == 2)
+        else if (id == 1 || id == 2 || id == 3)
         {
             if (null == ItemChecker(id)) // check if item is not in list
             {
@@ -61,8 +70,10 @@ public class Inventory : MonoBehaviour
             else
             {
                 characterItems[id].amount += 1; // if it is, just increment amount
-                if (id == 1) invincibilityNum.text = ItemChecker(id).amount.ToString();
-                else goldenNum.text = ItemChecker(id).amount.ToString();
+                // then update relevant UI
+                if (id == 1) { invincibilityNum.text = ItemChecker(id).amount.ToString(); }
+                if (id == 2) { goldenNum.text = ItemChecker(id).amount.ToString(); }
+                if (id == 3) { toolkitNum.text = ItemChecker(id).amount.ToString(); }
             }
         }
         Debug.Log("Added item: " + itemToAdd.title);
@@ -88,6 +99,9 @@ public class Inventory : MonoBehaviour
                 break;
             case 2:
                 goldenNum.text = (characterItems[id].amount).ToString();
+                break;
+            case 3:
+                toolkitNum.text = (characterItems[id].amount).ToString();
                 break;
 
         }
