@@ -5,21 +5,25 @@ public class PlayerController : MonoBehaviour
 {
 
     //Movement
-    public float speed;
-    public float speedMod;
-
-    public float rotationMod;
-    public float jumpPower;
-    public float jumpNumber;
+    [SerializeField] private float speed;
+    [SerializeField] private float speedMod;
+    [SerializeField] private float rotationMod;
+    [SerializeField] private float jumpPower;
+    [SerializeField] private float jumpNumber;
     float jumpsRemaining;
+    float moveVelocity = 0;
 
     //getting references for different parts of the player entity
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
     private BoxCollider2D HurtBox;
     private Animator animator;
 
     //Number crunching variables
     [SerializeField] private int startingHP;
+    [SerializeField] private int landingLag;
+    [SerializeField] private float maxSpeedMult;
+    [SerializeField] private float airControlMod;
+    public int HPSliderMax;
     public int HealthPoints;
 
     //sets the ammount of invincibility frames given after a hit and tracks them
@@ -32,12 +36,13 @@ public class PlayerController : MonoBehaviour
     private Vector3 previousPosition;
     private Vector3 currentPosition;
     private int count;
+    public int stuckCount;
 
+    //various different controllers from around the scene.
     public MusicController MusicController;
     public UIController UIController;
-    public bool levelComplete;
 
-    float moveVelocity = 0;
+    public bool levelComplete;
 
     //Holds the state of the game from among: running, paused
     public string gameState;
@@ -46,6 +51,8 @@ public class PlayerController : MonoBehaviour
     public string playerState;
 
     public Transform GroundChecker; // circle collider located under the player object, used to check if on the ground
+    public Transform GroundChecker2;
+    public Transform GroundChecker3;
 
     //Different Layers used
     public LayerMask GroundLayer;
@@ -59,6 +66,7 @@ public class PlayerController : MonoBehaviour
     //variables for transmitting user input into fixed update
     private bool jumpInput;
     private int accelerationInput;
+    private int powerupInput;
 
     //Verious timer values
     private int jumpTimer;
@@ -68,16 +76,47 @@ public class PlayerController : MonoBehaviour
 
     //Grounded Vars
     bool grounded = true;
+    bool grounded2 = true;
+    bool grounded3= true;
+    bool groundedUnified = true;
+
+    //Inventory
+    public Inventory inventory;
+
+    //Mushing related
+    private bool canMush = true;
+    [SerializeField] private float mushingCooldown;
+    [SerializeField] private float mushForce;
+    public ParticleSystem mushUse;
+
+    //Invincibility powerup related
+    [SerializeField] private float invincibilityLength;
+    private float invincibilityCounter = 0;
+    private bool invincibilityOn = false;
+    public ParticleSystem invincibilityUse;
+
+    //golden powerup related
+    [SerializeField] private float goldenLength;
+    private float goldenCounter = 0;
+    private bool goldenOn = false;
+    public ParticleSystem golden1Use;
+    public ParticleSystem golden2Use;
+
+
+    //Toolkit related
+    public ParticleSystem toolkitUse;
 
     //Event reporting system
-    //public delegate void MyDelegate();
-    //public event MyDelegate onDeath;
+    public delegate void MyDelegate();
+    public static event MyDelegate onDeath;
 
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         HurtBox = GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
+        inventory = GetComponentInParent<Inventory>();
+        HPSliderMax = startingHP;
         HealthPoints = startingHP;
 
         playerState = "Start";
@@ -90,18 +129,16 @@ public class PlayerController : MonoBehaviour
         UIController.levelStart();
         MusicController.levelStart();
         count = 0;
+        stuckCount = 0;
         jumpTimer = 0;
         landingTimer = 0;
         readySetGoTimer = 0;
+        powerupInput = 0; ;
         readySetGo();
 
-
-        if (playerState == "Start")
-        {
-            //filler method to remove warnings for now
-        }
     }
 
+    //update is largely focused on user input
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -109,6 +146,13 @@ public class PlayerController : MonoBehaviour
             Debug.Log("esc");
             pauseHandler();
         }
+
+        if (Input.GetKeyDown(KeyCode.BackQuote) && gameState == "paused")
+        {
+            Debug.Log("debugMenu");
+            UIController.toggleDebugMenu();
+        }
+
         if (gameState != "Paused" && !levelComplete && gameState != "Starting")
         {
             //Jumping
@@ -140,9 +184,33 @@ public class PlayerController : MonoBehaviour
             //this are testing functions to be removed later.
             if (Input.GetKeyDown(KeyCode.Q))
             {
-                takeDamage(50);
+                takeDamage(50, 0);
+            }
+
+            // Powerup-related
+
+            if (Input.GetKeyDown(KeyCode.F) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
+            {
+                powerupInput = 1;
+            }
+
+            if (Input.GetKeyDown(KeyCode.G) && invincibilityOn == false && inventory.characterItems[1].amount > 0) // for invincibility
+            {
+                powerupInput = 2;
+            }
+
+            if (Input.GetKeyDown(KeyCode.B) && goldenOn == false && inventory.characterItems[2].amount > 0) // for golden
+            { 
+                powerupInput = 3;
+            }
+
+            if (Input.GetKeyDown(KeyCode.V) && inventory.characterItems[3].amount > 0) // for toolkit
+            {
+                powerupInput = 4;
             }
         }
+
+        
         if (levelComplete)
         {
             accelerationInput = -1;
@@ -150,28 +218,44 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
+    //Fixed update is where all physics happens
     void FixedUpdate()
     {
         readySetGo();
         isGrounded();
-        //Controlls the base and maximum speed
-        if (moveVelocity < 0)
+        if (canMush)
         {
-            moveVelocity = 0;
+            //Controlls the base and maximum speed if not using a powerup
+            if (moveVelocity < 0)
+            {
+                moveVelocity = 0;
+            }
+            else if (moveVelocity > speed)
+            {
+                moveVelocity -= speedMod / 10;
+            }
+            Accelerate(accelerationInput);
         }
-        else if (moveVelocity > speed)
-        {
-            moveVelocity -= speedMod/10;
-        }
+        
 
         Jump(jumpInput);
 
-        Accelerate(accelerationInput);
+        
 
-        //control the rotation of the player        
-        if (!grounded)
+        UsePowerup();
+
+        //control the rotation of the player    
+        if(rb.rotation > 55)
         {
+            rb.rotation = 55;
+        }
+        if (rb.rotation < -55)
+        {
+            rb.rotation = -55;
+        }
+        if (!grounded && !grounded2 && !grounded3)
+        {
+            rb.freezeRotation = true;
             if (rb.rotation > 25)
             {
                 rb.rotation = 25;
@@ -185,7 +269,7 @@ public class PlayerController : MonoBehaviour
                 rb.rotation -= rotationMod;
             }
         }
-        
+
 
         checkSpeed();
 
@@ -201,7 +285,7 @@ public class PlayerController : MonoBehaviour
     //handles acceleration inputs
     void Accelerate(int accelInput)
     {
-        if (grounded)
+        if ((groundedUnified) && jumpTimer == 0)
         {
             //if holding back and with positive velocity, slow down
             if (accelInput == -1 && moveVelocity > 0)
@@ -213,7 +297,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
             //if holding forward and not exceeding the maximum, speed up
-            if (accelInput == 1 && moveVelocity < speed * 2.5)
+            if (accelInput == 1 && moveVelocity < speed * maxSpeedMult)
             {
                 moveVelocity = moveVelocity + speedMod;
             }
@@ -222,13 +306,14 @@ public class PlayerController : MonoBehaviour
             {
                 if (moveVelocity < 1)
                 {
-                    animator.Play("PlayerRestIan");
+                    animator.Play("PlayerRest");
                 }
                 else
                 {
-                    animator.Play("PlayerRunningIan");
+                    animator.Play("PlayerRunning");
                 }
             }
+            rb.AddForce(Vector2.down * 50);
             
         }
         else
@@ -236,15 +321,15 @@ public class PlayerController : MonoBehaviour
             //Air control is reduced
             if (accelInput == -1 && moveVelocity > 0)
             {
-                moveVelocity = moveVelocity - speedMod/5;
+                moveVelocity = moveVelocity - speedMod/airControlMod;
                 if (moveVelocity < 0)
                 {
                     moveVelocity = 0;
                 }
             }
-            if (accelInput == 1 && moveVelocity < speed * 2.5)
+            if (accelInput == 1 && moveVelocity < speed * maxSpeedMult)
             {
-                moveVelocity = moveVelocity + speedMod/5;
+                moveVelocity = moveVelocity + speedMod/airControlMod;
             }
         }
 
@@ -263,6 +348,20 @@ public class PlayerController : MonoBehaviour
             speedometer = Vector2.Distance(v1, v2);
             previousPosition = currentPosition;
             count = 0;
+            if(speedometer <= 0.5f && !groundedUnified)
+            {
+                stuckCount += 1;
+            }
+            else
+            {
+                stuckCount = 0;
+            }
+            if(stuckCount >= 1)
+            {
+                stuckCount = 0;
+                rb.velocity = new Vector2(-1, -1);
+                moveVelocity = 0;
+            }
         }
         else
         {
@@ -274,14 +373,14 @@ public class PlayerController : MonoBehaviour
     //reports the Death event and respawns the player
     void Death()
     {
-        //onDeath.Invoke();
+        onDeath?.Invoke();
         Debug.Log("The Player Has died");
         rb.velocity = new Vector2(0, 0);
         rb.rotation = 0;
         rb.transform.position = spawnPoint.position;
 
         //resetting all values
-        animator.Play("PlayerRestIan");
+        animator.Play("PlayerRest");
         moveVelocity = 0;
         accelerationInput = 0;
         jumpInput = false;
@@ -292,6 +391,8 @@ public class PlayerController : MonoBehaviour
         UIController.updateHealth();
 
     }
+
+    
 
     private void handleInvincibilityTimer()
     {
@@ -310,10 +411,18 @@ public class PlayerController : MonoBehaviour
             isLanding = true;
         }
         grounded = Physics2D.OverlapCircle(GroundChecker.position, GroundChecker.GetComponent<CircleCollider2D>().radius, GroundLayer);
-        if (grounded)
+        grounded2 = Physics2D.OverlapCircle(GroundChecker2.position, GroundChecker2.GetComponent<CircleCollider2D>().radius, GroundLayer);
+        grounded3 = Physics2D.OverlapCircle(GroundChecker3.position, GroundChecker3.GetComponent<CircleCollider2D>().radius, GroundLayer);
+        groundedUnified = (grounded && grounded2 && grounded3);
+        if (grounded || grounded2 || grounded3)
+        {
+            rb.freezeRotation = false;
+        }
+        if (groundedUnified) 
         {
             jumpsRemaining = jumpNumber;
             playerState = "grounded";
+            
             if (landingTimer > 0)
             {
                 landingTimer -= 1;
@@ -321,8 +430,8 @@ public class PlayerController : MonoBehaviour
             
             if (isLanding)
             {
-                landingTimer = 5;
-                animator.Play("PlayerLandIan");
+                landingTimer = landingLag;
+                animator.Play("PlayerLand");
             }
         }
         else
@@ -338,6 +447,7 @@ public class PlayerController : MonoBehaviour
     {
         if (HurtBox.IsTouchingLayers(DeathPlane))
         {
+            MusicController.outOfBoundsFunction();
             return true;
         }
         return false;
@@ -348,15 +458,16 @@ public class PlayerController : MonoBehaviour
     {
         if (jInput)
         {
-            if ((grounded || jumpsRemaining > 0) && jumpTimer == 0 && landingTimer == 0)
+            if (((groundedUnified) || jumpsRemaining > 0) && jumpTimer == 0 && landingTimer == 0)
             {
                 if (rb.velocity.y < 0)
                 {
                     rb.velocity = new Vector2(moveVelocity, 0);
                 }
-                animator.Play("PlayerJumpIan");
-                rb.AddForce(Vector2.up * jumpPower); // = new Vector2(rb.velocity.x, jumpPower);
-                rb.rotation += 15;
+                MusicController.JumpFunction();
+                animator.Play("PlayerJump");
+                rb.AddForce(Vector2.up * jumpPower); 
+                rb.rotation = 25;
                 jumpsRemaining -= 1;
                 jumpTimer = 15;
                 jumpInput = false;
@@ -368,18 +479,20 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void pauseHandler()
+    public void pauseHandler()
     {
         if (gameState != "paused")
         {
             Time.timeScale = 0;
             gameState = "paused";
+            MusicController.AudioSource.Pause();
 
         }
         else
         {
             Time.timeScale = 1;
             gameState = "running";
+            MusicController.AudioSource.UnPause();
         }
 
     }
@@ -390,6 +503,7 @@ public class PlayerController : MonoBehaviour
         {
             if (readySetGoTimer == 0)
             {
+                MusicController.ReadySetGoFunction();
                 UIController.readySetGoText.text = "Ready";
             }
             else if (readySetGoTimer == 60)
@@ -400,6 +514,7 @@ public class PlayerController : MonoBehaviour
             {
                 UIController.readySetGoText.text = "Go!";
                 gameState = "running";
+                UIController.timerStart();
             }
             else if (readySetGoTimer == 180)
             {
@@ -409,24 +524,136 @@ public class PlayerController : MonoBehaviour
         }
     }
     
-    //processes if the player should take damage, and if so, how much, then calculates for death. 
-    public void takeDamage(int damageNumber)
+    //processes if the player should take damage, and if so, how much, then calculates for death. damageType Numbers: 0 is one hit damage, 1 is damage over time.
+    public void takeDamage(int damageNumber, int damageType)
     {
-        if (invincibilityTimer <= 0)
+        if (invincibilityTimer <= 0 && invincibilityOn == false)
         {
-            HealthPoints -= damageNumber;
-            if (HealthPoints <= 0)
+            switch (damageType)
             {
-                Death();
+                case 0:
+                    HealthPoints -= damageNumber;
+                    if (HealthPoints <= 0)
+                    {
+                        Death();
+                        break;
+                    }
+                    MusicController.DamageFunction();
+                    invincibilityTimer = invincibilityValue;
+                    if (groundedUnified)
+                    {
+                        animator.Play("PlayerRunningDamage_Ian");
+                    }
+                    else
+                    {
+                        animator.Play("PlayerJumpDamage_Ian");
+                    }
+                    break;
+                case 1:
+                    if(speedometer >= 1)
+                    {
+                        HealthPoints -= damageNumber;
+                        if (HealthPoints <= 0)
+                        {
+                            Death();
+                            break;
+                        }
+                        MusicController.DamageFunction();
+                        invincibilityTimer = invincibilityValue / 2;
+                        if (groundedUnified)
+                        {
+                            animator.Play("PlayerRunningDamage_Ian");
+                        }
+                        else
+                        {
+                            animator.Play("PlayerJumpDamage_Ian");
+                        }
+                    }
+                    break;
             }
-            else
-            {
-                invincibilityTimer = invincibilityValue;
-                animator.Play("PlayerDamageIan");
-
-            }
-            UIController.updateHealth();
         }
+    UIController.updateHealth();
+    }
+    
+    void UsePowerup()
+    {
+        switch (powerupInput)
+        {
+            case 0:
+                break;
 
+            case 1:
+                MusicController.SpeedBoostFunction();
+                rb.AddForce(transform.right * mushForce, ForceMode2D.Impulse);
+                mushUse.Play();
+                canMush = false;
+                StartCoroutine(MushingRoutine());
+                inventory.RemoveItem(0);
+                powerupInput = 0;
+                break;
+            case 2: //invincibility
+                invincibilityOn = true;
+                invincibilityUse.Play();
+                StartCoroutine(InvincibilityRoutine());
+                invincibilityCounter = 0;
+                inventory.RemoveItem(1);
+                powerupInput = 0;
+                break;
+            case 3: //golden
+                goldenOn = true;
+                golden1Use.Stop();
+                golden2Use.Stop();
+                golden1Use.Play();
+                golden2Use.Play();
+                StartCoroutine(GoldenRoutine());
+                goldenCounter = 0;
+                inventory.RemoveItem(2);
+                powerupInput = 0;
+                break;
+            case 4: //toolkit
+                HealthPoints += 10;
+                toolkitUse.Play();
+                inventory.RemoveItem(3);
+                UIController.updateHealth();
+                powerupInput = 0;
+                break;
+        }
+    }
+
+    IEnumerator MushingRoutine() // is called by the trigger event for powerups to countdown how long the power lasts
+    {
+        yield return new WaitForSeconds(mushingCooldown); // waits a certain number of seconds
+        canMush = true;
+    }
+
+    IEnumerator InvincibilityRoutine() // is called by the trigger event for powerupts to countdown how long 
+    {
+        while (invincibilityCounter < invincibilityLength)
+        {
+            if (gameState != "paused")
+            {
+                invincibilityCounter += Time.deltaTime;
+                yield return null;
+            }
+        }
+        invincibilityOn = false;
+        invincibilityUse.Stop();
+        yield return null;
+    } 
+
+    IEnumerator GoldenRoutine()
+    {
+        while (goldenCounter < goldenLength)
+        {
+            if (gameState != "paused")
+            {
+                goldenCounter += Time.deltaTime;
+                yield return null;
+            }
+        }
+        goldenOn = false;
+        golden1Use.Stop();
+        golden2Use.Stop();
+        yield return null;
     }
 }
