@@ -630,11 +630,10 @@ public class PlayerController : MonoBehaviour
     {
         while (invincibilityCounter < invincibilityLength)
         {
-            if (gameState != "paused")
-            {
-                invincibilityCounter += Time.deltaTime;
-                yield return null;
-            }
+            yield return new WaitWhile(() => gameState == "paused");
+
+            invincibilityCounter += Time.deltaTime;
+            yield return null;
         }
         invincibilityOn = false;
         invincibilityUse.Stop();
@@ -645,11 +644,10 @@ public class PlayerController : MonoBehaviour
     {
         while (goldenCounter < goldenLength)
         {
-            if (gameState != "paused")
-            {
-                goldenCounter += Time.deltaTime;
-                yield return null;
-            }
+            yield return new WaitWhile(() => gameState == "paused");
+
+            goldenCounter += Time.deltaTime;
+            yield return null;
         }
         goldenOn = false;
         golden1Use.Stop();
