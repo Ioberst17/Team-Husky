@@ -181,7 +181,7 @@ public class PlayerController : MonoBehaviour
                 accelerationInput = 0;
             }
 
-            //this are testing functions to be removed later.
+            //this is a testing functions to be removed later.
             if (Input.GetKeyDown(KeyCode.Q))
             {
                 takeDamage(50, 0);
@@ -210,7 +210,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        
         if (levelComplete)
         {
             accelerationInput = -1;
@@ -359,7 +358,7 @@ public class PlayerController : MonoBehaviour
             if(stuckCount >= 1)
             {
                 stuckCount = 0;
-                rb.velocity = new Vector2(-1, -1);
+                rb.velocity = new Vector2(-1, -4);
                 moveVelocity = 0;
             }
         }
@@ -391,8 +390,6 @@ public class PlayerController : MonoBehaviour
         UIController.updateHealth();
 
     }
-
-    
 
     private void handleInvincibilityTimer()
     {

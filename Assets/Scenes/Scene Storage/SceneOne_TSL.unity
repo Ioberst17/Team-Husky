@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 2492992}
   - component: {fileID: 2492991}
   - component: {fileID: 2492990}
+  - component: {fileID: 2492993}
   m_Layer: 10
   m_Name: SnowPile002
   m_TagString: Untagged
@@ -171,6 +172,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &2492991
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -249,6 +253,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &2492993
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2492988}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &22337926
 GameObject:
   m_ObjectHideFlags: 0
@@ -261,6 +286,7 @@ GameObject:
   - component: {fileID: 22337930}
   - component: {fileID: 22337929}
   - component: {fileID: 22337928}
+  - component: {fileID: 22337931}
   m_Layer: 0
   m_Name: Boulder012
   m_TagString: Untagged
@@ -313,6 +339,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &22337930
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -365,6 +394,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &22337931
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22337926}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &23787622
 GameObject:
   m_ObjectHideFlags: 0
@@ -512,6 +562,7 @@ GameObject:
   - component: {fileID: 52943531}
   - component: {fileID: 52943530}
   - component: {fileID: 52943529}
+  - component: {fileID: 52943532}
   m_Layer: 0
   m_Name: Boulder016
   m_TagString: Untagged
@@ -564,6 +615,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &52943531
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -616,6 +670,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &52943532
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 52943527}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &62792388
 GameObject:
   m_ObjectHideFlags: 0
@@ -628,6 +703,7 @@ GameObject:
   - component: {fileID: 62792392}
   - component: {fileID: 62792391}
   - component: {fileID: 62792390}
+  - component: {fileID: 62792393}
   m_Layer: 10
   m_Name: SnowPile005
   m_TagString: Untagged
@@ -664,6 +740,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &62792391
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -742,6 +821,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &62792393
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 62792388}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &72380335
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,6 +854,7 @@ GameObject:
   - component: {fileID: 72380339}
   - component: {fileID: 72380338}
   - component: {fileID: 72380337}
+  - component: {fileID: 72380340}
   m_Layer: 10
   m_Name: Tree015
   m_TagString: Untagged
@@ -790,6 +891,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &72380338
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -868,6 +972,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &72380340
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72380335}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &75206576
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,6 +1005,7 @@ GameObject:
   - component: {fileID: 75206580}
   - component: {fileID: 75206579}
   - component: {fileID: 75206578}
+  - component: {fileID: 75206581}
   m_Layer: 10
   m_Name: SnowPile003
   m_TagString: Untagged
@@ -916,6 +1042,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &75206579
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -994,6 +1123,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &75206581
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 75206576}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &97653817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1365,6 +1515,7 @@ GameObject:
   - component: {fileID: 146501239}
   - component: {fileID: 146501238}
   - component: {fileID: 146501237}
+  - component: {fileID: 146501240}
   m_Layer: 10
   m_Name: Tree005
   m_TagString: Untagged
@@ -1401,6 +1552,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &146501238
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1479,6 +1633,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &146501240
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 146501235}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &200907747
 GameObject:
   m_ObjectHideFlags: 0
@@ -1628,6 +1803,7 @@ GameObject:
   - component: {fileID: 204172906}
   - component: {fileID: 204172905}
   - component: {fileID: 204172904}
+  - component: {fileID: 204172907}
   m_Layer: 10
   m_Name: Tree008
   m_TagString: Untagged
@@ -1664,6 +1840,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &204172905
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -1742,6 +1921,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &204172907
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 204172902}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &208614294
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,6 +2012,7 @@ GameObject:
   - component: {fileID: 222465616}
   - component: {fileID: 222465615}
   - component: {fileID: 222465614}
+  - component: {fileID: 222465617}
   m_Layer: 0
   m_Name: Boulder014
   m_TagString: Untagged
@@ -1864,6 +2065,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &222465616
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1916,6 +2120,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &222465617
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222465612}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &226023612
 GameObject:
   m_ObjectHideFlags: 0
@@ -2298,6 +2523,7 @@ GameObject:
   - component: {fileID: 340517233}
   - component: {fileID: 340517232}
   - component: {fileID: 340517231}
+  - component: {fileID: 340517234}
   m_Layer: 0
   m_Name: Boulder015
   m_TagString: Untagged
@@ -2350,6 +2576,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &340517233
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2402,6 +2631,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &340517234
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 340517229}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &353990390
 GameObject:
   m_ObjectHideFlags: 0
@@ -2548,6 +2798,7 @@ GameObject:
   - component: {fileID: 370206786}
   - component: {fileID: 370206785}
   - component: {fileID: 370206784}
+  - component: {fileID: 370206787}
   m_Layer: 10
   m_Name: Tree013
   m_TagString: Untagged
@@ -2584,6 +2835,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &370206785
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -2662,6 +2916,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &370206787
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 370206782}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &373431553
 GameObject:
   m_ObjectHideFlags: 0
@@ -2674,6 +2949,7 @@ GameObject:
   - component: {fileID: 373431557}
   - component: {fileID: 373431556}
   - component: {fileID: 373431555}
+  - component: {fileID: 373431558}
   m_Layer: 0
   m_Name: Boulder008
   m_TagString: Untagged
@@ -2726,6 +3002,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &373431557
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -2778,6 +3057,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &373431558
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373431553}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &379293064
 GameObject:
   m_ObjectHideFlags: 0
@@ -2889,6 +3189,7 @@ GameObject:
   - component: {fileID: 431461679}
   - component: {fileID: 431461678}
   - component: {fileID: 431461677}
+  - component: {fileID: 431461680}
   m_Layer: 10
   m_Name: Tree001
   m_TagString: Untagged
@@ -2925,6 +3226,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &431461678
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3003,6 +3307,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &431461680
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431461675}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &463726336
 GameObject:
   m_ObjectHideFlags: 0
@@ -3015,6 +3340,7 @@ GameObject:
   - component: {fileID: 463726340}
   - component: {fileID: 463726339}
   - component: {fileID: 463726338}
+  - component: {fileID: 463726341}
   m_Layer: 0
   m_Name: Boulder002
   m_TagString: Untagged
@@ -3067,6 +3393,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &463726340
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3119,6 +3448,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &463726341
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 463726336}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &468244532
 GameObject:
   m_ObjectHideFlags: 0
@@ -3230,6 +3580,7 @@ GameObject:
   - component: {fileID: 469129005}
   - component: {fileID: 469129004}
   - component: {fileID: 469129003}
+  - component: {fileID: 469129006}
   m_Layer: 0
   m_Name: Boulder005
   m_TagString: Untagged
@@ -3282,6 +3633,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &469129005
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3334,6 +3688,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &469129006
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469129001}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &469574618
 GameObject:
   m_ObjectHideFlags: 0
@@ -3346,6 +3721,7 @@ GameObject:
   - component: {fileID: 469574622}
   - component: {fileID: 469574621}
   - component: {fileID: 469574620}
+  - component: {fileID: 469574623}
   m_Layer: 10
   m_Name: Tree007
   m_TagString: Untagged
@@ -3382,6 +3758,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &469574621
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3460,6 +3839,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &469574623
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469574618}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &492497731
 GameObject:
   m_ObjectHideFlags: 0
@@ -3472,6 +3872,7 @@ GameObject:
   - component: {fileID: 492497735}
   - component: {fileID: 492497734}
   - component: {fileID: 492497733}
+  - component: {fileID: 492497736}
   m_Layer: 0
   m_Name: Boulder004
   m_TagString: Untagged
@@ -3524,6 +3925,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &492497735
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3576,6 +3980,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &492497736
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 492497731}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &501102133
 GameObject:
   m_ObjectHideFlags: 0
@@ -3812,6 +4237,7 @@ GameObject:
   - component: {fileID: 606962373}
   - component: {fileID: 606962372}
   - component: {fileID: 606962371}
+  - component: {fileID: 606962374}
   m_Layer: 0
   m_Name: Boulder007
   m_TagString: Untagged
@@ -3864,6 +4290,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &606962373
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3916,6 +4345,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &606962374
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606962369}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &611440055
 GameObject:
   m_ObjectHideFlags: 0
@@ -4027,6 +4477,7 @@ GameObject:
   - component: {fileID: 668481106}
   - component: {fileID: 668481105}
   - component: {fileID: 668481104}
+  - component: {fileID: 668481107}
   m_Layer: 10
   m_Name: SnowPile011
   m_TagString: Untagged
@@ -4063,6 +4514,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &668481105
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4141,6 +4595,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &668481107
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 668481102}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &680948907
 GameObject:
   m_ObjectHideFlags: 0
@@ -4153,6 +4628,7 @@ GameObject:
   - component: {fileID: 680948911}
   - component: {fileID: 680948910}
   - component: {fileID: 680948909}
+  - component: {fileID: 680948912}
   m_Layer: 0
   m_Name: Boulder001
   m_TagString: Untagged
@@ -4205,6 +4681,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &680948911
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -4257,6 +4736,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &680948912
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 680948907}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &707696290
 GameObject:
   m_ObjectHideFlags: 0
@@ -4269,6 +4769,7 @@ GameObject:
   - component: {fileID: 707696294}
   - component: {fileID: 707696293}
   - component: {fileID: 707696292}
+  - component: {fileID: 707696295}
   m_Layer: 10
   m_Name: SnowPile009
   m_TagString: Untagged
@@ -4305,6 +4806,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &707696293
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4383,6 +4887,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &707696295
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 707696290}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &715556675
 GameObject:
   m_ObjectHideFlags: 0
@@ -4608,6 +5133,7 @@ GameObject:
   - component: {fileID: 765813399}
   - component: {fileID: 765813398}
   - component: {fileID: 765813397}
+  - component: {fileID: 765813400}
   m_Layer: 10
   m_Name: Tree003
   m_TagString: Untagged
@@ -4644,6 +5170,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &765813398
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4722,6 +5251,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &765813400
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 765813395}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &769743484
 GameObject:
   m_ObjectHideFlags: 0
@@ -4835,6 +5385,7 @@ GameObject:
   - component: {fileID: 780899160}
   - component: {fileID: 780899159}
   - component: {fileID: 780899158}
+  - component: {fileID: 780899161}
   m_Layer: 10
   m_Name: SnowPile008
   m_TagString: Untagged
@@ -4871,6 +5422,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &780899159
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4949,6 +5503,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &780899161
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 780899156}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &788838450
 GameObject:
   m_ObjectHideFlags: 0
@@ -5045,6 +5620,7 @@ GameObject:
   - component: {fileID: 838691413}
   - component: {fileID: 838691412}
   - component: {fileID: 838691411}
+  - component: {fileID: 838691414}
   m_Layer: 0
   m_Name: Boulder009
   m_TagString: Untagged
@@ -5097,6 +5673,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &838691413
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5149,6 +5728,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &838691414
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 838691409}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &856879043
 GameObject:
   m_ObjectHideFlags: 0
@@ -5203,16 +5803,24 @@ MonoBehaviour:
   rotationMod: 0.6
   jumpPower: 850
   jumpNumber: 2
+  rb: {fileID: 0}
   startingHP: 100
+  landingLag: 0
+  maxSpeedMult: 0
+  airControlMod: 0
+  HPSliderMax: 0
   HealthPoints: 0
   invincibilityValue: 60
   speedometer: 0
+  stuckCount: 0
   MusicController: {fileID: 1372260676}
   UIController: {fileID: 1504781968}
   levelComplete: 0
   gameState: 
   playerState: 
   GroundChecker: {fileID: 1314476591}
+  GroundChecker2: {fileID: 0}
+  GroundChecker3: {fileID: 0}
   GroundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -5223,6 +5831,16 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 1024
   spawnPoint: {fileID: 1238749312}
+  inventory: {fileID: 0}
+  mushingCooldown: 0
+  mushForce: 0
+  mushUse: {fileID: 0}
+  invincibilityLength: 0
+  invincibilityUse: {fileID: 0}
+  goldenLength: 0
+  golden1Use: {fileID: 0}
+  golden2Use: {fileID: 0}
+  toolkitUse: {fileID: 0}
 --- !u!50 &856879049
 Rigidbody2D:
   serializedVersion: 4
@@ -5354,6 +5972,7 @@ GameObject:
   - component: {fileID: 861950241}
   - component: {fileID: 861950240}
   - component: {fileID: 861950239}
+  - component: {fileID: 861950242}
   m_Layer: 0
   m_Name: Boulder017
   m_TagString: Untagged
@@ -5406,6 +6025,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &861950241
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5458,6 +6080,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &861950242
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 861950237}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &913944623
 GameObject:
   m_ObjectHideFlags: 0
@@ -5876,6 +6519,7 @@ GameObject:
   - component: {fileID: 1008455236}
   - component: {fileID: 1008455235}
   - component: {fileID: 1008455234}
+  - component: {fileID: 1008455237}
   m_Layer: 0
   m_Name: Boulder013
   m_TagString: Untagged
@@ -5928,6 +6572,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &1008455236
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -5980,6 +6627,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1008455237
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008455232}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1009834642
 GameObject:
   m_ObjectHideFlags: 0
@@ -6228,6 +6896,7 @@ GameObject:
   - component: {fileID: 1099104942}
   - component: {fileID: 1099104941}
   - component: {fileID: 1099104940}
+  - component: {fileID: 1099104943}
   m_Layer: 0
   m_Name: Boulder006
   m_TagString: Untagged
@@ -6280,6 +6949,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &1099104942
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -6332,6 +7004,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1099104943
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099104938}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1189035810
 GameObject:
   m_ObjectHideFlags: 0
@@ -6443,6 +7136,7 @@ GameObject:
   - component: {fileID: 1208461969}
   - component: {fileID: 1208461968}
   - component: {fileID: 1208461967}
+  - component: {fileID: 1208461970}
   m_Layer: 10
   m_Name: SnowPile007
   m_TagString: Untagged
@@ -6479,6 +7173,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1208461968
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6557,6 +7254,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1208461970
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208461965}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1213965182
 GameObject:
   m_ObjectHideFlags: 0
@@ -6834,6 +7552,7 @@ GameObject:
   - component: {fileID: 1252831999}
   - component: {fileID: 1252831998}
   - component: {fileID: 1252831997}
+  - component: {fileID: 1252832000}
   m_Layer: 10
   m_Name: Tree002
   m_TagString: Untagged
@@ -6870,6 +7589,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1252831998
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6948,6 +7670,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1252832000
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1252831995}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1256128584
 GameObject:
   m_ObjectHideFlags: 0
@@ -6960,6 +7703,7 @@ GameObject:
   - component: {fileID: 1256128588}
   - component: {fileID: 1256128587}
   - component: {fileID: 1256128586}
+  - component: {fileID: 1256128589}
   m_Layer: 0
   m_Name: Boulder011
   m_TagString: Untagged
@@ -7012,6 +7756,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &1256128588
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -7064,6 +7811,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1256128589
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1256128584}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1270514194
 GameObject:
   m_ObjectHideFlags: 0
@@ -7175,6 +7943,7 @@ GameObject:
   - component: {fileID: 1276537850}
   - component: {fileID: 1276537849}
   - component: {fileID: 1276537848}
+  - component: {fileID: 1276537851}
   m_Layer: 10
   m_Name: SnowPile013
   m_TagString: Untagged
@@ -7211,6 +7980,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1276537849
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7289,6 +8061,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1276537851
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1276537846}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1294030103
 GameObject:
   m_ObjectHideFlags: 0
@@ -7301,6 +8094,7 @@ GameObject:
   - component: {fileID: 1294030107}
   - component: {fileID: 1294030106}
   - component: {fileID: 1294030105}
+  - component: {fileID: 1294030108}
   m_Layer: 10
   m_Name: Tree009
   m_TagString: Untagged
@@ -7337,6 +8131,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1294030106
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7415,6 +8212,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1294030108
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1294030103}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1297392363
 GameObject:
   m_ObjectHideFlags: 0
@@ -7647,6 +8465,7 @@ GameObject:
   - component: {fileID: 1341461371}
   - component: {fileID: 1341461370}
   - component: {fileID: 1341461369}
+  - component: {fileID: 1341461372}
   m_Layer: 10
   m_Name: Tree006
   m_TagString: Untagged
@@ -7683,6 +8502,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1341461370
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7761,6 +8583,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1341461372
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1341461367}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1342730394
 GameObject:
   m_ObjectHideFlags: 0
@@ -8164,6 +9007,11 @@ MonoBehaviour:
   LevelTheme: {fileID: 8300000, guid: 9d10626cfa4b42c46b0b50a0aec5692b, type: 3}
   PowerupTheme: {fileID: 8300000, guid: 26cf3ef841ce04144b8eb2f3264e8aa0, type: 3}
   EndLevelTheme: {fileID: 8300000, guid: 4e64d58c3913728428d20c6fb645f1d4, type: 3}
+  OutOfBoundsClip: {fileID: 0}
+  DamageClip: {fileID: 0}
+  JumpClip: {fileID: 0}
+  SpeedBoostClip: {fileID: 0}
+  ReadySetGoClip: {fileID: 0}
 --- !u!1 &1382260942
 GameObject:
   m_ObjectHideFlags: 0
@@ -8298,6 +9146,7 @@ GameObject:
   - component: {fileID: 1400297397}
   - component: {fileID: 1400297396}
   - component: {fileID: 1400297395}
+  - component: {fileID: 1400297398}
   m_Layer: 0
   m_Name: Boulder010
   m_TagString: Untagged
@@ -8350,6 +9199,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &1400297397
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8402,6 +9254,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1400297398
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1400297393}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1436032572
 GameObject:
   m_ObjectHideFlags: 0
@@ -8414,6 +9287,7 @@ GameObject:
   - component: {fileID: 1436032576}
   - component: {fileID: 1436032575}
   - component: {fileID: 1436032574}
+  - component: {fileID: 1436032577}
   m_Layer: 10
   m_Name: SnowPile010
   m_TagString: Untagged
@@ -8450,6 +9324,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1436032575
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -8528,6 +9405,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1436032577
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436032572}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1437161891
 GameObject:
   m_ObjectHideFlags: 0
@@ -8540,6 +9438,7 @@ GameObject:
   - component: {fileID: 1437161895}
   - component: {fileID: 1437161894}
   - component: {fileID: 1437161893}
+  - component: {fileID: 1437161896}
   m_Layer: 0
   m_Name: Boulder003
   m_TagString: Untagged
@@ -8592,6 +9491,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &1437161895
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -8644,6 +9546,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1437161896
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1437161891}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1445470913
 GameObject:
   m_ObjectHideFlags: 0
@@ -8863,12 +9786,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adcb936306085a84b94d0902010f93ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  healthBar: {fileID: 0}
   HPtext: {fileID: 1874252387}
   timerText: {fileID: 1909760351}
   readySetGoText: {fileID: 735806920}
   Stopwatch: {fileID: 2043626211}
   PlayerController: {fileID: 856879045}
   pauseMenu: {fileID: 1079734255}
+  debugMenu: {fileID: 0}
+  endLevelMenu: {fileID: 0}
+  checkpoint1: {fileID: 0}
 --- !u!1 &1521731774
 GameObject:
   m_ObjectHideFlags: 0
@@ -9062,6 +9989,7 @@ GameObject:
   - component: {fileID: 1558255537}
   - component: {fileID: 1558255536}
   - component: {fileID: 1558255535}
+  - component: {fileID: 1558255538}
   m_Layer: 10
   m_Name: Tree010
   m_TagString: Untagged
@@ -9098,6 +10026,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1558255536
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9176,6 +10107,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1558255538
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1558255533}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1568355407
 GameObject:
   m_ObjectHideFlags: 0
@@ -9188,6 +10140,7 @@ GameObject:
   - component: {fileID: 1568355411}
   - component: {fileID: 1568355410}
   - component: {fileID: 1568355409}
+  - component: {fileID: 1568355412}
   m_Layer: 10
   m_Name: SnowPile006
   m_TagString: Untagged
@@ -9224,6 +10177,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1568355410
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9302,6 +10258,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1568355412
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1568355407}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1580845251
 GameObject:
   m_ObjectHideFlags: 0
@@ -9413,6 +10390,7 @@ GameObject:
   - component: {fileID: 1597270368}
   - component: {fileID: 1597270367}
   - component: {fileID: 1597270366}
+  - component: {fileID: 1597270369}
   m_Layer: 10
   m_Name: Tree004
   m_TagString: Untagged
@@ -9449,6 +10427,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1597270367
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9527,6 +10508,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1597270369
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1597270364}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1669473815
 GameObject:
   m_ObjectHideFlags: 0
@@ -9539,6 +10541,7 @@ GameObject:
   - component: {fileID: 1669473819}
   - component: {fileID: 1669473818}
   - component: {fileID: 1669473817}
+  - component: {fileID: 1669473820}
   m_Layer: 10
   m_Name: SnowPile014
   m_TagString: Untagged
@@ -9575,6 +10578,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1669473818
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9653,6 +10659,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1669473820
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669473815}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1676989506
 GameObject:
   m_ObjectHideFlags: 0
@@ -9797,6 +10824,7 @@ GameObject:
   - component: {fileID: 1706385868}
   - component: {fileID: 1706385867}
   - component: {fileID: 1706385866}
+  - component: {fileID: 1706385869}
   m_Layer: 10
   m_Name: SnowPile015
   m_TagString: Untagged
@@ -9833,6 +10861,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1706385867
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -9911,6 +10942,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1706385869
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1706385864}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!4 &1721176958 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6459094403862240193, guid: 35048d51a942756469430b7b06b602e2, type: 3}
@@ -10100,6 +11152,7 @@ GameObject:
   - component: {fileID: 1772990870}
   - component: {fileID: 1772990869}
   - component: {fileID: 1772990868}
+  - component: {fileID: 1772990871}
   m_Layer: 10
   m_Name: SnowPile012
   m_TagString: Untagged
@@ -10136,6 +11189,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1772990869
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10214,6 +11270,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1772990871
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1772990866}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1793039976
 GameObject:
   m_ObjectHideFlags: 0
@@ -10354,6 +11431,7 @@ GameObject:
   - component: {fileID: 1799243209}
   - component: {fileID: 1799243208}
   - component: {fileID: 1799243207}
+  - component: {fileID: 1799243210}
   m_Layer: 0
   m_Name: Boulder018
   m_TagString: Untagged
@@ -10406,6 +11484,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!212 &1799243209
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -10458,6 +11539,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1799243210
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1799243205}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1816141627
 GameObject:
   m_ObjectHideFlags: 0
@@ -10940,6 +12042,7 @@ GameObject:
   - component: {fileID: 1901920472}
   - component: {fileID: 1901920471}
   - component: {fileID: 1901920470}
+  - component: {fileID: 1901920473}
   m_Layer: 10
   m_Name: SnowPile004
   m_TagString: Untagged
@@ -10976,6 +12079,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1901920471
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11054,6 +12160,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1901920473
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901920468}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1909760350
 GameObject:
   m_ObjectHideFlags: 0
@@ -11240,6 +12367,7 @@ GameObject:
   - component: {fileID: 1915534760}
   - component: {fileID: 1915534759}
   - component: {fileID: 1915534758}
+  - component: {fileID: 1915534761}
   m_Layer: 10
   m_Name: Tree011
   m_TagString: Untagged
@@ -11276,6 +12404,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1915534759
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11354,6 +12485,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1915534761
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915534756}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1920770302
 GameObject:
   m_ObjectHideFlags: 0
@@ -11366,6 +12518,7 @@ GameObject:
   - component: {fileID: 1920770306}
   - component: {fileID: 1920770305}
   - component: {fileID: 1920770304}
+  - component: {fileID: 1920770307}
   m_Layer: 10
   m_Name: SnowPile001
   m_TagString: Untagged
@@ -11402,6 +12555,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1920770305
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11480,6 +12636,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1920770307
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1920770302}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1931175727
 GameObject:
   m_ObjectHideFlags: 0
@@ -11572,6 +12749,7 @@ GameObject:
   - component: {fileID: 1963362752}
   - component: {fileID: 1963362751}
   - component: {fileID: 1963362750}
+  - component: {fileID: 1963362753}
   m_Layer: 10
   m_Name: Tree012
   m_TagString: Untagged
@@ -11608,6 +12786,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1963362751
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11686,6 +12867,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1963362753
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1963362748}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &1981488907
 GameObject:
   m_ObjectHideFlags: 0
@@ -11698,6 +12900,7 @@ GameObject:
   - component: {fileID: 1981488911}
   - component: {fileID: 1981488910}
   - component: {fileID: 1981488909}
+  - component: {fileID: 1981488912}
   m_Layer: 10
   m_Name: Tree014
   m_TagString: Untagged
@@ -11734,6 +12937,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageValue: 10
   PlayerController: {fileID: 856879045}
+  fallSpeed: 0
+  isIcicle: 0
+  isHazard: 0
 --- !u!61 &1981488910
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -11812,6 +13018,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!50 &1981488912
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1981488907}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &2014661332
 GameObject:
   m_ObjectHideFlags: 0

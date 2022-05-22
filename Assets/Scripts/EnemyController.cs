@@ -9,7 +9,7 @@ public class EnemyController : MonoBehaviour
 
     [SerializeField] public PlayerController PlayerController;
 
-    public Rigidbody2D rb;
+    private Rigidbody2D rb;
     [SerializeField] private float fallSpeed;
     [SerializeField] private bool isIcicle;
     [SerializeField] private bool isHazard;

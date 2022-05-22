@@ -18,7 +18,8 @@ public class UIController : MonoBehaviour
     public GameObject endLevelMenu;
     private int readySetGoTimer;
     [SerializeField] private Transform checkpoint1;
-    
+    [SerializeField] private Transform checkpoint2;
+
 
 
     public void levelStart()
@@ -42,6 +43,12 @@ public class UIController : MonoBehaviour
     public void goToCheckpoint1()
     {
         PlayerController.rb.transform.position = checkpoint1.position;
+        toggleDebugMenu();
+
+    }
+    public void goToCheckpoint2()
+    {
+        PlayerController.rb.transform.position = checkpoint2.position;
         toggleDebugMenu();
 
     }
