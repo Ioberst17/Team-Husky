@@ -9796,7 +9796,6 @@ MonoBehaviour:
   debugMenu: {fileID: 0}
   endLevelMenu: {fileID: 0}
   checkpoint1: {fileID: 0}
-  checkpoint2: {fileID: 0}
 --- !u!1 &1521731774
 GameObject:
   m_ObjectHideFlags: 0
