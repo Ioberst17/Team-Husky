@@ -1,0 +1,68 @@
+﻿
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using CutScene.Utils;
+using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
+using System;
+
+public class UI_Assistant : MonoBehaviour {
+
+    private Text dialogueText;
+    private TextWriter.TextWriterSingle textWriterSingle;
+    private AudioSource dialogueAudioSource;
+    public string[] dialogueArray;
+    private int arrayTracker = 0;
+    public Action pressSpace = null;
+
+    private void Awake() {
+        dialogueText = transform.Find("Dialogue").Find("DialogueText").GetComponent<Text>();
+        dialogueArray = new string[]
+            {
+                "Grandma was telling us all about the dog sled run across the vast ice of Alaska…",
+                "“And then,” Grandma said, “he turned himself into a pickle.” She paused to laugh. “It was the funniest shit I’d ever seen.”",
+            };
+        //dialogueAudioSource = transform.Find("DialogueAudio").GetComponent<AudioSource>();
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            if (textWriterSingle != null && textWriterSingle.IsActive()) //make sure there aren't multiple dialogue text writers running simultaneously
+            {
+                // Currently active TextWriter
+                textWriterSingle.WriteAllAndDestroy();
+            } 
+
+            if (arrayTracker < dialogueArray.Length) // iterate through the cutscenes dialogue
+            {
+                    string message = dialogueArray[arrayTracker];
+                    arrayTracker++;
+                    //StartTalkingSound();
+                    textWriterSingle = TextWriter.AddWriter_Static(dialogueText, message, .05f, true, true, StopTalkingSound);
+            }
+            else // once the array is finished, load the next scene
+            {
+                    SceneManager.LoadScene(0);
+            }
+        }
+    }
+
+    private void StartTalkingSound() {
+        dialogueAudioSource.Play();
+    }
+
+
+    private void StopTalkingSound() {
+        //dialogueAudioSource.Stop();
+        Debug.Log("you need audio");
+    }
+
+    private void Start() {
+        //TextWriter.AddWriter_Static(messageText, "This is the assistant speaking, hello and goodbye, see you next time!", .1f, true);
+    }
+
+}
