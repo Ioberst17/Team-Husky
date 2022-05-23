@@ -50,7 +50,7 @@ public class UI_Assistant : MonoBehaviour {
             }
             else // once the array is finished, load the next scene
             {
-                //SceneManager.LoadScene(0);
+                SceneManager.LoadScene(0);
             }
         }
         if (textWriterSingle != null && !textWriterSingle.IsActive()) //if textwriter isn't typing

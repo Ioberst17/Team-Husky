@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -72,7 +73,7 @@ public class PlayerController : MonoBehaviour
     private int jumpTimer;
     private int readySetGoTimer;
     private int landingTimer;
-
+    public Stopwatch Stopwatch;
 
     //Grounded Vars
     bool grounded = true;
@@ -110,17 +111,22 @@ public class PlayerController : MonoBehaviour
     public delegate void MyDelegate();
     public static event MyDelegate onDeath;
 
+    public GameManager gameManager;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         HurtBox = GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
         inventory = GetComponentInParent<Inventory>();
+        Stopwatch = FindObjectOfType<Stopwatch>();
+        gameManager = GameManager.Instance;
         HPSliderMax = startingHP;
         HealthPoints = startingHP;
 
         playerState = "Start";
         gameState = "Starting";
+        //SceneDataLoader();
         levelComplete = false;
         if (previousPosition == null)
         {
@@ -214,6 +220,18 @@ public class PlayerController : MonoBehaviour
         {
             accelerationInput = -1;
             jumpInput = false;
+
+            // save session data
+            gameManager.EndSceneDataSaver(
+                HealthPoints,
+                inventory.characterItems[0].amount,
+                inventory.characterItems[1].amount,
+                inventory.characterItems[2].amount,
+                inventory.characterItems[3].amount,
+                1,
+                Stopwatch.GetRawElapsedTime());
+
+
         }
     }
 
@@ -650,5 +668,28 @@ public class PlayerController : MonoBehaviour
         golden1Use.Stop();
         golden2Use.Stop();
         yield return null;
+    }
+
+    public void SceneDataLoader()
+    {
+        if (gameManager.sceneHistory[gameManager.sceneHistory.Count - 1] == 0) //if the previous screen was the main menu
+        {
+            // do nothing except open up with default level values
+        }
+        else // load the previous values
+        {
+            HealthPoints = gameManager.hitPoints;
+            inventory.characterItems[0].amount = gameManager.musherAmount;
+            inventory.characterItems[1].amount = gameManager.invincibilityAmount;
+            inventory.characterItems[2].amount = gameManager.goldenAmount;
+            inventory.characterItems[3].amount = gameManager.toolkitAmount;
+        }
+
+        // UI updates
+        UIController.updateHealth(); // update health UI
+        for (int i = 0; i < 4; i++) // update inventory UI
+        {
+            inventory.updateUI(i);
+        }
     }
 }
