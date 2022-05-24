@@ -62,17 +62,22 @@ public class UIController : MonoBehaviour
         healthBar.value = HP;
         HPtext.text = HP.ToString();
     }
+
+    public void timeFormatter()
+    {
+        // formats time based on the fact Unity uses seconds as a basis for time.time (see Stopwatch.cs for methods)
+        timerText.text = string.Format("{0:0}:{1:00}:{2:00}",
+                                    Stopwatch.GetMinutes(),
+                                    Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
+                                    (Stopwatch.GetMilliseconds() * 100.00f) % 100.00f);
+    }
+
     public void Update()
     {
         if(PlayerController.gameState != "paused" && PlayerController.levelComplete !=  true)
         {
             Stopwatch.Unpause();
-
-            // formats time based on the fact Unity uses seconds as a basis for time.time (see Stopwatch.cs for methods)
-            timerText.text = string.Format("{0:0}:{1:00}:{2:00}",
-                                                Stopwatch.GetMinutes(),
-                                                Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
-                                                (Stopwatch.GetMilliseconds()*100.00f)%100.00f);
+            timeFormatter();
         }
         if (PlayerController.levelComplete == true)
         {

@@ -223,15 +223,21 @@ public class PlayerController : MonoBehaviour
 
             // save session data
             gameManager.EndSceneDataSaver(
+                gameManager.seshData,
                 HealthPoints,
                 inventory.characterItems[0].amount,
                 inventory.characterItems[1].amount,
                 inventory.characterItems[2].amount,
-                inventory.characterItems[3].amount,
-                1,
-                Stopwatch.GetRawElapsedTime());
+                inventory.characterItems[3].amount);
 
+            // check for new high score
+            gameManager.CheckForNewHighScore(gameManager.gameData, gameManager.seshData, 1, Stopwatch.GetRawElapsedTime());
 
+            // solves for delay between timer stopping and checkForNewHighScore firing
+            UIController.timerText.text = string.Format("{0:0}:{1:00}:{2:00}",
+                                                        Stopwatch.GetMinutes(),
+                                                        Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
+                                                        (Stopwatch.GetMilliseconds() * 100.00f) % 100.00f);
         }
     }
 
@@ -678,11 +684,11 @@ public class PlayerController : MonoBehaviour
         }
         else // load the previous values
         {
-            HealthPoints = gameManager.hitPoints;
-            inventory.characterItems[0].amount = gameManager.musherAmount;
-            inventory.characterItems[1].amount = gameManager.invincibilityAmount;
-            inventory.characterItems[2].amount = gameManager.goldenAmount;
-            inventory.characterItems[3].amount = gameManager.toolkitAmount;
+            HealthPoints = gameManager.seshData.hitPoints;
+            inventory.characterItems[0].amount = gameManager.seshData.musherAmount;
+            inventory.characterItems[1].amount = gameManager.seshData.invincibilityAmount;
+            inventory.characterItems[2].amount = gameManager.seshData.goldenAmount;
+            inventory.characterItems[3].amount = gameManager.seshData.toolkitAmount;
         }
 
         // UI updates

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.SceneManagement;
-using UnityEngine.Events;
 
 
 public class GameManager : MonoBehaviour
@@ -16,26 +15,14 @@ public class GameManager : MonoBehaviour
     // i.e. there is a "get" (read-access), but not a "set" (write-access) except for "private set" (write-access within it's class)
     // this is also known as Singleton structure
 
-    // Game Data for long-term storage
-    public int timesPlayed;
-    public int currentSceneID;
-    public float totalScore;
-    public int totalTime;
+    public int timesPlayed = 1;
 
-    // Session Data
-    // gameplay
-    public int hitPoints;
-    public int musherAmount;
-    public int invincibilityAmount;
-    public int goldenAmount;
-    public int toolkitAmount;
-    // scores
-    public float level1Time;
-    public float level2Time;
-    public float level3Time;
     // to use for session saving / loading
     public int previousSceneBuildIndex;
     public List<int> sceneHistory = new List<int>();
+
+    public SessionData seshData = new SessionData(); // creates a new instance of class SessionData
+    public GameData gameData = new GameData(); // creates a new instance of class GameData
 
     /* FUNCTIONS */
 
@@ -53,76 +40,111 @@ public class GameManager : MonoBehaviour
         }
 
         sceneHistory.Add(0);
-
-        GameDataLoader();
-        GameDataSaver();
+        gameData = GameDataLoader();
+        gameData.timesPlayed++;
     }
 
+    [System.Serializable]
     public class SessionData
     {
+        // class attributes
         public int hitPoints;
         public int musherAmount;
         public int invincibilityAmount;
         public int goldenAmount;
         public int toolkitAmount;
+        public float level1Time;
+        public float level2Time;
+        public float level3Time;
     }
-    
-    
+        
     [System.Serializable] // called to make class serializale i.e. turn from an object to bytes for storage; eventually, deserialized when used again (from bytes back to object)
-    class GameData // data to be saved between sessions in Json format
+    public class GameData // data to be saved between sessions in Json format
     {
         public int timesPlayed;
-        public int currentSceneID;
-        public float totalScore;
-        public int totalTime;
+        public float level1BestTime;
+        public float level2BestTime;
+        public float level3BestTime;
     }
 
-    public void GameDataSaver() // used to save data to a file
+    private void GameDataSaver(GameData gameData) // used to save data to a file
     {
-        GameData data = new GameData(); // creates a new instance of class GameData named data
-        data.timesPlayed = timesPlayed; // adds to the new instance's current TeamColor attribute (which is of Type Color from UnityEngine namespace)
-
-        string json = JsonUtility.ToJson(data); // turns data into a json string
+        string json = JsonUtility.ToJson(gameData); // turns data into a json string
 
         File.WriteAllText(Application.persistentDataPath + "/savefile.json", json); // uses System.IO namespace to write to a consistent folder, with name savefile.json
+        Debug.Log(json);
     }
 
-    public void GameDataLoader()
+    private GameData GameDataLoader()
     {
         string path = Application.persistentDataPath + "/savefile.json"; // writes a string with the path file to check
         if (File.Exists(path)) // check if file exists
         {
             string json = File.ReadAllText(path); // reads file content to json string
-            GameData data = JsonUtility.FromJson<GameData>(json); // reads json string data to variable data
-            timesPlayed = data.timesPlayed; // adds class data back to used instance of timesPlayed
-        }
+            GameData gameData = JsonUtility.FromJson<GameData>(json); // reads json string data to variable data
 
-        timesPlayed++;
-        Debug.Log(timesPlayed);
+            return gameData;
+        }
+        else
+        {
+            GameData gameData = new GameData();
+            return gameData;
+        }
     }
 
-    public void EndSceneDataSaver(int health, int mushAmount, int invincAmount, int goldAmount, int toolsAmount, int levelNum, float time)
+    public void clearData()
     {
-        hitPoints = health;
-        musherAmount = mushAmount;
-        invincibilityAmount = invincAmount;
-        goldenAmount = goldAmount;
-        toolkitAmount = toolsAmount;
-        switch (levelNum)
+        GameData gameData = new GameData();
+        Debug.Log(gameData);
+        GameDataSaver(gameData);
+        Instance.gameData = GameDataLoader();
+    }
+
+    public void EndSceneDataSaver(SessionData seshData, int health, int mushAmount, int invincibilityAmount, int goldAmount, int toolsAmount)
+    {
+        seshData.hitPoints = health;
+        seshData.musherAmount = mushAmount;
+        seshData.invincibilityAmount = invincibilityAmount;
+        seshData.goldenAmount = goldAmount;
+        seshData.toolkitAmount = toolsAmount;
+    }
+
+    public void CheckForNewHighScore(GameData gameData, SessionData seshData, int levelNum, float time)
+    {
+        switch (levelNum) // sets session time
         {
-            case 0:
-                break;
             case 1:
-                level1Time = time;
+                seshData.level1Time = time;
                 break;
             case 2:
-                level2Time = time;
+                seshData.level2Time = time;
                 break;
             case 3:
-                level3Time = time;
+                seshData.level3Time = time;
                 break;
         }
-
+        switch (levelNum) // checks for new all-time best for level
+        {
+            case 1:
+                if (gameData.level1BestTime == 0f || gameData.level1BestTime > seshData.level1Time) 
+                {
+                    gameData.level1BestTime = seshData.level1Time;
+                }
+                break;
+            case 2:
+                if (gameData.level2BestTime == 0f || gameData.level2BestTime > seshData.level2Time)
+                {
+                    gameData.level2BestTime = seshData.level2Time;
+                }
+                break;
+            case 3:
+                if (gameData.level3BestTime == 0f || gameData.level3BestTime > seshData.level3Time)
+                {
+                    gameData.level3BestTime = seshData.level3Time;
+                }
+                break;
+        }
+        GameDataSaver(gameData);
     }
 
     //Call this whenever you want to load a new scene
@@ -131,5 +153,11 @@ public class GameManager : MonoBehaviour
     {
         sceneHistory.Add(newScene);
         SceneManager.LoadScene(newScene);
+    }
+
+    private void OnApplicationQuit()
+    {
+        GameDataSaver(gameData);
+        Debug.Log("Saved data");
     }
 }
