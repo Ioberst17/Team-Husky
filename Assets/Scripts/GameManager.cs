@@ -96,6 +96,7 @@ public class GameManager : MonoBehaviour
     {
         GameData gameData = new GameData();
         Debug.Log(gameData);
+        gameData.timesPlayed = 1;
         GameDataSaver(gameData);
         Instance.gameData = GameDataLoader();
     }
@@ -152,6 +153,7 @@ public class GameManager : MonoBehaviour
     public void LoadScene(int newScene)
     {
         sceneHistory.Add(newScene);
+        Time.timeScale = 1;
         SceneManager.LoadScene(newScene);
     }
 

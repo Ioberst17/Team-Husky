@@ -24,7 +24,7 @@ public class GameManagerSupport : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
 
-        if (SceneManager.GetActiveScene().buildIndex == 8) // needed to ensure data records UI get's loaded on the main menu
+        if (SceneManager.GetActiveScene().buildIndex == 0) // needed to ensure data records UI get's loaded on the main menu
         {
             canvas = GameObject.Find("Canvas"); // since canvas is active on load, it can be found in the hierarchy using Find
 
