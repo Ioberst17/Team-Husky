@@ -106,6 +106,7 @@ public class FontReplacerTMPro : EditorWindow
         foreach (var text in textsFiltered)
         {
             text.font = dest;
+            text.faceColor = new Color32(1, 1, 1, 1);
             matches++;
         }
         return matches;

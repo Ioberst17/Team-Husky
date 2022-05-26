@@ -13,6 +13,8 @@ public class MusicController : MonoBehaviour
     public AudioClip JumpClip;
     public AudioClip SpeedBoostClip;
     public AudioClip ReadySetGoClip;
+    public AudioClip MenuButtonHoverClip;
+
 
     public void levelStart()
     {
@@ -47,5 +49,10 @@ public class MusicController : MonoBehaviour
     public void ReadySetGoFunction()
     {
         AudioSource.PlayOneShot(ReadySetGoClip);
+    }
+
+    public void MenuButtonHoverFunction()
+    {
+        AudioSource.PlayOneShot(MenuButtonHoverClip, 0.1F);
     }
 }
