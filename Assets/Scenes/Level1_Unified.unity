@@ -7598,6 +7598,9 @@ GameObject:
   - component: {fileID: 169899824}
   - component: {fileID: 169899826}
   - component: {fileID: 169899825}
+  - component: {fileID: 169899827}
+  - component: {fileID: 169899828}
+  - component: {fileID: 169899829}
   m_Layer: 5
   m_Name: Fill
   m_TagString: Untagged
@@ -7638,7 +7641,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.07226774, g: 0.6603774, b: 0.1960874, a: 1}
+  m_Color: {r: 0, g: 0.8396226, b: 0.23502445, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -7663,6 +7666,71 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 169899823}
   m_CullTransparentMesh: 1
+--- !u!114 &169899827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169899823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fb48d82dc0e94a2b9246d17d04f8748, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Direction: 3
+  m_Color1: {r: 0, g: 1, b: 0.11560202, a: 1}
+  m_Color2: {r: 1, g: 0, b: 0.96678877, a: 1}
+  m_Color3: {r: 1, g: 0, b: 0.32242727, a: 1}
+  m_Color4: {r: 0, g: 0.7022941, b: 1, a: 1}
+  m_Rotation: 180
+  m_Offset1: -0.08
+  m_Offset2: -0.17
+  m_GradientStyle: 0
+  m_ColorSpace: -1
+  m_IgnoreAspectRatio: 1
+--- !u!114 &169899828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169899823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f19b7e2285c104f6ca47d583f3e5444f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectFactor: 0
+  m_Width: 0.25
+  m_Rotation: 135
+  m_Softness: 1
+  m_Brightness: 1
+  m_Gloss: 1
+  m_EffectArea: 0
+  m_Player:
+    play: 0
+    initialPlayDelay: 0
+    duration: 1
+    loop: 0
+    loopDelay: 0
+    updateMode: 0
+--- !u!114 &169899829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 169899823}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a4abfdba4ed8ee4fa07aecb7a34ddd0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gradientUI: {fileID: 0}
+  shinyUI: {fileID: 0}
+  playerController: {fileID: 0}
+  fillColor: {fileID: 0}
 --- !u!1 &182977310
 GameObject:
   m_ObjectHideFlags: 0
@@ -44732,6 +44800,7 @@ MonoBehaviour:
   mushForce: 70
   mushUse: {fileID: 42362573}
   invincibilityLength: 15
+  invincibilityOn: 0
   invincibilityUse: {fileID: 2056235087}
   goldenLength: 15
   golden1Use: {fileID: 1121270736}
