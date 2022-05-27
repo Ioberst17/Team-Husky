@@ -33808,7 +33808,7 @@ GameObject:
   - component: {fileID: 1372260675}
   m_Layer: 0
   m_Name: MusicController
-  m_TagString: Untagged
+  m_TagString: MusicController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -33946,6 +33946,7 @@ MonoBehaviour:
   SpeedBoostClip: {fileID: 8300000, guid: 5365b1fdd7d1df34f8fce7f552993660, type: 3}
   ReadySetGoClip: {fileID: 8300000, guid: 886ddf8da4373984ca29402ae7e8048f, type: 3}
   MenuButtonHoverClip: {fileID: 8300000, guid: 79ec2f683e3bc9f4d8f153553e156f13, type: 3}
+  MainMenuToPlayGameDogBarkClip: {fileID: 0}
 --- !u!1 &1389925122
 GameObject:
   m_ObjectHideFlags: 0

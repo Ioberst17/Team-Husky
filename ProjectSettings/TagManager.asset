@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Stopwatch
   - GameManager
+  - MusicController
   layers:
   - Default
   - TransparentFX

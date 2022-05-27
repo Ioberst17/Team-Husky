@@ -14,6 +14,7 @@ public class MusicController : MonoBehaviour
     public AudioClip SpeedBoostClip;
     public AudioClip ReadySetGoClip;
     public AudioClip MenuButtonHoverClip;
+    public AudioClip MainMenuToPlayGameDogBarkClip;
 
 
     public void levelStart()
@@ -54,5 +55,10 @@ public class MusicController : MonoBehaviour
     public void MenuButtonHoverFunction()
     {
         AudioSource.PlayOneShot(MenuButtonHoverClip, 0.1F);
+    }
+
+    public void MainMenuToPlayGameDogBark()
+    {
+        AudioSource.PlayOneShot(MainMenuToPlayGameDogBarkClip, 0.2F);
     }
 }

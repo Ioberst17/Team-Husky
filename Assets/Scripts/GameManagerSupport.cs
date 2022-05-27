@@ -8,11 +8,12 @@ public class GameManagerSupport : MonoBehaviour
 {
     // used for buttons, finds GameManager and loads its functions in scenes
     // this is because otherwise, buttons that link to GameManager would not be able to find the reference to GameManager if added in the hierarchy and then in play mode
-    // It additionally fires screen transitions (as it is involved in loading scenes
+    // It additionally fires screen transitions (as it is involved in loading scenes and manages animations of images and calling audio controller)
 
     public GameManager gameManager;
     public Animator screenTransition;
-    public GameObject canvas;
+    public MusicController musicController;
+    public GameObject canvas; // used to update scores on main menu
 
     //scores to update if needed
     public GameObject timesPlayed;
@@ -26,6 +27,7 @@ public class GameManagerSupport : MonoBehaviour
     {
         gameManager = FindObjectOfType<GameManager>();
         screenTransition = GameObject.Find("ScreenTransitions").GetComponent<Animator>();
+        musicController = GameObject.Find("MusicController").GetComponent<MusicController>();
 
         if (SceneManager.GetActiveScene().buildIndex == 0) // needed to ensure data records UI get's loaded on the main menu
         {
@@ -52,6 +54,11 @@ public class GameManagerSupport : MonoBehaviour
     {
         screenTransition.ResetTrigger("EndScreenTransitionMainMenu");
         screenTransition.SetTrigger("EndScreenTransitionMainMenu");
+        musicController.MainMenuToPlayGameDogBark();
+        if (musicController.AudioSource.isPlaying)
+        {
+            Debug.Log("It works");
+        }
         yield return new WaitForSecondsRealtime(1.5f);
         gameManager.LoadScene(sceneID); // call load scene AFTER scene transition happens
     }
