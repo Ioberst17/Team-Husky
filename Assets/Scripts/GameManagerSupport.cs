@@ -8,8 +8,10 @@ public class GameManagerSupport : MonoBehaviour
 {
     // used for buttons, finds GameManager and loads its functions in scenes
     // this is because otherwise, buttons that link to GameManager would not be able to find the reference to GameManager if added in the hierarchy and then in play mode
+    // It additionally fires screen transitions (as it is involved in loading scenes
 
     public GameManager gameManager;
+    public Animator screenTransition;
     public GameObject canvas;
 
     //scores to update if needed
@@ -23,6 +25,7 @@ public class GameManagerSupport : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        screenTransition = GameObject.Find("ScreenTransitions").GetComponent<Animator>();
 
         if (SceneManager.GetActiveScene().buildIndex == 0) // needed to ensure data records UI get's loaded on the main menu
         {
@@ -40,12 +43,20 @@ public class GameManagerSupport : MonoBehaviour
         }
     }
 
-    public void gameManagerLoader(int sceneID)
+    public void gameManagerLoader(int sceneID) // load scene function from gameManager
     {
-        gameManager.LoadScene(sceneID);
+        StartCoroutine(ScreenTransition(sceneID)); // trigger scene transition
     }
 
-    public void gameManagerDataClear()
+    IEnumerator ScreenTransition(int sceneID) 
+    {
+        screenTransition.ResetTrigger("EndScreenTransitionMainMenu");
+        screenTransition.SetTrigger("EndScreenTransitionMainMenu");
+        yield return new WaitForSecondsRealtime(1.5f);
+        gameManager.LoadScene(sceneID); // call load scene AFTER scene transition happens
+    }
+
+    public void gameManagerDataClear() // clear data function from gameManager
     {
         gameManager.clearData();
         dataRecordsUIUpdate();

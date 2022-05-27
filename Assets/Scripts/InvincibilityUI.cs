@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 public class InvincibilityUI : MonoBehaviour
 {
+    // ATTACHED TO HP SHADER TO TRIGGER ITS AURORA GLOW
+
     public UIGradient gradientUI;
     public UIShiny shinyUI;
     public PlayerController playerController;
