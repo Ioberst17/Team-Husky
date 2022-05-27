@@ -12,15 +12,21 @@ public class UIController : MonoBehaviour
     public Text timerText;
     public Text readySetGoText;
     public Stopwatch Stopwatch;
-    public PlayerController PlayerController;
+    public PlayerController PlayerController; // assigned in inspector
     public GameObject pauseMenu;
     public GameObject debugMenu;
     public GameObject endLevelMenu;
+
+    // for UI Images
+    public Image invincibilitySprite; // assigned in inspector
+    public Image goldenSprite; // assigned in inspector
+    public float spriteZRotation = -5;
+    public float spriteZIncrement = 0.1F;
+    
+    
     private int readySetGoTimer;
     [SerializeField] private Transform checkpoint1;
     [SerializeField] private Transform checkpoint2;
-
-
 
     public void levelStart()
     {
@@ -74,7 +80,27 @@ public class UIController : MonoBehaviour
 
     public void Update()
     {
-        if(PlayerController.gameState != "paused" && PlayerController.levelComplete !=  true)
+        // manages invincibility UI icon rotation on use
+        if (PlayerController.invincibilityOn)
+        {
+            invincibilitySprite.transform.Rotate(new Vector3(0, 0, spriteZRotation));         
+        }
+        else
+        {
+            invincibilitySprite.rectTransform.Rotate(new Vector3(0, 0, spriteZIncrement));
+        }
+
+        // manages golden UI icon rotation on use
+        if (PlayerController.goldenOn)
+        {
+            goldenSprite.transform.Rotate(new Vector3(0, 0, spriteZRotation));
+        }
+        else
+        {
+            goldenSprite.rectTransform.Rotate(new Vector3(0, 0, spriteZIncrement));
+        }
+
+        if (PlayerController.gameState != "paused" && PlayerController.levelComplete !=  true)
         {
             Stopwatch.Unpause();
             timeFormatter();

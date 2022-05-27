@@ -93,13 +93,13 @@ public class PlayerController : MonoBehaviour
     //Invincibility powerup related
     [SerializeField] private float invincibilityLength;
     private float invincibilityCounter = 0;
-    public bool invincibilityOn = false;
+    public bool invincibilityOn = false; // need public for UI events
     public ParticleSystem invincibilityUse;
 
     //golden powerup related
     [SerializeField] private float goldenLength;
     private float goldenCounter = 0;
-    private bool goldenOn = false;
+    public bool goldenOn = false; // need public for UI events
     public ParticleSystem golden1Use;
     public ParticleSystem golden2Use;
 
