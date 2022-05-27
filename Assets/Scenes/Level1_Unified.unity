@@ -6772,6 +6772,7 @@ GameObject:
   - component: {fileID: 84051227}
   - component: {fileID: 84051229}
   - component: {fileID: 84051228}
+  - component: {fileID: 84051230}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -6837,6 +6838,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 84051226}
   m_CullTransparentMesh: 1
+--- !u!95 &84051230
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 84051226}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1bd721f879afab345bf5920e052cea13, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &84714179
 GameObject:
   m_ObjectHideFlags: 0
@@ -9534,6 +9555,7 @@ GameObject:
   - component: {fileID: 368335215}
   - component: {fileID: 368335217}
   - component: {fileID: 368335216}
+  - component: {fileID: 368335218}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -9599,6 +9621,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 368335214}
   m_CullTransparentMesh: 1
+--- !u!95 &368335218
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 368335214}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1bd721f879afab345bf5920e052cea13, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &370206782
 GameObject:
   m_ObjectHideFlags: 0
@@ -44886,6 +44928,7 @@ MonoBehaviour:
   spawnPoint: {fileID: 1238749312}
   Stopwatch: {fileID: 0}
   inventory: {fileID: 0}
+  canMush: 1
   mushingCooldown: 1
   mushForce: 70
   mushUse: {fileID: 42362573}

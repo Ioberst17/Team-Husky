@@ -20,7 +20,7 @@ public class ConditionFocusedPowerUps : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerController.invincibilityOn) // check if invincibility is on
+        if (playerController.invincibilityOn) // INVINCIBILITY CHECKER
         {
             if (gameObject.name == "Slider") // check for the slider
             {
@@ -35,7 +35,7 @@ public class ConditionFocusedPowerUps : MonoBehaviour
                 }
             }
         }
-        else if(playerController.goldenOn) //check if golden is on
+        else if (playerController.goldenOn) //GOLDEN CONDITION CHECKER
         {
             if (gameObject.transform.parent.gameObject.name == "Golden") // check if the parent to the image is Golden
             {

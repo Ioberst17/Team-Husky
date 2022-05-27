@@ -85,10 +85,11 @@ public class PlayerController : MonoBehaviour
     public Inventory inventory;
 
     //Mushing related
-    private bool canMush = true;
+    public bool canMush = true; // need public for UI events
     [SerializeField] private float mushingCooldown;
     [SerializeField] private float mushForce;
     public ParticleSystem mushUse;
+    Animator mushUIButtonAnimation;
 
     //Invincibility powerup related
     [SerializeField] private float invincibilityLength;
@@ -106,6 +107,7 @@ public class PlayerController : MonoBehaviour
 
     //Toolkit related
     public ParticleSystem toolkitUse;
+    Animator toolkitUIButtonAnimation;
 
     //Event reporting system
     public delegate void MyDelegate();
@@ -120,6 +122,8 @@ public class PlayerController : MonoBehaviour
         animator = GetComponent<Animator>();
         inventory = GetComponentInParent<Inventory>();
         Stopwatch = FindObjectOfType<Stopwatch>();
+        mushUIButtonAnimation = GameObject.Find("Musher").transform.Find("Image").GetComponent<Animator>();
+        toolkitUIButtonAnimation = GameObject.Find("Toolkit").transform.Find("Image").GetComponent<Animator>();
         gameManager = GameManager.Instance;
         HPSliderMax = startingHP;
         HealthPoints = startingHP;
@@ -608,6 +612,7 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(transform.right * mushForce, ForceMode2D.Impulse);
                 mushUse.Play();
                 canMush = false;
+                mushUIButtonAnimation.SetTrigger("TriggerPowerUpScale");
                 StartCoroutine(MushingRoutine());
                 inventory.RemoveItem(0);
                 powerupInput = 0;
@@ -635,6 +640,7 @@ public class PlayerController : MonoBehaviour
                 HealthPoints += 10;
                 toolkitUse.Play();
                 inventory.RemoveItem(3);
+                toolkitUIButtonAnimation.SetTrigger("TriggerPowerUpScale");
                 UIController.updateHealth();
                 powerupInput = 0;
                 break;

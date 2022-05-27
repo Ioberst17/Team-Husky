@@ -21,7 +21,7 @@ public class UIController : MonoBehaviour
     public Image invincibilitySprite; // assigned in inspector
     public Image goldenSprite; // assigned in inspector
     public float spriteZRotation = -5;
-    public float spriteZIncrement = 0.1F;
+    public float spriteZIncrement = 0.01F;
     
     
     private int readySetGoTimer;
