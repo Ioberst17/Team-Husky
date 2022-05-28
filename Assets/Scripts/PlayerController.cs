@@ -109,6 +109,18 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem toolkitUse;
     Animator toolkitUIButtonAnimation;
 
+    //ReadySetGoParticles
+    public ParticleSystem readySetGoParticle1A; // assigned in inspector
+    public ParticleSystem readySetGoParticle2A;
+    public ParticleSystem readySetGoParticle3A;
+    public ParticleSystem readySetGoParticle4A;
+    public ParticleSystem readySetGoParticle1B; 
+    public ParticleSystem readySetGoParticle2B;
+    public ParticleSystem readySetGoParticle3B;
+    public ParticleSystem readySetGoParticle4B;
+    public bool readySetGoParticleFadeOut = false;
+
+
     //Event reporting system
     public delegate void MyDelegate();
     public static event MyDelegate onDeath;
@@ -127,6 +139,12 @@ public class PlayerController : MonoBehaviour
         gameManager = GameManager.Instance;
         HPSliderMax = startingHP;
         HealthPoints = startingHP;
+
+        readySetGoParticle1B.Stop();
+        readySetGoParticle2B.Stop();
+        readySetGoParticle3B.Stop();
+        readySetGoParticle4B.Stop();
+
 
         playerState = "Start";
         gameState = "Starting";
@@ -218,6 +236,11 @@ public class PlayerController : MonoBehaviour
             {
                 powerupInput = 4;
             }
+        }
+
+        if(rb.velocity.x > 1) // turn off player highlighter particles if not ready, set, go
+        {
+            ReadySetGoParticleFade();
         }
 
         if (levelComplete)
@@ -600,6 +623,35 @@ public class PlayerController : MonoBehaviour
     UIController.updateHealth();
     }
     
+    public void ReadySetGoParticleFade()
+    {
+        if(readySetGoParticleFadeOut == false)
+        {
+            readySetGoParticle1A.gameObject.SetActive(false);
+            readySetGoParticle2A.gameObject.SetActive(false);
+            readySetGoParticle3A.gameObject.SetActive(false);
+            readySetGoParticle4A.gameObject.SetActive(false);
+
+            readySetGoParticle1B.gameObject.SetActive(true);
+            readySetGoParticle2B.gameObject.SetActive(true);
+            readySetGoParticle3B.gameObject.SetActive(true);
+            readySetGoParticle4B.gameObject.SetActive(true);
+
+            readySetGoParticle1B.Play();
+            readySetGoParticle2B.Play();
+            readySetGoParticle3B.Play();
+            readySetGoParticle4B.Play();
+
+            readySetGoParticleFadeOut = true;
+        }
+        else
+        {
+            readySetGoParticle1B.Stop();
+            readySetGoParticle2B.Stop();
+            readySetGoParticle3B.Stop();
+            readySetGoParticle4B.Stop();
+        }
+    }
     void UsePowerup()
     {
         switch (powerupInput)
