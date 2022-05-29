@@ -259,7 +259,11 @@ public class PlayerController : MonoBehaviour
                 inventory.characterItems[3].amount);
 
             // check for new high score
-            gameManager.CheckForNewHighScore(gameManager.gameData, gameManager.seshData, 1, Stopwatch.GetRawElapsedTime());
+            bool newHighScore = gameManager.CheckForNewHighScore(gameManager.gameData, gameManager.seshData, 1, Stopwatch.GetRawElapsedTime());
+            if (newHighScore)
+            {
+                UIController.NewHighScoreDisplay();
+            }
 
             // solves for delay between timer stopping and checkForNewHighScore firing
             UIController.timerText.text = string.Format("{0:0}:{1:00}:{2:00}",

@@ -111,8 +111,9 @@ public class GameManager : MonoBehaviour
         seshData.toolkitAmount = toolsAmount;
     }
 
-    public void CheckForNewHighScore(GameData gameData, SessionData seshData, int levelNum, float time)
+    public bool CheckForNewHighScore(GameData gameData, SessionData seshData, int levelNum, float time)
     {
+        bool isNewHighScore = false;
         switch (levelNum) // sets session time
         {
             case 1:
@@ -131,22 +132,26 @@ public class GameManager : MonoBehaviour
                 if (gameData.level1BestTime == 0f || gameData.level1BestTime > seshData.level1Time) 
                 {
                     gameData.level1BestTime = seshData.level1Time;
+                    isNewHighScore = true;
                 }
                 break;
             case 2:
                 if (gameData.level2BestTime == 0f || gameData.level2BestTime > seshData.level2Time)
                 {
                     gameData.level2BestTime = seshData.level2Time;
+                    isNewHighScore = true;
                 }
                 break;
             case 3:
                 if (gameData.level3BestTime == 0f || gameData.level3BestTime > seshData.level3Time)
                 {
                     gameData.level3BestTime = seshData.level3Time;
+                    isNewHighScore = true;
                 }
                 break;
         }
         GameDataSaver(gameData);
+        return isNewHighScore; // used to trigger new record in game scene
     }
 
     //Call this whenever you want to load a new scene

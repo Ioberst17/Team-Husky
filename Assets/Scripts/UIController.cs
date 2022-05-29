@@ -22,8 +22,13 @@ public class UIController : MonoBehaviour
     public Image goldenSprite; // assigned in inspector
     public float spriteZRotation = -5;
     public float spriteZIncrement = 0.01F;
-    
-    
+
+    //for New Highscore at end of level / all are assigned in inspector
+    public Text newRecordText;
+    public ParticleSystem newRecordParticle1; 
+    public ParticleSystem newRecordParticle2;
+    public ParticleSystem newRecordParticle3;
+
     private int readySetGoTimer;
     [SerializeField] private Transform checkpoint1;
     [SerializeField] private Transform checkpoint2;
@@ -76,6 +81,14 @@ public class UIController : MonoBehaviour
                                     Stopwatch.GetMinutes(),
                                     Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
                                     (Stopwatch.GetMilliseconds() * 100.00f) % 100.00f);
+    }
+
+    public void NewHighScoreDisplay()
+    {
+        newRecordText.gameObject.SetActive(true);
+        newRecordParticle1.Play();
+        newRecordParticle2.Play();
+        newRecordParticle3.Play();
     }
 
     public void Update()
