@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpNumber;
     float jumpsRemaining;
     float moveVelocity = 0;
+    public ParticleSystem movementDustParticles;
 
     //getting references for different parts of the player entity
     public Rigidbody2D rb;
@@ -361,6 +362,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     animator.Play("PlayerRunning");
+                    CreateMovementDust();
                 }
             }
             rb.AddForce(Vector2.down * 50);
@@ -480,11 +482,13 @@ public class PlayerController : MonoBehaviour
             {
                 landingTimer = landingLag;
                 animator.Play("PlayerLand");
+                CreateMovementDust();
             }
         }
         else
         {
             playerState = "airborn";
+            StopMovementDust();
         }
     }
 
@@ -514,6 +518,7 @@ public class PlayerController : MonoBehaviour
                 }
                 MusicController.JumpFunction();
                 animator.Play("PlayerJump");
+                CreateMovementDust();
                 rb.AddForce(Vector2.up * jumpPower); 
                 rb.rotation = 25;
                 jumpsRemaining -= 1;
@@ -623,7 +628,7 @@ public class PlayerController : MonoBehaviour
     UIController.updateHealth();
     }
     
-    public void ReadySetGoParticleFade()
+    public void ReadySetGoParticleFade() // controls the fade of the ReadySetGo Particles after the player starts moving
     {
         if(readySetGoParticleFadeOut == false)
         {
@@ -652,6 +657,17 @@ public class PlayerController : MonoBehaviour
             readySetGoParticle4B.Stop();
         }
     }
+
+    void CreateMovementDust()
+    {
+        movementDustParticles.Play();
+    }
+
+    void StopMovementDust()
+    {
+        movementDustParticles.Stop();
+    }
+
     void UsePowerup()
     {
         switch (powerupInput)

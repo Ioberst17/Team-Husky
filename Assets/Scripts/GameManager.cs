@@ -62,6 +62,7 @@ public class GameManager : MonoBehaviour
     public class GameData // data to be saved between sessions in Json format
     {
         public int timesPlayed;
+        public int patsToTheDog;
         public float level1BestTime;
         public float level2BestTime;
         public float level3BestTime;

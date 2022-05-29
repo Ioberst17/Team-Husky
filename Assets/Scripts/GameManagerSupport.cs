@@ -17,6 +17,7 @@ public class GameManagerSupport : MonoBehaviour
 
     //scores to update if needed
     public GameObject timesPlayed;
+    public GameObject patsToTheDog;
     public GameObject level1BestTime;
     public GameObject level2BestTime;
     public GameObject level3BestTime;
@@ -35,7 +36,8 @@ public class GameManagerSupport : MonoBehaviour
 
             // inactive objects including the hidden records page on main menu load, can't be found using .Find-related functions
             // as a workaround created a static class search function (in ObjectFinder.cs) to loop through hierarchy and find the relevant fields and assign them for use
-            timesPlayed = ObjectFinder.FindObject(canvas, "TimesPlayed"); 
+            timesPlayed = ObjectFinder.FindObject(canvas, "TimesPlayed");
+            patsToTheDog = ObjectFinder.FindObject(canvas, "DogPats");
             level1BestTime = ObjectFinder.FindObject(canvas, "Level1BestTime");
             level2BestTime = ObjectFinder.FindObject(canvas, "Level2BestTime");
             level3BestTime = ObjectFinder.FindObject(canvas, "Level3BestTime");
@@ -69,9 +71,16 @@ public class GameManagerSupport : MonoBehaviour
         dataRecordsUIUpdate();
     }
 
+    public void petTheDogUIUpdate()
+    {
+        gameManager.gameData.patsToTheDog += 1;
+        patsToTheDog.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = gameManager.gameData.patsToTheDog.ToString(); //update times played 
+    }
+
     public void dataRecordsUIUpdate()
     {
         timesPlayed.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = gameManager.gameData.timesPlayed.ToString(); //update times played
+        patsToTheDog.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = gameManager.gameData.patsToTheDog.ToString(); //update pats given
         if (gameManager.gameData.level1BestTime == 0) //update level 1 score in UI
         {
             level1BestTime.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = "N/A"; //if it's 0, there isn't a time registed - list it as N/A
