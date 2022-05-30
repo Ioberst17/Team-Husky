@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
 {
+    // NOTE: the handling of animation related to condition focused powerups (invincibility / golden) is generally handled the ConditionFocusedPowerUps.cs
+    // It's in the Gameplay UI Support Folder of the Scripts Folder
+    // That said, rotation of those UI sprites is handled below
     private int HP;
     public Slider healthBar;
     private int maxHP;
@@ -17,11 +20,13 @@ public class UIController : MonoBehaviour
     public GameObject debugMenu;
     public GameObject endLevelMenu;
 
-    // for UI Images
-    public Image invincibilitySprite; // assigned in inspector
-    public Image goldenSprite; // assigned in inspector
-    public float spriteZRotation = -5;
-    public float spriteZIncrement = 0.01F;
+    // for UI Images, assigned in inspectors
+    public Image invincibilitySprite; 
+    public Image goldenSprite; 
+    public float spriteYRotation = -5;
+    public ParticleSystem invincibilityShaderGlow;
+    public ParticleSystem invincibilityShaderStars;
+
 
     //for New Highscore at end of level / all are assigned in inspector
     public Text newRecordText;
@@ -96,21 +101,30 @@ public class UIController : MonoBehaviour
         // manages invincibility UI icon rotation on use
         if (PlayerController.invincibilityOn)
         {
-            invincibilitySprite.transform.Rotate(new Vector3(0, 0, spriteZRotation));         
+            invincibilitySprite.transform.Rotate(new Vector3(0, spriteYRotation, 0));
+            invincibilityShaderGlow.gameObject.SetActive(true);
+            invincibilityShaderStars.gameObject.SetActive(true);
+            invincibilityShaderGlow.Play();
+            invincibilityShaderStars.Play();
+            
         }
         else
         {
             invincibilitySprite.transform.eulerAngles = (new Vector3(0, 0, 0));
+            invincibilityShaderGlow.Stop();
+            invincibilityShaderStars.Stop();
+            invincibilityShaderGlow.gameObject.SetActive(false);
+            invincibilityShaderStars.gameObject.SetActive(false);
         }
 
         // manages golden UI icon rotation on use
         if (PlayerController.goldenOn)
         {
-            goldenSprite.transform.Rotate(new Vector3(0, 0, spriteZRotation));
+            goldenSprite.transform.Rotate(new Vector3(0, spriteYRotation, 0));
         }
         else
         {
-            goldenSprite.transform.eulerAngles = new Vector3(0, 0, -17);
+            goldenSprite.transform.eulerAngles = new Vector3(0, 0, -17); //resets to 17 as an oddity of the current golden sprite, will change with Justin's new sprite
         }
 
         if (PlayerController.gameState != "paused" && PlayerController.levelComplete !=  true)

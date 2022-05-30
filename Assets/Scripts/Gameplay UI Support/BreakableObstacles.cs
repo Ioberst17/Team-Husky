@@ -14,6 +14,7 @@ public class BreakableObstacles : MonoBehaviour
     private PlayerController playerController;
     private AudioSource obstacleBreakSound;
     // used to trigger particle effects on player
+    private ParticleSystem invincibilityObstacleParticles;
     private ParticleSystem snowPileParticles;
     private ParticleSystem boulderParticles;
     private int obstacleID;
@@ -21,6 +22,7 @@ public class BreakableObstacles : MonoBehaviour
     {
         obstacleSpriteRenderer = gameObject.GetComponent<SpriteRenderer>(); // need to disable sprite render
         playerController = GameObject.Find("PlayerModel").GetComponent<PlayerController>(); // need for collisions
+        invincibilityObstacleParticles = GameObject.Find("InvincibilityObstacleParticles").GetComponent<ParticleSystem>(); // need for particle effects
         snowPileParticles = GameObject.Find("SnowPileParticles").GetComponent<ParticleSystem>(); // need for particle effects
         boulderParticles = GameObject.Find("BoulderParticles").GetComponent<ParticleSystem>(); // need for particle effects
 
@@ -50,8 +52,14 @@ public class BreakableObstacles : MonoBehaviour
         obstacleBreakSound.Play(); // play sound
         obstacleSpriteRenderer.enabled = false; // disable sprite
         // play a specific breakable object particle system on playerController based on current object type
+        if (playerController.invincibilityOn) { obstacleID = 0; } // if the character has invincibility make this adjustment
         switch (obstacleID)
         {
+            case 0:
+                var invincPart = invincibilityObstacleParticles.main; //note you need to instantiate particle systems modules to access underlying variables in code
+                invincPart.startSpeed = playerController.rb.velocity.magnitude; // set particle system launch speed to velocity mag of player
+                invincibilityObstacleParticles.Play();
+                break;
             case 1:
                 var snowPart = snowPileParticles.main;
                 snowPart.startSpeed = playerController.rb.velocity.magnitude;

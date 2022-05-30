@@ -36,6 +36,11 @@ public class Inventory : MonoBehaviour
         AddItem(0);
         AddItem(0);
         AddItem(1);
+        AddItem(1);
+        AddItem(1);
+        AddItem(2);
+        AddItem(2);
+        AddItem(2);
         AddItem(2);
         AddItem(3);
         AddItem(3);

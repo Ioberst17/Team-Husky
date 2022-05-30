@@ -221,22 +221,22 @@ public class PlayerController : MonoBehaviour
 
             // Powerup-related
 
-            if (Input.GetKeyDown(KeyCode.F) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
+            if (Input.GetKeyDown(KeyCode.R) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
             {
                 powerupInput = 1;
             }
 
-            if (Input.GetKeyDown(KeyCode.G) && invincibilityOn == false && inventory.characterItems[1].amount > 0) // for invincibility
+            if (Input.GetKeyDown(KeyCode.T) && invincibilityOn == false && inventory.characterItems[1].amount > 0) // for invincibility
             {
                 powerupInput = 2;
             }
 
-            if (Input.GetKeyDown(KeyCode.B) && goldenOn == false && inventory.characterItems[2].amount > 0) // for golden
+            if (Input.GetKeyDown(KeyCode.Y) && goldenOn == false && inventory.characterItems[2].amount > 0) // for golden
             { 
                 powerupInput = 3;
             }
 
-            if (Input.GetKeyDown(KeyCode.V) && inventory.characterItems[3].amount > 0) // for toolkit
+            if (Input.GetKeyDown(KeyCode.E) && inventory.characterItems[3].amount > 0) // for toolkit
             {
                 powerupInput = 4;
             }
@@ -738,6 +738,7 @@ public class PlayerController : MonoBehaviour
             invincibilityCounter += Time.deltaTime;
             yield return null;
         }
+        invincibilityCounter = 0; // needed here to confirm counter reset
         invincibilityOn = false;
         invincibilityUse.Stop();
         yield return null;
@@ -752,6 +753,7 @@ public class PlayerController : MonoBehaviour
             goldenCounter += Time.deltaTime;
             yield return null;
         }
+        goldenCounter = 0; // needed here to confirm counter reset
         goldenOn = false;
         golden1Use.Stop();
         golden2Use.Stop();
