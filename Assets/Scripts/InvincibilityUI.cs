@@ -54,7 +54,7 @@ public class InvincibilityUI : MonoBehaviour
             gradientUI.color4 = new Color32(255, 0, 247, 255);
 
             shinyUI.Play(); // turn on shiny animation
-            shinyUI.Loop(true); // loop animation
+            shinyUI.effectPlayer.loop = true;
         }
     }
 
@@ -68,8 +68,8 @@ public class InvincibilityUI : MonoBehaviour
         gradientUI.color3 = new Color32(255, 255, 255, 255);
         gradientUI.color4 = new Color32(255, 255, 255, 255);
 
-        shinyUI.Loop(false); // turn off looping
         shinyUI.Stop(); //turn off shiny
+        shinyUI.effectPlayer.loop = false;
     }
 
     public void GradientModifier()
