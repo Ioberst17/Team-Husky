@@ -7,6 +7,8 @@ TagManager:
   - Stopwatch
   - GameManager
   - MusicController
+  - Boulder
+  - SnowPile
   layers:
   - Default
   - TransparentFX

@@ -110,8 +110,8 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem toolkitUse;
     Animator toolkitUIButtonAnimation;
 
-    //ReadySetGoParticles
-    public ParticleSystem readySetGoParticle1A; // assigned in inspector
+    //ReadySetGoParticles, assigned in inspector
+    public ParticleSystem readySetGoParticle1A; 
     public ParticleSystem readySetGoParticle2A;
     public ParticleSystem readySetGoParticle3A;
     public ParticleSystem readySetGoParticle4A;
@@ -121,6 +121,9 @@ public class PlayerController : MonoBehaviour
     public ParticleSystem readySetGoParticle4B;
     public bool readySetGoParticleFadeOut = false;
 
+    //Obstacle break particles, assigned in inspector
+    public ParticleSystem snowPileParticles; 
+    public ParticleSystem boulderParticles;
 
     //Event reporting system
     public delegate void MyDelegate();
