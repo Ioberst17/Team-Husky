@@ -87,7 +87,7 @@ public class UIController : MonoBehaviour
     {
         newRecordText.gameObject.SetActive(true);
         newRecordParticle1.Play();
-        newRecordParticle2.Play();
+        newRecordParticle2.Play(); 
         newRecordParticle3.Play();
     }
 
@@ -100,7 +100,7 @@ public class UIController : MonoBehaviour
         }
         else
         {
-            invincibilitySprite.rectTransform.Rotate(new Vector3(0, 0, spriteZIncrement));
+            invincibilitySprite.transform.eulerAngles = (new Vector3(0, 0, 0));
         }
 
         // manages golden UI icon rotation on use
@@ -110,7 +110,7 @@ public class UIController : MonoBehaviour
         }
         else
         {
-            goldenSprite.rectTransform.Rotate(new Vector3(0, 0, spriteZIncrement));
+            goldenSprite.transform.eulerAngles = new Vector3(0, 0, -17);
         }
 
         if (PlayerController.gameState != "paused" && PlayerController.levelComplete !=  true)

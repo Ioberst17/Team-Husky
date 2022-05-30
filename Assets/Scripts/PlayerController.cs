@@ -714,6 +714,7 @@ public class PlayerController : MonoBehaviour
             case 4: //toolkit
                 HealthPoints += 10;
                 toolkitUse.Play();
+                MusicController.Toolkit();
                 inventory.RemoveItem(3);
                 toolkitUIButtonAnimation.SetTrigger("TriggerPowerUpScale");
                 UIController.updateHealth();

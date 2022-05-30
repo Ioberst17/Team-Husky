@@ -715,6 +715,9 @@ MonoBehaviour:
   gameManagerSupport: {fileID: 0}
   petTheDogTextRecord: {fileID: 0}
   canvas: {fileID: 0}
+  cursorTexture: {fileID: 2800000, guid: e9cbbd7f4b159c44ba7918ed31612df2, type: 3}
+  cursorMode: 0
+  hotSpot: {x: 0, y: 0}
   mouseDown: 0
 --- !u!65 &240249598
 BoxCollider:
@@ -3354,6 +3357,9 @@ MonoBehaviour:
   gameManagerSupport: {fileID: 0}
   petTheDogTextRecord: {fileID: 0}
   canvas: {fileID: 0}
+  cursorTexture: {fileID: 2800000, guid: e9cbbd7f4b159c44ba7918ed31612df2, type: 3}
+  cursorMode: 0
+  hotSpot: {x: 0, y: 0}
   mouseDown: 0
 --- !u!65 &846419466
 BoxCollider:
@@ -5995,8 +6001,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 512, y: -216.23006}
-  m_SizeDelta: {x: 1024, y: 432.45}
+  m_AnchoredPosition: {x: 512, y: -231.21}
+  m_SizeDelta: {x: 1024, y: 462.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1374199977
 MonoBehaviour:

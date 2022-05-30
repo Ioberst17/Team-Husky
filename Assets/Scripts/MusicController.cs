@@ -15,6 +15,7 @@ public class MusicController : MonoBehaviour
     public AudioClip DamageClip;
     public AudioClip JumpClip;
     public AudioClip SpeedBoostClip;
+    public AudioClip ToolKitClip;
     public AudioClip ReadySetGoClip;
     public AudioClip MenuButtonHoverClip;
     public AudioClip[] PetTheDogSounds; // assigned in inspector
@@ -83,5 +84,10 @@ public class MusicController : MonoBehaviour
         public void PetTheDogPanting()
     {
         AudioSource.PlayOneShot(PetTheDogPantingClip, 0.7F);
+    }
+
+    public void Toolkit()
+    {
+        AudioSource.PlayOneShot(ToolKitClip, 0.7F);
     }
 }

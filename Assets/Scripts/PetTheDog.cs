@@ -12,6 +12,9 @@ public class PetTheDog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
     public GameManagerSupport gameManagerSupport;
     public Animator petTheDogTextRecord;
     public GameObject canvas;
+    public Texture2D cursorTexture;
+    public CursorMode cursorMode = CursorMode.Auto;
+    public Vector2 hotSpot = Vector2.zero;
     public bool mouseDown = false;
 
     void Start()
@@ -24,11 +27,12 @@ public class PetTheDog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
     }
     public void OnPointerExit(PointerEventData eventData)
     {
         mouseDown = false;
+        Cursor.SetCursor(null, Vector2.zero, cursorMode);
     }
 
     public void OnPointerDown(PointerEventData eventData)
