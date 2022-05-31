@@ -3,7 +3,18 @@ guid: 3ae4ab89a1eff21419a67021f01399c8
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - AudioSource: {instanceID: 0}
+  - LevelTheme: {instanceID: 0}
+  - PowerupTheme: {instanceID: 0}
+  - EndLevelTheme: {instanceID: 0}
+  - OutOfBoundsClip: {instanceID: 0}
+  - DamageClip: {instanceID: 0}
+  - JumpClip: {instanceID: 0}
+  - SpeedBoostClip: {instanceID: 0}
+  - ReadySetGoClip: {instanceID: 0}
+  - MenuButtonHoverClip: {instanceID: 0}
+  - MainMenuToPlayGameDogBark: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Coffee.UIEffects;
 
 public class UIController : MonoBehaviour
 {
+    // NOTE: the handling of animation related to condition focused powerups (invincibility / golden) is generally handled the ConditionFocusedPowerUps.cs
+    // It's in the Gameplay UI Support Folder of the Scripts Folder
+    // That said, rotation of those UI sprites is handled below
     private int HP;
     public Slider healthBar;
     private int maxHP;
@@ -12,15 +16,65 @@ public class UIController : MonoBehaviour
     public Text timerText;
     public Text readySetGoText;
     public Stopwatch Stopwatch;
-    public PlayerController PlayerController;
+    public PlayerController PlayerController; // assigned in inspector
+    public GameManager gameManager;
+    public LevelSystem levelSystem;
     public GameObject pauseMenu;
     public GameObject debugMenu;
     public GameObject endLevelMenu;
+
+    // for UI Images, assigned in inspectors
+    public Image invincibilitySprite; 
+    public Image goldenSprite; 
+    public float spriteYRotation = -5;
+    public ParticleSystem invincibilityShaderGlow;
+    public ParticleSystem invincibilityShaderStars;
+
+
+    //for New Highscore at end of level / all are assigned in inspector
+    public Text newRecordText;
+    public ParticleSystem newRecordParticle1; 
+    public ParticleSystem newRecordParticle2;
+    public ParticleSystem newRecordParticle3;
+
+    // for end of level menu, found by UIController in Start Function
+    // END OF LEVEL - LEVEL RESULTS UI
+    public Text endOfLevelTime;
+    // for Rank
+    public Text endOfLevelRank;
+    public GameObject endOfLevelRankDiamond;
+    public GameObject endOfLevelRankGold;
+    public GameObject endOfLevelRankSilver;
+    public GameObject endOfLevelRankBronze;
+    public int whichRankImageToRotate;
+    public float rankSpriteRotation = -0.5F;
+    // for Awards
+    public Text endOfLevelAward;
+    public GameObject endOfLevelAwardHealth; 
+    public ParticleSystem endOfLeveHealthParticleSystem; //assigned in inspector
+    public ParticleSystem endOfLeveHealthParticleSystem2; //assigned in inspector
+    // END OF LEVEL - PLAYER EXP
+    public Slider playerEXP;
+    public Text endOfLevelPlayerLevel;
+
+
     private int readySetGoTimer;
     [SerializeField] private Transform checkpoint1;
     [SerializeField] private Transform checkpoint2;
 
-
+    public void Start()
+    {
+        gameManager = GameManager.Instance;
+        levelSystem = PlayerController.gameObject.GetComponent<LevelSystem>();
+        endOfLevelRank = GameObject.Find("LevelEndRankText").GetComponentInChildren<Text>();
+        endOfLevelAward = GameObject.Find("LevelEndAwardText").GetComponentInChildren<Text>();
+        endOfLevelRankDiamond = GameObject.Find("LevelEndRankImageDiamond");
+        endOfLevelRankGold = GameObject.Find("LevelEndRankImageGold");
+        endOfLevelRankSilver = GameObject.Find("LevelEndRankImageSilver");
+        endOfLevelRankBronze = GameObject.Find("LevelEndRankImageBronze");
+        endOfLevelAwardHealth = GameObject.Find("LevelEndAwardImageHealth");
+        endOfLevelPlayerLevel = GameObject.Find("EndOfLevelPlayerLevel").GetComponentInChildren<Text>();
+    }
 
     public void levelStart()
     {
@@ -62,17 +116,101 @@ public class UIController : MonoBehaviour
         healthBar.value = HP;
         HPtext.text = HP.ToString();
     }
+
+    public void timeFormatter()
+    {
+        // formats time based on the fact Unity uses seconds as a basis for time.time (see Stopwatch.cs for methods)
+        timerText.text = string.Format("{0:0}:{1:00}:{2:00}",
+                                    Stopwatch.GetMinutes(),
+                                    Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
+                                    (Stopwatch.GetMilliseconds() * 100.00f) % 100.00f);
+    }
+
+    public void NewHighScoreDisplay()
+    {
+        newRecordText.gameObject.SetActive(true);
+        newRecordParticle1.Play();
+        newRecordParticle2.Play(); 
+        newRecordParticle3.Play();
+    }
+
+    public void EndOfLevelUIUpdates() // called in player controller to ensure UI happens after Player Controller update game data / session 
+    {
+        if (PlayerController.levelComplete) // assist in updating end level menu
+        {
+            
+            // update rank image by deactivating all the incorrect images and loop a shiny effect
+            // rank name has been updated in a call in PlayerController at level complete
+            if(endOfLevelRank.text == "Diamond") // if it is of one
+            {
+                endOfLevelRankGold.gameObject.SetActive(false); endOfLevelRankSilver.gameObject.SetActive(false); endOfLevelRankBronze.gameObject.SetActive(false); // then deactive others
+                endOfLevelRankDiamond.gameObject.GetComponent<UIShiny>().Play(); // then play a shiny effect
+                endOfLevelRankDiamond.gameObject.GetComponent<UIShiny>().effectPlayer.loop = true; // loop it
+                whichRankImageToRotate = 1;
+               
+            }
+            else if (endOfLevelRank.text == "Gold") 
+            {
+                endOfLevelRankDiamond.gameObject.SetActive(false); endOfLevelRankSilver.gameObject.SetActive(false); endOfLevelRankBronze.gameObject.SetActive(false);
+                endOfLevelRankGold.gameObject.GetComponent<UIShiny>().Play(); 
+                endOfLevelRankGold.gameObject.GetComponent<UIShiny>().effectPlayer.loop = true;
+                whichRankImageToRotate = 2;
+                
+            }
+            else if (endOfLevelRank.text == "Silver")
+            {
+                endOfLevelRankDiamond.gameObject.SetActive(false); endOfLevelRankGold.gameObject.SetActive(false); endOfLevelRankBronze.gameObject.SetActive(false);
+                endOfLevelRankSilver.gameObject.GetComponent<UIShiny>().Play();
+                endOfLevelRankSilver.gameObject.GetComponent<UIShiny>().effectPlayer.loop = true;
+                whichRankImageToRotate = 3;
+                
+            }
+            else
+            {
+                endOfLevelRankDiamond.gameObject.SetActive(false); endOfLevelRankGold.gameObject.SetActive(false); endOfLevelRankSilver.gameObject.SetActive(false);
+                endOfLevelRankBronze.gameObject.GetComponent<UIShiny>().Play();
+                endOfLevelRankBronze.gameObject.GetComponent<UIShiny>().effectPlayer.loop = true;
+                whichRankImageToRotate = 4;
+
+            }
+        }
+    }
+
     public void Update()
     {
-        if(PlayerController.gameState != "paused" && PlayerController.levelComplete !=  true)
+        // manages invincibility UI icon rotation on use
+        if (PlayerController.invincibilityOn)
+        {
+            invincibilitySprite.transform.Rotate(new Vector3(0, spriteYRotation, 0));
+            invincibilityShaderGlow.gameObject.SetActive(true);
+            invincibilityShaderStars.gameObject.SetActive(true);
+            invincibilityShaderGlow.Play();
+            invincibilityShaderStars.Play();
+            
+        }
+        else
+        {
+            invincibilitySprite.transform.eulerAngles = (new Vector3(0, 0, 0));
+            invincibilityShaderGlow.Stop();
+            invincibilityShaderStars.Stop();
+            invincibilityShaderGlow.gameObject.SetActive(false);
+            invincibilityShaderStars.gameObject.SetActive(false);
+        }
+
+        // manages golden UI icon rotation on use
+        if (PlayerController.goldenOn)
+        {
+            goldenSprite.transform.Rotate(new Vector3(0, spriteYRotation, 0));
+        }
+        else
+        {
+            goldenSprite.transform.eulerAngles = new Vector3(0, 0, -17); //resets to 17 as an oddity of the current golden sprite, will change with Justin's new sprite
+        }
+
+        if (PlayerController.gameState != "paused" && PlayerController.levelComplete !=  true)
         {
             Stopwatch.Unpause();
-
-            // formats time based on the fact Unity uses seconds as a basis for time.time (see Stopwatch.cs for methods)
-            timerText.text = string.Format("{0:0}:{1:00}:{2:00}",
-                                                Stopwatch.GetMinutes(),
-                                                Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
-                                                (Stopwatch.GetMilliseconds()*100.00f)%100.00f);
+            timeFormatter();
         }
         if (PlayerController.levelComplete == true)
         {
@@ -89,5 +227,33 @@ public class UIController : MonoBehaviour
         }
 
         endLevelMenu.SetActive(PlayerController.levelComplete);
+        if (PlayerController.levelComplete)
+        {
+            switch (whichRankImageToRotate) // used to rotate rank image
+            {
+                case 1:
+                    endOfLevelRankDiamond.gameObject.transform.Rotate(new Vector3(0, rankSpriteRotation, 0));
+                    break;
+                case 2:
+                    endOfLevelRankGold.transform.Rotate(new Vector3(0, rankSpriteRotation, 0));
+
+                    break;
+                case 3:
+                    endOfLevelRankSilver.transform.Rotate(new Vector3(0, rankSpriteRotation, 0));
+                    break;
+                case 4:
+                    endOfLevelRankBronze.transform.Rotate(new Vector3(0, rankSpriteRotation, 0));
+                    break;
+            }
+
+            // particles and rotation of health image
+            endOfLevelAwardHealth.gameObject.transform.Rotate(new Vector3(0, -rankSpriteRotation, 0));
+            endOfLeveHealthParticleSystem.Play();
+            endOfLeveHealthParticleSystem2.Play();
+
+            //update EXP bar
+            levelSystem.UpdateXP(.4F);
+
+        }
+        }
     }
-}

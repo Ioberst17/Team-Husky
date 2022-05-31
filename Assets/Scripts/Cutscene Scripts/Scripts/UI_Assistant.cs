@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using CutScene.Utils;
 using UnityEngine.SceneManagement;
-using UnityEngine.EventSystems;
+using UnityEngine.Events;
 using System;
 
 public class UI_Assistant : MonoBehaviour {
@@ -15,7 +15,7 @@ public class UI_Assistant : MonoBehaviour {
     private AudioSource dialogueAudioSource;
     public string[] dialogueArray;
     private int arrayTracker = 0;
-    public Action pressSpace = null;
+    public Text continueText;
 
     private void Awake() {
         dialogueText = transform.Find("Dialogue").Find("DialogueText").GetComponent<Text>();
@@ -35,21 +35,36 @@ public class UI_Assistant : MonoBehaviour {
             {
                 // Currently active TextWriter
                 textWriterSingle.WriteAllAndDestroy();
-            } 
+            }
 
             if (arrayTracker < dialogueArray.Length) // iterate through the cutscenes dialogue
             {
-                    string message = dialogueArray[arrayTracker];
-                    arrayTracker++;
-                    //StartTalkingSound();
-                    textWriterSingle = TextWriter.AddWriter_Static(dialogueText, message, .05f, true, true, StopTalkingSound);
+                string message = dialogueArray[arrayTracker];
+                arrayTracker++;
+                //StartTalkingSound();
+                textWriterSingle = TextWriter.AddWriter_Static(dialogueText, message, .05f, true, true, StopTalkingSound);
+                if (textWriterSingle.IsActive())
+                {
+                    continueText.gameObject.SetActive(false);
+                }
             }
             else // once the array is finished, load the next scene
             {
-                    SceneManager.LoadScene(0);
+                SceneManager.LoadScene(0);
+            }
+        }
+        if (textWriterSingle != null && !textWriterSingle.IsActive()) //if textwriter isn't typing
+        {
+            if (!textWriterSingle.IsActive())
+            {
+                Invoke("turnContinueTextOn", 0.5f); //
             }
         }
     }
+
+    public void turnContinueTextOn() {continueText.gameObject.SetActive(true);}
+
+    public void turnContinueTextOff() { continueText.gameObject.SetActive(false); }
 
     private void StartTalkingSound() {
         dialogueAudioSource.Play();

@@ -36,6 +36,11 @@ public class Inventory : MonoBehaviour
         AddItem(0);
         AddItem(0);
         AddItem(1);
+        AddItem(1);
+        AddItem(1);
+        AddItem(2);
+        AddItem(2);
+        AddItem(2);
         AddItem(2);
         AddItem(3);
         AddItem(3);
@@ -87,8 +92,11 @@ public class Inventory : MonoBehaviour
     public void RemoveItem(int id) // remove item in inventory based on item id, only works with amount / UI elements 
     {
         characterItems[id].amount -= 1; // decrement inventory
+        updateUI(id);
+    }
 
-        //update UI
+    public void updateUI(int id)
+    {
         switch (id)
         {
             case 0:
