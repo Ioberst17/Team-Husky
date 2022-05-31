@@ -7,7 +7,9 @@ public class EnemyController : MonoBehaviour
     //the amount of damage the enemy inflicts on contact
     [SerializeField] public int damageValue;
 
+    //this is required to communicate fully with the player
     [SerializeField] public PlayerController PlayerController;
+
 
     private Rigidbody2D rb;
     [SerializeField] private float fallSpeed;
@@ -24,15 +26,19 @@ public class EnemyController : MonoBehaviour
         startingLocation = transform.position;
         PlayerController.onDeath += OnRespawn;
     }
+    //make sure to remove itself when the level restarts
     private void OnDisable()
     {
         PlayerController.onDeath -= OnRespawn;
     }
+    //when something enters the zone
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        //if its a player
         if (collider.gameObject.layer
                 == LayerMask.NameToLayer("Player"))
         {
+            //are we an icicle?
             if (!fallTrigger)
             {
                 fallTrigger = true;
@@ -40,6 +46,7 @@ public class EnemyController : MonoBehaviour
             }
             else
             {
+                //are we a hazard?
                 if (isHazard)
                 {
                     //do nothing, the ontriggerstay function will handle it
@@ -52,6 +59,7 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+    //deals faster, lighter damage
     private void OnTriggerStay2D(Collider2D collider)
     {
         if (collider.gameObject.layer
@@ -64,11 +72,12 @@ public class EnemyController : MonoBehaviour
             }
         }
     }
+    //reset everything on respawn
     void OnRespawn()
     {
         transform.position = startingLocation;
         rb.velocity = new Vector2(0, 0);
         fallTrigger = !isIcicle;
-        Debug.Log(name + " Respawned");
+        //Debug.Log(name + " Respawned");
     }
 }
