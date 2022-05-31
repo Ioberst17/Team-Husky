@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
@@ -45,9 +46,12 @@ public class PlayerController : MonoBehaviour
     public UIController UIController;
 
     public bool levelComplete;
+    public LevelRankData ranker; // used at end of level to rank player
+    public LevelSystem levelSystem; // manages level up
 
     //Holds the state of the game from among: running, paused
     public string gameState;
+    public bool hasUpdatedRecords = false; // used to call update end of level records only once (set positive to stop continuous update)
 
     //Holds the state of the game from among: grounded, airborn
     public string playerState;
@@ -140,6 +144,8 @@ public class PlayerController : MonoBehaviour
         Stopwatch = FindObjectOfType<Stopwatch>();
         mushUIButtonAnimation = GameObject.Find("Musher").transform.Find("Image").GetComponent<Animator>();
         toolkitUIButtonAnimation = GameObject.Find("Toolkit").transform.Find("Image").GetComponent<Animator>();
+        ranker = gameObject.GetComponent<LevelRankData>();
+        levelSystem = gameObject.GetComponent<LevelSystem>();
         gameManager = GameManager.Instance;
         HPSliderMax = startingHP;
         HealthPoints = startingHP;
@@ -251,28 +257,30 @@ public class PlayerController : MonoBehaviour
         {
             accelerationInput = -1;
             jumpInput = false;
-
-            // save session data
-            gameManager.EndSceneDataSaver(
-                gameManager.seshData,
-                HealthPoints,
-                inventory.characterItems[0].amount,
-                inventory.characterItems[1].amount,
-                inventory.characterItems[2].amount,
-                inventory.characterItems[3].amount);
-
-            // check for new high score
-            bool newHighScore = gameManager.CheckForNewHighScore(gameManager.gameData, gameManager.seshData, 1, Stopwatch.GetRawElapsedTime());
-            if (newHighScore)
+            if (!hasUpdatedRecords)
             {
-                UIController.NewHighScoreDisplay();
+                // save session data to gameManager
+                SaveSceneData();
+
+                // check for new high score
+                bool newHighScore = gameManager.HighScoreChecker(gameManager.gameData, gameManager.seshData, gameManager.LevelNumberChecker(), Stopwatch.GetRawElapsedTime());
+                if (newHighScore)
+                {
+                    UIController.NewHighScoreDisplay();
+                }
+
+                // solves for delay between timer stopping and checkForNewHighScore firing
+                UIController.timerText.text = string.Format("{0:0}:{1:00}:{2:00}",
+                                                            Stopwatch.GetMinutes(),
+                                                            Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
+                                                            (Stopwatch.GetMilliseconds() * 100.00f) % 100.00f);
+                // check rank and update UI
+                UIController.endOfLevelPlayerLevel.text = gameManager.gameData.playerEXP.ToString();
+                EndOfLevelResultsChecker();
+
+                hasUpdatedRecords = true;
             }
 
-            // solves for delay between timer stopping and checkForNewHighScore firing
-            UIController.timerText.text = string.Format("{0:0}:{1:00}:{2:00}",
-                                                        Stopwatch.GetMinutes(),
-                                                        Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
-                                                        (Stopwatch.GetMilliseconds() * 100.00f) % 100.00f);
         }
     }
 
@@ -776,10 +784,103 @@ public class PlayerController : MonoBehaviour
         }
 
         // UI updates
+        UpdateHealthAndInventoryUI();
+    }
+
+    public void EndOfLevelResultsChecker()
+    {
+
+        // update game and session data based on level results
+        if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) // if the time for the level is less than the rank for Diamond
+        {
+            // add health to player inventory, but make sure it's not above 100
+            HealthPoints = Mathf.Min(startingHP, HealthPoints + ranker.levelRanking["Diamond"].award);
+            // add rank to player history
+            UpdatePlayerRankHistory();
+            // add EXP to player exp history
+            gameManager.gameData.playerEXP += ranker.levelRanking["Diamond"].exp;
+            // pass specific UI updates to UI Controller
+            UIController.endOfLevelRank.text = "Diamond";
+            UIController.endOfLevelAward.text = "+" + ranker.levelRanking["Diamond"].award.ToString() + " Health";
+        }
+        else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Gold"].levelTime)
+        {
+            HealthPoints = Mathf.Min(startingHP, HealthPoints + ranker.levelRanking["Gold"].award);
+            UpdatePlayerRankHistory();
+            gameManager.gameData.playerEXP += ranker.levelRanking["Gold"].exp;
+            UIController.endOfLevelRank.text = "Gold";
+            UIController.endOfLevelAward.text = string.Concat("+", ranker.levelRanking["Gold"].award.ToString(), " Health");
+        }
+        else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Silver"].levelTime)
+        {
+            HealthPoints = Mathf.Min(startingHP, HealthPoints + ranker.levelRanking["Silver"].award);
+            UpdatePlayerRankHistory();
+            gameManager.gameData.playerEXP += ranker.levelRanking["Silver"].exp;
+            UIController.endOfLevelRank.text = "Silver";
+            UIController.endOfLevelAward.text = string.Concat("+", ranker.levelRanking["Silver"].award.ToString(), " Health");
+        }
+        else // bronze case
+        {
+            HealthPoints = Mathf.Min(startingHP, HealthPoints + ranker.levelRanking["Bronze"].award);
+            UpdatePlayerRankHistory();
+            gameManager.gameData.playerEXP += ranker.levelRanking["Bronze"].exp;
+            UIController.endOfLevelRank.text = "Bronze";
+            UIController.endOfLevelAward.text = string.Concat("+", ranker.levelRanking["Bronze"].award.ToString(), " Health");
+        }
+        // save session data in gameManager
+        SaveSceneData();
+
+        // update health and inventory ui
+        UpdateHealthAndInventoryUI();
+        UIController.EndOfLevelUIUpdates();
+        
+    }
+    
+
+    public void UpdateHealthAndInventoryUI()
+    {
         UIController.updateHealth(); // update health UI
         for (int i = 0; i < 4; i++) // update inventory UI
         {
             inventory.updateUI(i);
+        }
+    }
+
+    public void SaveSceneData()
+    {
+        gameManager.EndSceneDataSaver(
+            gameManager.seshData,
+            HealthPoints,
+            inventory.characterItems[0].amount,
+            inventory.characterItems[1].amount,
+            inventory.characterItems[2].amount,
+            inventory.characterItems[3].amount);
+            }
+
+    public void UpdatePlayerRankHistory()
+    {
+        int levelNum = gameManager.LevelNumberChecker();
+
+        switch (levelNum)
+        {
+            case 1:
+                if(Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) { gameManager.gameData.level1DiamondRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Gold"].levelTime) { gameManager.gameData.level1GoldRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Silver"].levelTime) { gameManager.gameData.level1SilverRanks++; }
+                else { gameManager.gameData.level1BronzeRanks++; }
+                break;
+            case 2:
+                if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) { gameManager.gameData.level2DiamondRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Gold"].levelTime) { gameManager.gameData.level2GoldRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Silver"].levelTime) { gameManager.gameData.level2SilverRanks++; }
+                else { gameManager.gameData.level2BronzeRanks++; }
+                break;
+            case 3:
+                if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) { gameManager.gameData.level3DiamondRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Gold"].levelTime) { gameManager.gameData.level3GoldRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Silver"].levelTime) { gameManager.gameData.level3SilverRanks++; }
+                else { gameManager.gameData.level3BronzeRanks++; }
+                break;
         }
     }
 }

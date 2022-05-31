@@ -3,7 +3,13 @@ guid: 1ddc888482f00064c99e3db4fdd79c1b
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - musicController: {instanceID: 0}
+  - gameManagerSupport: {instanceID: 0}
+  - gameManager: {instanceID: 0}
+  - petTheDogTextRecord: {instanceID: 0}
+  - canvas: {instanceID: 0}
+  - cursorTexture: {fileID: 2800000, guid: e9cbbd7f4b159c44ba7918ed31612df2, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

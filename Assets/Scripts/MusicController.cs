@@ -24,15 +24,17 @@ public class MusicController : MonoBehaviour
 
     private void Start()
     {
-        if(SceneManager.GetActiveScene().buildIndex == 0) // if it's the main menu
+        if(SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.GetActiveScene().buildIndex == 1) // if it's the main menu or first cut scene
         {
-            AudioSource.clip = MainMenuThemeClip; // assign the main menu theme to clip
+            AudioSource.clip = MainMenuThemeClip; // assign the main menu theme to clip in the first audio source
             AudioSource.Play(); //have it play (loop is set in the inspector)
         }
-    }
-    public void MainMenuTheme()
-    {
-        AudioSource.PlayOneShot(MainMenuThemeClip);
+        else if (SceneManager.GetActiveScene().buildIndex == 2) // if it's the first level, play the level theme
+        {
+            AudioSource.clip = LevelTheme; // assign the main menu theme to clip in first audiosource
+            AudioSource.Play(); //have it play (loop is set in the inspector)
+        }
+
     }
 
     public void levelStart()

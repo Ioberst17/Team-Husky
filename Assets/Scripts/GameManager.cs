@@ -58,14 +58,33 @@ public class GameManager : MonoBehaviour
         public float level3Time;
     }
         
-    [System.Serializable] // called to make class serializale i.e. turn from an object to bytes for storage; eventually, deserialized when used again (from bytes back to object)
-    public class GameData // data to be saved between sessions in Json format
+    [System.Serializable] // called to make class serializable i.e. turn from an object to bytes for storage; eventually, deserialized when used again (from bytes back to object)
+    public class GameData // data to be saved between sessions in Json format - n.b Unity Json utility does not support arrays
     {
         public int timesPlayed;
         public int patsToTheDog;
+        // Best Times
         public float level1BestTime;
         public float level2BestTime;
         public float level3BestTime;
+        // Level 1 Ranks
+        public int level1DiamondRanks;
+        public int level1GoldRanks;
+        public int level1SilverRanks;
+        public int level1BronzeRanks;
+        // Level 2 Ranks
+        public int level2DiamondRanks;
+        public int level2GoldRanks;
+        public int level2SilverRanks;
+        public int level2BronzeRanks;
+        // Level 3 Ranks
+        public int level3DiamondRanks;
+        public int level3GoldRanks;
+        public int level3SilverRanks;
+        public int level3BronzeRanks;
+        // Player Data
+        public float playerEXP;
+        public int playerLevel;
     }
 
     private void GameDataSaver(GameData gameData) // used to save data to a file
@@ -83,7 +102,7 @@ public class GameManager : MonoBehaviour
         {
             string json = File.ReadAllText(path); // reads file content to json string
             GameData gameData = JsonUtility.FromJson<GameData>(json); // reads json string data to variable data
-
+            if(gameData.playerLevel == 0) { gameData.playerLevel++; } 
             return gameData;
         }
         else
@@ -98,6 +117,7 @@ public class GameManager : MonoBehaviour
         GameData gameData = new GameData();
         Debug.Log(gameData);
         gameData.timesPlayed = 1;
+        gameData.playerLevel = 1;
         GameDataSaver(gameData);
         Instance.gameData = GameDataLoader();
     }
@@ -111,8 +131,14 @@ public class GameManager : MonoBehaviour
         seshData.toolkitAmount = toolsAmount;
     }
 
-    public bool CheckForNewHighScore(GameData gameData, SessionData seshData, int levelNum, float time)
+    public int LevelNumberChecker() // UPDATE IF BUILD INDEX CHANGES
     {
+        int levelNum = SceneManager.GetActiveScene().buildIndex / 2; // works because of build index structure where level number is 1/2 of build index
+        return levelNum;
+    }
+    public bool HighScoreChecker(GameData gameData, SessionData seshData, int levelNum, float time) // returns a true if level high score is achieved
+    {
+        // Check for New High Score
         bool isNewHighScore = false;
         switch (levelNum) // sets session time
         {
