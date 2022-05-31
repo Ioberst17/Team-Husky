@@ -5,9 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/MainMenu_Unified.unity
     guid: 90152afcf1cfed243bb348a7d9fa4c24
+  - enabled: 1
+    path: Assets/Scenes/MainMenu_Unified_v2.unity
+    guid: cdacbd2e669bd6a41ad3d45656f85605
   - enabled: 1
     path: Assets/Scenes/CutsceneScene_Ian 0.unity
     guid: 9531ce679d577074794760adff345862
@@ -29,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CutsceneScene_Ian 3.unity
     guid: 2c528ef2b1551ae4ab73247366c8bb62
+  - enabled: 1
+    path: Assets/Scenes/Scene Storage/Scene0.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
   m_configObjects: {}

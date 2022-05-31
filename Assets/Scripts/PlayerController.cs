@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float jumpNumber;
     float jumpsRemaining;
     float moveVelocity = 0;
+    public ParticleSystem movementDustParticles;
 
     //getting references for different parts of the player entity
     public Rigidbody2D rb;
@@ -43,9 +46,12 @@ public class PlayerController : MonoBehaviour
     public UIController UIController;
 
     public bool levelComplete;
+    public LevelRankData ranker; // used at end of level to rank player
+    public LevelSystem levelSystem; // manages level up
 
     //Holds the state of the game from among: running, paused
     public string gameState;
+    public bool hasUpdatedRecords = false; // used to call update end of level records only once (set positive to stop continuous update)
 
     //Holds the state of the game from among: grounded, airborn
     public string playerState;
@@ -72,7 +78,7 @@ public class PlayerController : MonoBehaviour
     private int jumpTimer;
     private int readySetGoTimer;
     private int landingTimer;
-
+    public Stopwatch Stopwatch;
 
     //Grounded Vars
     bool grounded = true;
@@ -84,31 +90,50 @@ public class PlayerController : MonoBehaviour
     public Inventory inventory;
 
     //Mushing related
-    private bool canMush = true;
+    public bool canMush = true; // need public for UI events
     [SerializeField] private float mushingCooldown;
     [SerializeField] private float mushForce;
     public ParticleSystem mushUse;
+    Animator mushUIButtonAnimation;
 
     //Invincibility powerup related
     [SerializeField] private float invincibilityLength;
     private float invincibilityCounter = 0;
-    private bool invincibilityOn = false;
+    public bool invincibilityOn = false; // need public for UI events
     public ParticleSystem invincibilityUse;
 
     //golden powerup related
     [SerializeField] private float goldenLength;
     private float goldenCounter = 0;
-    private bool goldenOn = false;
+    public bool goldenOn = false; // need public for UI events
     public ParticleSystem golden1Use;
     public ParticleSystem golden2Use;
 
 
     //Toolkit related
     public ParticleSystem toolkitUse;
+    Animator toolkitUIButtonAnimation;
+
+    //ReadySetGoParticles, assigned in inspector
+    public ParticleSystem readySetGoParticle1A; 
+    public ParticleSystem readySetGoParticle2A;
+    public ParticleSystem readySetGoParticle3A;
+    public ParticleSystem readySetGoParticle4A;
+    public ParticleSystem readySetGoParticle1B; 
+    public ParticleSystem readySetGoParticle2B;
+    public ParticleSystem readySetGoParticle3B;
+    public ParticleSystem readySetGoParticle4B;
+    public bool readySetGoParticleFadeOut = false;
+
+    //Obstacle break particles, assigned in inspector
+    public ParticleSystem snowPileParticles; 
+    public ParticleSystem boulderParticles;
 
     //Event reporting system
     public delegate void MyDelegate();
     public static event MyDelegate onDeath;
+
+    public GameManager gameManager;
 
     private void Start()
     {
@@ -116,11 +141,24 @@ public class PlayerController : MonoBehaviour
         HurtBox = GetComponent<BoxCollider2D>();
         animator = GetComponent<Animator>();
         inventory = GetComponentInParent<Inventory>();
+        Stopwatch = FindObjectOfType<Stopwatch>();
+        mushUIButtonAnimation = GameObject.Find("Musher").transform.Find("Image").GetComponent<Animator>();
+        toolkitUIButtonAnimation = GameObject.Find("Toolkit").transform.Find("Image").GetComponent<Animator>();
+        ranker = gameObject.GetComponent<LevelRankData>();
+        levelSystem = gameObject.GetComponent<LevelSystem>();
+        gameManager = GameManager.Instance;
         HPSliderMax = startingHP;
         HealthPoints = startingHP;
 
+        readySetGoParticle1B.Stop();
+        readySetGoParticle2B.Stop();
+        readySetGoParticle3B.Stop();
+        readySetGoParticle4B.Stop();
+
+
         playerState = "Start";
         gameState = "Starting";
+        //SceneDataLoader();
         levelComplete = false;
         if (previousPosition == null)
         {
@@ -189,31 +227,60 @@ public class PlayerController : MonoBehaviour
 
             // Powerup-related
 
-            if (Input.GetKeyDown(KeyCode.F) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
+            if (Input.GetKeyDown(KeyCode.R) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
             {
                 powerupInput = 1;
             }
 
-            if (Input.GetKeyDown(KeyCode.G) && invincibilityOn == false && inventory.characterItems[1].amount > 0) // for invincibility
+            if (Input.GetKeyDown(KeyCode.T) && invincibilityOn == false && inventory.characterItems[1].amount > 0) // for invincibility
             {
                 powerupInput = 2;
             }
 
-            if (Input.GetKeyDown(KeyCode.B) && goldenOn == false && inventory.characterItems[2].amount > 0) // for golden
+            if (Input.GetKeyDown(KeyCode.Y) && goldenOn == false && inventory.characterItems[2].amount > 0) // for golden
             { 
                 powerupInput = 3;
             }
 
-            if (Input.GetKeyDown(KeyCode.V) && inventory.characterItems[3].amount > 0) // for toolkit
+            if (Input.GetKeyDown(KeyCode.E) && inventory.characterItems[3].amount > 0) // for toolkit
             {
                 powerupInput = 4;
             }
+        }
+
+        if(rb.velocity.x > 1) // turn off player highlighter particles if not ready, set, go
+        {
+            ReadySetGoParticleFade();
         }
 
         if (levelComplete)
         {
             accelerationInput = -1;
             jumpInput = false;
+            if (!hasUpdatedRecords)
+            {
+                // save session data to gameManager
+                SaveSceneData();
+
+                // check for new high score
+                bool newHighScore = gameManager.HighScoreChecker(gameManager.gameData, gameManager.seshData, gameManager.LevelNumberChecker(), Stopwatch.GetRawElapsedTime());
+                if (newHighScore)
+                {
+                    UIController.NewHighScoreDisplay();
+                }
+
+                // solves for delay between timer stopping and checkForNewHighScore firing
+                UIController.timerText.text = string.Format("{0:0}:{1:00}:{2:00}",
+                                                            Stopwatch.GetMinutes(),
+                                                            Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
+                                                            (Stopwatch.GetMilliseconds() * 100.00f) % 100.00f);
+                // check rank and update UI
+                UIController.endOfLevelPlayerLevel.text = gameManager.gameData.playerEXP.ToString();
+                EndOfLevelResultsChecker();
+
+                hasUpdatedRecords = true;
+            }
+
         }
     }
 
@@ -310,6 +377,7 @@ public class PlayerController : MonoBehaviour
                 else
                 {
                     animator.Play("PlayerRunning");
+                    CreateMovementDust();
                 }
             }
             rb.AddForce(Vector2.down * 50);
@@ -429,11 +497,13 @@ public class PlayerController : MonoBehaviour
             {
                 landingTimer = landingLag;
                 animator.Play("PlayerLand");
+                CreateMovementDust();
             }
         }
         else
         {
             playerState = "airborn";
+            StopMovementDust();
         }
     }
 
@@ -463,6 +533,7 @@ public class PlayerController : MonoBehaviour
                 }
                 MusicController.JumpFunction();
                 animator.Play("PlayerJump");
+                CreateMovementDust();
                 rb.AddForce(Vector2.up * jumpPower); 
                 rb.rotation = 25;
                 jumpsRemaining -= 1;
@@ -572,6 +643,46 @@ public class PlayerController : MonoBehaviour
     UIController.updateHealth();
     }
     
+    public void ReadySetGoParticleFade() // controls the fade of the ReadySetGo Particles after the player starts moving
+    {
+        if(readySetGoParticleFadeOut == false)
+        {
+            readySetGoParticle1A.gameObject.SetActive(false);
+            readySetGoParticle2A.gameObject.SetActive(false);
+            readySetGoParticle3A.gameObject.SetActive(false);
+            readySetGoParticle4A.gameObject.SetActive(false);
+
+            readySetGoParticle1B.gameObject.SetActive(true);
+            readySetGoParticle2B.gameObject.SetActive(true);
+            readySetGoParticle3B.gameObject.SetActive(true);
+            readySetGoParticle4B.gameObject.SetActive(true);
+
+            readySetGoParticle1B.Play();
+            readySetGoParticle2B.Play();
+            readySetGoParticle3B.Play();
+            readySetGoParticle4B.Play();
+
+            readySetGoParticleFadeOut = true;
+        }
+        else
+        {
+            readySetGoParticle1B.Stop();
+            readySetGoParticle2B.Stop();
+            readySetGoParticle3B.Stop();
+            readySetGoParticle4B.Stop();
+        }
+    }
+
+    void CreateMovementDust()
+    {
+        movementDustParticles.Play();
+    }
+
+    void StopMovementDust()
+    {
+        movementDustParticles.Stop();
+    }
+
     void UsePowerup()
     {
         switch (powerupInput)
@@ -584,6 +695,7 @@ public class PlayerController : MonoBehaviour
                 rb.AddForce(transform.right * mushForce, ForceMode2D.Impulse);
                 mushUse.Play();
                 canMush = false;
+                mushUIButtonAnimation.SetTrigger("TriggerPowerUpScale");
                 StartCoroutine(MushingRoutine());
                 inventory.RemoveItem(0);
                 powerupInput = 0;
@@ -610,7 +722,9 @@ public class PlayerController : MonoBehaviour
             case 4: //toolkit
                 HealthPoints += 10;
                 toolkitUse.Play();
+                MusicController.Toolkit();
                 inventory.RemoveItem(3);
+                toolkitUIButtonAnimation.SetTrigger("TriggerPowerUpScale");
                 UIController.updateHealth();
                 powerupInput = 0;
                 break;
@@ -632,6 +746,7 @@ public class PlayerController : MonoBehaviour
             invincibilityCounter += Time.deltaTime;
             yield return null;
         }
+        invincibilityCounter = 0; // needed here to confirm counter reset
         invincibilityOn = false;
         invincibilityUse.Stop();
         yield return null;
@@ -646,9 +761,126 @@ public class PlayerController : MonoBehaviour
             goldenCounter += Time.deltaTime;
             yield return null;
         }
+        goldenCounter = 0; // needed here to confirm counter reset
         goldenOn = false;
         golden1Use.Stop();
         golden2Use.Stop();
         yield return null;
+    }
+
+    public void SceneDataLoader()
+    {
+        if (gameManager.sceneHistory[gameManager.sceneHistory.Count - 1] == 0) //if the previous screen was the main menu
+        {
+            // do nothing except open up with default level values
+        }
+        else // load the previous values
+        {
+            HealthPoints = gameManager.seshData.hitPoints;
+            inventory.characterItems[0].amount = gameManager.seshData.musherAmount;
+            inventory.characterItems[1].amount = gameManager.seshData.invincibilityAmount;
+            inventory.characterItems[2].amount = gameManager.seshData.goldenAmount;
+            inventory.characterItems[3].amount = gameManager.seshData.toolkitAmount;
+        }
+
+        // UI updates
+        UpdateHealthAndInventoryUI();
+    }
+
+    public void EndOfLevelResultsChecker()
+    {
+
+        // update game and session data based on level results
+        if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) // if the time for the level is less than the rank for Diamond
+        {
+            // add health to player inventory, but make sure it's not above 100
+            HealthPoints = Mathf.Min(startingHP, HealthPoints + ranker.levelRanking["Diamond"].award);
+            // add rank to player history
+            UpdatePlayerRankHistory();
+            // add EXP to player exp history
+            gameManager.gameData.playerEXP += ranker.levelRanking["Diamond"].exp;
+            // pass specific UI updates to UI Controller
+            UIController.endOfLevelRank.text = "Diamond";
+            UIController.endOfLevelAward.text = "+" + ranker.levelRanking["Diamond"].award.ToString() + " Health";
+        }
+        else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Gold"].levelTime)
+        {
+            HealthPoints = Mathf.Min(startingHP, HealthPoints + ranker.levelRanking["Gold"].award);
+            UpdatePlayerRankHistory();
+            gameManager.gameData.playerEXP += ranker.levelRanking["Gold"].exp;
+            UIController.endOfLevelRank.text = "Gold";
+            UIController.endOfLevelAward.text = string.Concat("+", ranker.levelRanking["Gold"].award.ToString(), " Health");
+        }
+        else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Silver"].levelTime)
+        {
+            HealthPoints = Mathf.Min(startingHP, HealthPoints + ranker.levelRanking["Silver"].award);
+            UpdatePlayerRankHistory();
+            gameManager.gameData.playerEXP += ranker.levelRanking["Silver"].exp;
+            UIController.endOfLevelRank.text = "Silver";
+            UIController.endOfLevelAward.text = string.Concat("+", ranker.levelRanking["Silver"].award.ToString(), " Health");
+        }
+        else // bronze case
+        {
+            HealthPoints = Mathf.Min(startingHP, HealthPoints + ranker.levelRanking["Bronze"].award);
+            UpdatePlayerRankHistory();
+            gameManager.gameData.playerEXP += ranker.levelRanking["Bronze"].exp;
+            UIController.endOfLevelRank.text = "Bronze";
+            UIController.endOfLevelAward.text = string.Concat("+", ranker.levelRanking["Bronze"].award.ToString(), " Health");
+        }
+        // save session data in gameManager
+        SaveSceneData();
+
+        // update health and inventory ui
+        UpdateHealthAndInventoryUI();
+        UIController.EndOfLevelUIUpdates();
+        
+    }
+    
+
+    public void UpdateHealthAndInventoryUI()
+    {
+        UIController.updateHealth(); // update health UI
+        for (int i = 0; i < 4; i++) // update inventory UI
+        {
+            inventory.updateUI(i);
+        }
+    }
+
+    public void SaveSceneData()
+    {
+        gameManager.EndSceneDataSaver(
+            gameManager.seshData,
+            HealthPoints,
+            inventory.characterItems[0].amount,
+            inventory.characterItems[1].amount,
+            inventory.characterItems[2].amount,
+            inventory.characterItems[3].amount);
+            }
+
+    public void UpdatePlayerRankHistory()
+    {
+        int levelNum = gameManager.LevelNumberChecker();
+
+        switch (levelNum)
+        {
+            case 1:
+                if(Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) { gameManager.gameData.level1DiamondRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Gold"].levelTime) { gameManager.gameData.level1GoldRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Silver"].levelTime) { gameManager.gameData.level1SilverRanks++; }
+                else { gameManager.gameData.level1BronzeRanks++; }
+                break;
+            case 2:
+                if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) { gameManager.gameData.level2DiamondRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Gold"].levelTime) { gameManager.gameData.level2GoldRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Silver"].levelTime) { gameManager.gameData.level2SilverRanks++; }
+                else { gameManager.gameData.level2BronzeRanks++; }
+                break;
+            case 3:
+                if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) { gameManager.gameData.level3DiamondRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Gold"].levelTime) { gameManager.gameData.level3GoldRanks++; }
+                else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Silver"].levelTime) { gameManager.gameData.level3SilverRanks++; }
+                else { gameManager.gameData.level3BronzeRanks++; }
+                break;
+        }
     }
 }

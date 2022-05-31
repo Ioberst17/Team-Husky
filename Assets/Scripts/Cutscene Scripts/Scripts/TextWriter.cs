@@ -35,7 +35,7 @@ public class TextWriter : MonoBehaviour {
 
     private void RemoveWriter(Text uiText) {
         for (int i = 0; i < textWriterSingleList.Count; i++) {
-            if (textWriterSingleList[i].GetUIText() == uiText) {
+            if (textWriterSingleList[i].GetUIText() == uiText) { //if text is complete, remove instance
                 textWriterSingleList.RemoveAt(i);
                 i--;
             }
@@ -101,7 +101,7 @@ public class TextWriter : MonoBehaviour {
             return uiText;
         }
 
-        public bool IsActive() {
+        public bool IsActive() { // checks if text writer instance is typing
             return characterIndex < textToWrite.Length;
         }
 
