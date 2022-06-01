@@ -19,11 +19,37 @@ public class UI_Assistant : MonoBehaviour {
 
     private void Awake() {
         dialogueText = transform.Find("Dialogue").Find("DialogueText").GetComponent<Text>();
-        dialogueArray = new string[]
+        switch (SceneManager.GetActiveScene().buildIndex)
+        {
+            case 1:
+                dialogueArray = new string[]
             {
-                "Grandma was telling us all about the dog sled run across the vast ice of Alaska…",
+                "Grandma was telling us all about the dog sled run across the vast ice of Alaska…1",
                 "“And then,” Grandma said, “he turned himself into a pickle.” She paused to laugh. “It was the funniest shit I’d ever seen.”",
             };
+                break;
+            case 3:
+                dialogueArray = new string[]
+            {
+                "Grandma was telling us all about the dog sled run across the vast ice of Alaska…3",
+                "“And then,” Grandma said, “he turned himself into a pickle.” She paused to laugh. “It was the funniest shit I’d ever seen.”",
+            };
+                break;
+            case 5:
+                dialogueArray = new string[]
+            {
+                "Grandma was telling us all about the dog sled run across the vast ice of Alaska…5",
+                "“And then,” Grandma said, “he turned himself into a pickle.” She paused to laugh. “It was the funniest shit I’d ever seen.”",
+            };
+                break;
+            case 7:
+                dialogueArray = new string[]
+            {
+                "Grandma was telling us all about the dog sled run across the vast ice of Alaska…7",
+                "“And then,” Grandma said, “he turned himself into a pickle.” She paused to laugh. “It was the funniest shit I’d ever seen.”",
+            };
+                break;
+        }
         //dialogueAudioSource = transform.Find("DialogueAudio").GetComponent<AudioSource>();
     }
 
@@ -50,7 +76,15 @@ public class UI_Assistant : MonoBehaviour {
             }
             else // once the array is finished, load the next scene
             {
-                SceneManager.LoadScene(0);
+                if (SceneManager.GetActiveScene().buildIndex + 1 == 8)
+                {
+                    SceneManager.LoadScene(0);
+                }
+                else
+                {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                }
+                
             }
         }
         if (textWriterSingle != null && !textWriterSingle.IsActive()) //if textwriter isn't typing

@@ -18,6 +18,7 @@ public class BreakableObstacles : MonoBehaviour
     private ParticleSystem snowPileParticles;
     private ParticleSystem boulderParticles;
     private int obstacleID;
+    private bool falltrigger = false;
     private void Awake()
     {
         obstacleSpriteRenderer = gameObject.GetComponent<SpriteRenderer>(); // need to disable sprite render
@@ -29,6 +30,9 @@ public class BreakableObstacles : MonoBehaviour
         //used to trigger particle systems
         if(CompareTag("SnowPile")) { obstacleID = 1; }
         if(CompareTag("Boulder")) { obstacleID = 2; }
+        if (CompareTag("Icicle")) { obstacleID = 3; }
+        if (CompareTag("RoughTerrain")) { obstacleID = 4; }
+        if (CompareTag("BoulderFall")) { obstacleID = 5; }
 
         // get the right collider component depending on the obstacle
         if (gameObject.GetComponent<BoxCollider2D>() != null) { obstacleBoxCollider = gameObject.GetComponent<BoxCollider2D>(); }
@@ -40,11 +44,24 @@ public class BreakableObstacles : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.GetComponent("PlayerController")) // if object that has the other collider has the PlayerController i.e. Player
+        if (other.gameObject.GetComponent("PlayerController") && obstacleID != 4) // if object that has the other collider has the PlayerController i.e. Player
         {
-            StartCoroutine(Break(other));
+            if(obstacleID == 3 | obstacleID == 5)
+            {
+                if (!falltrigger)
+                {
+                    falltrigger = true;
+                }
+                else
+                {
+                    StartCoroutine(Break(other));
+                }
+            }
+            else
+            {
+                StartCoroutine(Break(other));
+            }
         }
-            
     }
 
     private IEnumerator Break(Collider2D other) // coroutine used because there needs to be a delay between object destruction (i.e. disappearance from screen) to enable particle system playing
@@ -52,6 +69,7 @@ public class BreakableObstacles : MonoBehaviour
         obstacleBreakSound.Play(); // play sound
         obstacleSpriteRenderer.enabled = false; // disable sprite
         // play a specific breakable object particle system on playerController based on current object type
+        if(obstacleID == 5) { obstacleID = 2; }
         if (playerController.invincibilityOn) { obstacleID = 0; } // if the character has invincibility make this adjustment
         switch (obstacleID)
         {
@@ -70,6 +88,11 @@ public class BreakableObstacles : MonoBehaviour
                 bolPart.startSpeed = playerController.rb.velocity.magnitude;
                 snowPileParticles.Play();
                 boulderParticles.Play();
+                break;
+            case 3:
+                invincPart = invincibilityObstacleParticles.main; //note you need to instantiate particle systems modules to access underlying variables in code
+                invincPart.startSpeed = playerController.rb.velocity.magnitude; // set particle system launch speed to velocity mag of player
+                invincibilityObstacleParticles.Play();
                 break;
         }
 

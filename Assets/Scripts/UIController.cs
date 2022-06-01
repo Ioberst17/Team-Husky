@@ -221,9 +221,10 @@ public class UIController : MonoBehaviour
             Stopwatch.Pause();
             pauseMenu.SetActive(true);
         }
-        if (PlayerController.gameState == "running")
+        if (PlayerController.gameState == "running" || PlayerController.gameState == "starting")
         {
             pauseMenu.SetActive(false);
+            debugMenu.SetActive(false);
         }
 
         endLevelMenu.SetActive(PlayerController.levelComplete);

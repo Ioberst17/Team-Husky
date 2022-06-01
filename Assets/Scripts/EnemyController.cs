@@ -10,6 +10,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public PlayerController PlayerController;
 
     private Rigidbody2D rb;
+    private SpriteRenderer EnemySpriteRenderer;
     [SerializeField] private float fallSpeed;
     [SerializeField] private bool isIcicle;
     [SerializeField] private bool isHazard;
@@ -22,6 +23,7 @@ public class EnemyController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         fallTrigger = !isIcicle;
         startingLocation = transform.position;
+        EnemySpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
         PlayerController.onDeath += OnRespawn;
     }
     private void OnDisable()
@@ -69,6 +71,9 @@ public class EnemyController : MonoBehaviour
         transform.position = startingLocation;
         rb.velocity = new Vector2(0, 0);
         fallTrigger = !isIcicle;
-        Debug.Log(name + " Respawned");
+        EnemySpriteRenderer.enabled = true;
+
+
+        //Debug.Log(name + " Respawned");
     }
 }

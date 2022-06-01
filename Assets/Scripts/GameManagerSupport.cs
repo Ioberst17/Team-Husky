@@ -57,7 +57,7 @@ public class GameManagerSupport : MonoBehaviour
         screenTransition.ResetTrigger("EndScreenTransitionMainMenu");
         screenTransition.SetTrigger("EndScreenTransitionMainMenu");
         musicController.MainMenuToPlayGameDogBark();
-        if (musicController.AudioSource.isPlaying)
+        if (musicController.MusicSource.isPlaying)
         {
             Debug.Log("It works");
         }
@@ -105,7 +105,7 @@ public class GameManagerSupport : MonoBehaviour
         }
         else
         {
-            GameObject.Find("Level3BestTime/DataText").GetComponent<TMPro.TextMeshProUGUI>().text = gameManager.gameData.level3BestTime.ToString();
+            level3BestTime.transform.GetChild(1).GetComponent<TMPro.TextMeshProUGUI>().text = gameManager.gameData.level3BestTime.ToString();
         }
     }
 

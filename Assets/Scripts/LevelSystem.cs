@@ -31,7 +31,7 @@ public class LevelSystem : MonoBehaviour
         gameManager = GameManager.Instance;
         playerController = gameObject.GetComponent<PlayerController>();
         uiController = GameObject.FindObjectOfType<UIController>();
-        frontXPSlider.fillAmount = gameManager.gameData.playerEXP / requiredXP;
+        //frontXPSlider.fillAmount = gameManager.gameData.playerEXP / requiredXP;
         requiredXP = CalculateRequiredXP();
     }
 

@@ -9,6 +9,9 @@ TagManager:
   - MusicController
   - Boulder
   - SnowPile
+  - Icicle
+  - RoughTerrain
+  - BoulderFall
   layers:
   - Default
   - TransparentFX
