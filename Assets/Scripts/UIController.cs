@@ -204,7 +204,7 @@ public class UIController : MonoBehaviour
         }
         else
         {
-            goldenSprite.transform.eulerAngles = new Vector3(0, 0, -17); //resets to 17 as an oddity of the current golden sprite, will change with Justin's new sprite
+            //goldenSprite.transform.eulerAngles = new Vector3(0, 0, -17); //resets to 17 as an oddity of the current golden sprite, will change with Justin's new sprite
         }
 
         if (PlayerController.gameState != "paused" && PlayerController.levelComplete !=  true)
@@ -256,5 +256,5 @@ public class UIController : MonoBehaviour
             levelSystem.UpdateXP(.4F);
 
         }
-        }
     }
+}

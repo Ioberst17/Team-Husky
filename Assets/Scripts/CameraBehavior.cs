@@ -7,11 +7,16 @@ public class CameraBehavior : MonoBehaviour
     public Transform player;
     public float Hleeway;
     public float Vleeway;
+    private float leadtimer = 0;
+    private float previousPositionX;
+    private float previousPositionY;
 
     // Start is called before the first frame update
     void Start()
     {
         transform.position = new Vector3(player.position.x, player.position.y, -5);
+        previousPositionX = transform.position.x;
+        previousPositionY = transform.position.y;
     }
 
     // Update is called once per frame
@@ -25,14 +30,44 @@ public class CameraBehavior : MonoBehaviour
         {
             transform.position = new Vector3(transform.position.x - ((transform.position.x - player.position.x) + Hleeway), transform.position.y, -5);
         }
-        if (((transform.position.y) - (player.position.y)) > Vleeway)
+
+        if (player.position.y > previousPositionY)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y - ((transform.position.y - player.position.y) - Vleeway), -5);
+            if(leadtimer < 20)
+            {
+                leadtimer += player.position.y - previousPositionY;
+                if (leadtimer > 20)
+                {
+                    leadtimer = 20;
+                }
+            }
         }
-        if (((transform.position.y) - (player.position.y)) < -Vleeway)
+        if (player.position.y < previousPositionY)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y - ((transform.position.y - player.position.y) + Vleeway), -5);
+            if (leadtimer > -20)
+            {
+                leadtimer += player.position.y - previousPositionY;
+                if (leadtimer < -20)
+                {
+                    leadtimer = -20;
+                }
+            }
         }
+
+        Debug.Log(leadtimer);
+        transform.position = new Vector3(transform.position.x, player.position.y + (leadtimer / 10), -5);
+        previousPositionY = player.position.y;
+
+
+
+        //if (((transform.position.y) - (player.position.y)) > Vleeway)
+        //{
+        //    transform.position = new Vector3(transform.position.x, transform.position.y - ((transform.position.y - player.position.y) - Vleeway + 2), -5);
+        //}
+        //if (((transform.position.y) - (player.position.y)) < -Vleeway)
+        //{
+        //    transform.position = new Vector3(transform.position.x, transform.position.y - ((transform.position.y - player.position.y) + Vleeway + 2), -5);
+        //}
         //transform.position = new Vector3(player.position.x, player.position.y, -5);
     }
 }

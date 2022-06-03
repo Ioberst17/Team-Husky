@@ -24,6 +24,7 @@ public class PowerupBehavior : MonoBehaviour
                 == LayerMask.NameToLayer("Player"))
         {
             Inventory.AddItem(PowerupID);
+            MusicController.PowerupPickup();
             powerupSpriteRenderer.enabled = false;
         }
     }

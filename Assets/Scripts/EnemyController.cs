@@ -10,12 +10,13 @@ public class EnemyController : MonoBehaviour
     [SerializeField] public PlayerController PlayerController;
 
     private Rigidbody2D rb;
+
     private SpriteRenderer EnemySpriteRenderer;
     [SerializeField] private float fallSpeed;
     [SerializeField] private bool isIcicle;
     [SerializeField] private bool isHazard;
     private Vector3 startingLocation;
-    private bool fallTrigger;
+    public bool fallTrigger;
 
     // Start is called before the first frame update
     void Start()
@@ -71,7 +72,12 @@ public class EnemyController : MonoBehaviour
         transform.position = startingLocation;
         rb.velocity = new Vector2(0, 0);
         fallTrigger = !isIcicle;
-        EnemySpriteRenderer.enabled = true;
+        if (!isHazard)
+        {
+            EnemySpriteRenderer.enabled = true;
+        }
+       
+
 
 
         //Debug.Log(name + " Respawned");

@@ -7215,16 +7215,18 @@ MonoBehaviour:
   FXSource: {fileID: 1651941861}
   PetTheDogSource: {fileID: 1651941860}
   MainMenuThemeClip: {fileID: 8300000, guid: f3644523a98cbc24f8ba5554d976ae22, type: 3}
-  LevelThemeIntro: {fileID: 0}
-  LevelThemeLoop: {fileID: 0}
+  LevelThemeIntro: {fileID: 8300000, guid: 87034190790893540b293194078f8b5c, type: 3}
+  LevelThemeLoop: {fileID: 8300000, guid: 4327252010627bd4087427d3e289d686, type: 3}
   PowerupTheme: {fileID: 0}
   EndLevelThemeIntro: {fileID: 0}
   EndLevelThemeLoop: {fileID: 0}
   OutOfBoundsClip: {fileID: 0}
   DamageClip: {fileID: 0}
   JumpClip: {fileID: 0}
+  PowerupClip: {fileID: 0}
   SpeedBoostClip: {fileID: 0}
   ToolKitClip: {fileID: 0}
+  GoldenSkatesClip: {fileID: 0}
   ReadySetGoClip: {fileID: 0}
   MenuButtonHoverClip: {fileID: 8300000, guid: 79ec2f683e3bc9f4d8f153553e156f13, type: 3}
   PetTheDogSounds:

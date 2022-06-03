@@ -199,6 +199,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.Z) || Input.GetKeyUp(KeyCode.W))
             {
                 jumpInput = false;
+
             }
             if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.W))
             {
@@ -289,6 +290,8 @@ public class PlayerController : MonoBehaviour
     //Fixed update is where all physics happens
     void FixedUpdate()
     {
+
+        //jumpInput = true;
         readySetGo();
         isGrounded();
         if (canMush)
@@ -304,7 +307,7 @@ public class PlayerController : MonoBehaviour
             }
             Accelerate(accelerationInput);
         }
-
+        
         Jump(jumpInput);
         UsePowerup();
 
@@ -358,7 +361,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
             //if holding forward and not exceeding the maximum, speed up
-            if (accelInput == 1 && moveVelocity < speed * maxSpeedMult)
+            if (accelInput == 1 && moveVelocity < speed * maxSpeedMult && stuckCount <= 0)
             {
                 moveVelocity = moveVelocity + speedMod;
             }
@@ -412,16 +415,16 @@ public class PlayerController : MonoBehaviour
             count = 0;
             if(speedometer <= 0.5f && !grounded)
             {
-                stuckCount += 1;
+                stuckCount += 2;
             }
-            else
+            else if (stuckCount > 0)
             {
-                stuckCount = 0;
+                stuckCount -= 1;
             }
             if(stuckCount >= 1)
             {
-                stuckCount = 0;
-                rb.velocity = new Vector2(-1, -4);
+                //stuckCount = 0;
+                rb.velocity = new Vector2(-4, -4);
                 moveVelocity = 0;
             }
         }
@@ -729,6 +732,7 @@ public class PlayerController : MonoBehaviour
                 golden2Use.Stop();
                 golden1Use.Play();
                 golden2Use.Play();
+                MusicController.GoldenSkates();
                 StartCoroutine(GoldenRoutine());
                 goldenCounter = 0;
                 inventory.RemoveItem(2);
@@ -805,6 +809,7 @@ public class PlayerController : MonoBehaviour
     public void EndOfLevelResultsChecker()
     {
         // update game and session data based on level results
+        Debug.Log(ranker.levelRanking["Diamond"].levelTime);
         if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) // if the time for the level is less than the rank for Diamond
         {
             // add health to player inventory, but make sure it's not above 100

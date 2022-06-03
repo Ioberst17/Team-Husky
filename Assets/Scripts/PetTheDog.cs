@@ -59,6 +59,7 @@ public class PetTheDog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
             }
             musicController.PetTheDogSource.clip = musicController.PetTheDogSounds[Random.Range(0, musicController.PetTheDogSounds.Length)];
             musicController.PetTheDogSource.Play();
+            Debug.Log("dog pet");
             
         }
     }

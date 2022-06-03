@@ -19,8 +19,10 @@ public class MusicController : MonoBehaviour
     public AudioClip OutOfBoundsClip;
     public AudioClip DamageClip;
     public AudioClip JumpClip;
+    public AudioClip PowerupClip;
     public AudioClip SpeedBoostClip;
     public AudioClip ToolKitClip;
+    public AudioClip GoldenSkatesClip;
     public AudioClip ReadySetGoClip;
     public AudioClip MenuButtonHoverClip;
     public AudioClip[] PetTheDogSounds; // assigned in inspector
@@ -31,13 +33,7 @@ public class MusicController : MonoBehaviour
     {
         if(SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.GetActiveScene().buildIndex == 1) // if it's the main menu or first cut scene
         {
-            MusicSource.clip = MainMenuThemeClip; // assign the main menu theme to clip in the first audio source
-            MusicSource.Play(); //have it play (loop is set in the inspector)
-        }
-        else if (SceneManager.GetActiveScene().buildIndex == 2) // if it's the first level, play the level theme
-        {
-            //MusicSource.clip = LevelTheme; // assign the main menu theme to clip in first audiosource
-            //MusicSource.Play(); //have it play (loop is set in the inspector)
+            levelStart();
         }
 
     }
@@ -62,7 +58,7 @@ public class MusicController : MonoBehaviour
         MusicSource.clip = EndLevelThemeIntro;
         MusicSource2.clip = EndLevelThemeLoop;
         MusicSource.Play();
-        MusicSource2.PlayDelayed(EndLevelThemeIntro.length - 0.25f);
+        MusicSource2.PlayDelayed(EndLevelThemeIntro.length - 0.125f);
         MusicSource2.loop = true;
     }
     public void outOfBoundsFunction()
@@ -71,7 +67,7 @@ public class MusicController : MonoBehaviour
     }
     public void DamageFunction()
     {
-        FXSource.PlayOneShot(DamageClip);
+        FXSource.PlayOneShot(DamageClip, 0.33f);
     }
     public void JumpFunction()
     {
@@ -93,7 +89,7 @@ public class MusicController : MonoBehaviour
 
     public void MainMenuToPlayGameDogBark()
     {
-        FXSource.PlayOneShot(MainMenuToPlayGameDogBarkClip, 0.2F);
+        FXSource.PlayOneShot(MainMenuToPlayGameDogBarkClip, 1.0F);
     }
     
         public void PetTheDogPanting()
@@ -104,5 +100,14 @@ public class MusicController : MonoBehaviour
     public void Toolkit()
     {
         FXSource.PlayOneShot(ToolKitClip, 0.7F);
+    }
+    public void GoldenSkates()
+    {
+        FXSource.PlayOneShot(GoldenSkatesClip, 0.7F);
+    }
+    public void PowerupPickup()
+    {
+        FXSource.PlayOneShot(PowerupClip, 0.7F);
+        //Debug.Log("got powerup sound played");
     }
 }

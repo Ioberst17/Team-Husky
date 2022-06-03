@@ -12,6 +12,7 @@ public class BreakableObstacles : MonoBehaviour
     private CircleCollider2D obstacleCircleCollider; // used if obstacle has box collider
     private PolygonCollider2D obstaclePolygonCollider; // used if obstacle has box collider
     private PlayerController playerController;
+    private EnemyController enemyController;
     private AudioSource obstacleBreakSound;
     // used to trigger particle effects on player
     private ParticleSystem invincibilityObstacleParticles;
@@ -19,10 +20,12 @@ public class BreakableObstacles : MonoBehaviour
     private ParticleSystem boulderParticles;
     private int obstacleID;
     private bool falltrigger = false;
+
     private void Awake()
     {
         obstacleSpriteRenderer = gameObject.GetComponent<SpriteRenderer>(); // need to disable sprite render
         playerController = GameObject.Find("PlayerModel").GetComponent<PlayerController>(); // need for collisions
+        enemyController = GameObject.Find(name).GetComponent<EnemyController>();
         invincibilityObstacleParticles = GameObject.Find("InvincibilityObstacleParticles").GetComponent<ParticleSystem>(); // need for particle effects
         snowPileParticles = GameObject.Find("SnowPileParticles").GetComponent<ParticleSystem>(); // need for particle effects
         boulderParticles = GameObject.Find("BoulderParticles").GetComponent<ParticleSystem>(); // need for particle effects
@@ -48,13 +51,14 @@ public class BreakableObstacles : MonoBehaviour
         {
             if(obstacleID == 3 | obstacleID == 5)
             {
-                if (!falltrigger)
+                if (enemyController.fallTrigger && !falltrigger)
                 {
                     falltrigger = true;
                 }
                 else
                 {
                     StartCoroutine(Break(other));
+                    falltrigger = false;
                 }
             }
             else
@@ -102,6 +106,10 @@ public class BreakableObstacles : MonoBehaviour
         if (obstaclePolygonCollider != null) { obstaclePolygonCollider.enabled = false; }
 
         yield return new WaitForSeconds(3F);
-        gameObject.SetActive(false); // remove the obstacle
+        if (obstacleBoxCollider != null) { obstacleBoxCollider.enabled = true; }
+        if (obstacleCircleCollider != null) { obstacleCircleCollider.enabled = true; }
+        if (obstaclePolygonCollider != null) { obstaclePolygonCollider.enabled = true; }
+        //gameObject.SetActive(false); // remove the obstacle
     }
+    
 }
