@@ -14,6 +14,8 @@ public class UIController : MonoBehaviour
     private int maxHP;
     public Text HPtext;
     public Text timerText;
+    public Text levelNameHeaderText;
+    public Text levelNameText;
     public Text readySetGoText;
     public Stopwatch Stopwatch;
     public PlayerController PlayerController; // assigned in inspector
@@ -22,6 +24,7 @@ public class UIController : MonoBehaviour
     public GameObject pauseMenu;
     public GameObject debugMenu;
     public GameObject endLevelMenu;
+    public GameObject uiCanvas;
 
     // for UI Images, assigned in inspectors
     public Image invincibilitySprite; 
@@ -51,11 +54,14 @@ public class UIController : MonoBehaviour
     // for Awards
     public Text endOfLevelAward;
     public GameObject endOfLevelAwardHealth; 
-    public ParticleSystem endOfLeveHealthParticleSystem; //assigned in inspector
-    public ParticleSystem endOfLeveHealthParticleSystem2; //assigned in inspector
+    public ParticleSystem endOfLevelHealthParticleSystem; //assigned in inspector
+    public ParticleSystem endOfLevelHealthParticleSystem2; //assigned in inspector
+    public ParticleSystem endOfLevelRankParticles; //assigned in inspector
+    public ParticleSystem endOfLevelRankParticles2; //assigned in inspector
     // END OF LEVEL - PLAYER EXP
     public Slider playerEXP;
     public Text endOfLevelPlayerLevel;
+    public Animator endOfLevelPlayerLevelTextAnimator;
 
 
     private int readySetGoTimer;
@@ -66,14 +72,21 @@ public class UIController : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         levelSystem = PlayerController.gameObject.GetComponent<LevelSystem>();
-        endOfLevelRank = GameObject.Find("LevelEndRankText").GetComponentInChildren<Text>();
-        endOfLevelAward = GameObject.Find("LevelEndAwardText").GetComponentInChildren<Text>();
-        endOfLevelRankDiamond = GameObject.Find("LevelEndRankImageDiamond");
-        endOfLevelRankGold = GameObject.Find("LevelEndRankImageGold");
-        endOfLevelRankSilver = GameObject.Find("LevelEndRankImageSilver");
-        endOfLevelRankBronze = GameObject.Find("LevelEndRankImageBronze");
-        endOfLevelAwardHealth = GameObject.Find("LevelEndAwardImageHealth");
-        endOfLevelPlayerLevel = GameObject.Find("EndOfLevelPlayerLevel").GetComponentInChildren<Text>();
+        if(GameObject.Find("UI Canvas")) // if it is a playable level, i.e. has UI Canvas
+        {
+            uiCanvas = GameObject.Find("UI Canvas");
+            endOfLevelRank = ObjectFinder.FindObject(uiCanvas, "LevelEndRankText").GetComponentInChildren<Text>();
+            endOfLevelAward = ObjectFinder.FindObject(uiCanvas, "LevelEndAwardText").GetComponentInChildren<Text>();
+            endOfLevelRankDiamond = ObjectFinder.FindObject(uiCanvas, "LevelEndRankImageDiamond");
+            endOfLevelRankGold = ObjectFinder.FindObject(uiCanvas, "LevelEndRankImageGold");
+            endOfLevelRankSilver = ObjectFinder.FindObject(uiCanvas, "LevelEndRankImageSilver");
+            endOfLevelRankBronze = ObjectFinder.FindObject(uiCanvas, "LevelEndRankImageBronze");
+            endOfLevelAwardHealth = ObjectFinder.FindObject(uiCanvas, "LevelEndAwardImageHealth");
+            endOfLevelPlayerLevel = ObjectFinder.FindObject(uiCanvas, "EndOfLevelPlayerLevel").GetComponentInChildren<Text>();
+            endOfLevelPlayerLevelTextAnimator = ObjectFinder.FindObject(uiCanvas, "EndOfLevelPlayerLevel").GetComponentInChildren<Animator>();
+            endOfLevelPlayerLevel.text = gameManager.gameData.playerLevel.ToString();
+        }
+
     }
 
     public void levelStart()
@@ -173,6 +186,8 @@ public class UIController : MonoBehaviour
                 whichRankImageToRotate = 4;
 
             }
+
+            levelSystem.UpdateXPUI(10/25F);
         }
     }
 
@@ -246,15 +261,15 @@ public class UIController : MonoBehaviour
                     endOfLevelRankBronze.transform.Rotate(new Vector3(0, rankSpriteRotation, 0));
                     break;
             }
+            // play rank particles
+            endOfLevelRankParticles.Play();
+            endOfLevelRankParticles2.Play();
+
 
             // particles and rotation of health image
             endOfLevelAwardHealth.gameObject.transform.Rotate(new Vector3(0, -rankSpriteRotation, 0));
-            endOfLeveHealthParticleSystem.Play();
-            endOfLeveHealthParticleSystem2.Play();
-
-            //update EXP bar
-            levelSystem.UpdateXP(.4F);
-
+            endOfLevelHealthParticleSystem.Play();
+            endOfLevelHealthParticleSystem2.Play();
         }
     }
 }

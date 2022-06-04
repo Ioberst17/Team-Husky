@@ -26,6 +26,7 @@ public class LevelRankData : MonoBehaviour
     {
         gameManager = GameManager.Instance;
         levelRanking = populateLevelInformation(gameManager.LevelNumberChecker());
+        currentLevel = gameManager.LevelNumberChecker(); // used for debug
     }
 
     public Dictionary<string, RankAwardAndEXPData> populateLevelInformation(int level)

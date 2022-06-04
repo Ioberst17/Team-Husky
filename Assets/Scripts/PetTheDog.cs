@@ -50,7 +50,7 @@ public class PetTheDog : MonoBehaviour, IPointerEnterHandler, IPointerExitHandle
         {
             if (SceneManager.GetActiveScene().buildIndex == 0) // only used on the menu page
             {
-                petTheDogTextRecord.SetTrigger("Pet");
+                petTheDogTextRecord.SetTrigger("Scale");
                 gameManagerSupport.petTheDogUIUpdate();
             }
             else

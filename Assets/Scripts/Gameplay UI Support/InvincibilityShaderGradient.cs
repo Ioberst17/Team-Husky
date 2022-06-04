@@ -24,6 +24,7 @@ public class InvincibilityShaderGradient : MonoBehaviour
         fillColor = gameObject.GetComponent<Image>();
         shinyUI = gameObject.GetComponent<UIShiny>();
         gradientUI = gameObject.GetComponent<UIGradient>();
+        Changer();
     }
 
     // Update is called once per frame
@@ -32,10 +33,14 @@ public class InvincibilityShaderGradient : MonoBehaviour
         if (playerController.invincibilityOn)
         {
             Changer();
+            shinyUI.Play(); // turn on shiny animation
+            shinyUI.effectPlayer.loop = true;
         }
         else
         {
             Return();
+            shinyUI.Stop(); //turn off shiny
+            shinyUI.effectPlayer.loop = false;
         }
     }
 
@@ -46,30 +51,34 @@ public class InvincibilityShaderGradient : MonoBehaviour
 
     public void Changer()
     {
-        if(fillColor.color != new Color32(255, 255, 255, 255))
-        {
-            fillColor.color = new Color32(255, 255, 255, 255); // set health bar to white
 
-            //set colors of gradient
-            gradientUI.color1 = new Color32(0, 82, 231, 255); // font dark blue
-            gradientUI.color2 = new Color32(255, 255, 255, 255); // white
-            gradientUI.color3 = new Color32(0, 179, 255, 255); // light blue similar to invincibility sprite
-            gradientUI.color4 = new Color32(255, 255, 255, 255); // white
+        fillColor.color = new Color32(255, 255, 255, 255); // set health bar to white
 
-            shinyUI.Play(); // turn on shiny animation
-            shinyUI.effectPlayer.loop = true;
-        }
+        //set colors of gradient
+        gradientUI.color1 = new Color32(0, 82, 231, 255); // font dark blue
+        gradientUI.color2 = new Color32(255, 255, 255, 255); // white
+        gradientUI.color3 = new Color32(0, 179, 255, 255); // light blue similar to invincibility sprite
+        gradientUI.color4 = new Color32(255, 255, 255, 255); // white
+
+
+        shinyUI.Play(); // turn on shiny animation
+        shinyUI.effectPlayer.loop = true;
+   
     }
 
     public void Return()
     {
-        fillColor.color = new Color32(48, 124, 238, 255); //set UI back to original color
+        // otherwise return to regular
+        gradientUI.color1 = new Color32(0, 82, 231, 255); // font dark blue
+        gradientUI.color2 = new Color32(0, 179, 255, 255); // turquoise
+        gradientUI.color3 = new Color32(114, 204, 255, 255); // lighter turquoise
+        gradientUI.color4 = new Color32(20, 0, 255, 255); // blue
 
-        //set gradient back to 0
-        gradientUI.color1 = new Color32(255, 255, 255, 255);
-        gradientUI.color2 = new Color32(255, 255, 255, 255);
-        gradientUI.color3 = new Color32(255, 255, 255, 255);
-        gradientUI.color4 = new Color32(255, 255, 255, 255);
+        //set colors of gradient
+        /*gradientUI.color1 = new Color32(0, 82, 231, 255); // font dark blue
+        gradientUI.color2 = new Color32(255, 255, 255, 255); // white
+        gradientUI.color3 = new Color32(48, 124, 238, 255); // dark blue variant
+        gradientUI.color4 = new Color32(255, 255, 255, 255); // white*/
 
         shinyUI.Stop(); //turn off shiny
         shinyUI.effectPlayer.loop = false;

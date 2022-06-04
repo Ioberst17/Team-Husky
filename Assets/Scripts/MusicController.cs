@@ -44,7 +44,14 @@ public class MusicController : MonoBehaviour
         MusicSource.clip = LevelThemeIntro;
         MusicSource2.clip = LevelThemeLoop;
         MusicSource.Play();
-        MusicSource2.PlayDelayed(LevelThemeIntro.length-0.25f);
+        if(SceneManager.GetActiveScene().buildIndex == 2) // level 1 has a slightly shorter / less tolerant uptake before it's level theme plays
+        {
+            MusicSource2.PlayDelayed(LevelThemeIntro.length-.2F);
+        }
+        else
+        {
+            MusicSource2.PlayDelayed(LevelThemeIntro.length - 0.25f);
+        }
         MusicSource2.loop = true;
     }
     public void powerup()

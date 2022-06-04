@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4131986514471923457}
   - component: {fileID: 4131986514471923456}
   - component: {fileID: 945551732114739252}
+  - component: {fileID: 3460570805404048122}
   m_Layer: 0
   m_Name: Invincibility001
   m_TagString: Untagged
@@ -142,3 +143,23 @@ PolygonCollider2D:
       - {x: 0.16, y: -1.7199999}
       - {x: 0.5, y: -1.3299999}
       - {x: 0.64, y: -1.17}
+--- !u!95 &3460570805404048122
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4131986514471923471}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d53e2fca44dc63946880c3721e22d36c, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

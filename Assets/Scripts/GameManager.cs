@@ -102,12 +102,14 @@ public class GameManager : MonoBehaviour
         {
             string json = File.ReadAllText(path); // reads file content to json string
             GameData gameData = JsonUtility.FromJson<GameData>(json); // reads json string data to variable data
-            if(gameData.playerLevel == 0) { gameData.playerLevel++; } 
+            Debug.Log("CHECKING PLAYERLEVEL: " + gameData.playerLevel);
             return gameData;
         }
         else
         {
             GameData gameData = new GameData();
+            gameData.playerLevel = 1;
+            Debug.Log("CHECKING PLAYERLEVEL: " + gameData.playerLevel);
             return gameData;
         }
     }

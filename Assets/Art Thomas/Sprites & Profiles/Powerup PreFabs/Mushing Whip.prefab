@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3724710594281099982}
   - component: {fileID: 5135221548351001617}
   - component: {fileID: -7647427855175850024}
+  - component: {fileID: 7768473620669414240}
   m_Layer: 0
   m_Name: Mushing Whip
   m_TagString: Untagged
@@ -111,3 +112,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 8.4, y: 8.59}
   m_EdgeRadius: 0
+--- !u!95 &7768473620669414240
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4493978444751602895}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 96177c80b01304541af39b4a6ca4e9d9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0

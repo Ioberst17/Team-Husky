@@ -160,7 +160,6 @@ public class PlayerController : MonoBehaviour
 
         playerState = "Start";
         gameState = "Starting";
-        //SceneDataLoader();
         levelComplete = false;
         if (previousPosition == null)
         {
@@ -175,7 +174,9 @@ public class PlayerController : MonoBehaviour
         readySetGoTimer = 0;
         powerupInput = 0; ;
         readySetGo();
-
+#if !UNITY_EDITOR
+        Invoke("SceneDataLoader", .01F);
+#endif
     }
 
     //update is largely focused on user input
@@ -277,11 +278,12 @@ public class PlayerController : MonoBehaviour
                                                             Stopwatch.GetMinutes(),
                                                             Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
                                                             (Stopwatch.GetMilliseconds() * 100.00f) % 100.00f);
+                hasUpdatedRecords = true;
+
                 // check rank and update UI
-                UIController.endOfLevelPlayerLevel.text = gameManager.gameData.playerEXP.ToString();
                 EndOfLevelResultsChecker();
 
-                hasUpdatedRecords = true;
+                
             }
 
         }
@@ -582,10 +584,35 @@ public class PlayerController : MonoBehaviour
 
     }
     
+    private string GetLevelName()
+    {
+        string levelName = "";
+        int levelNum = gameManager.LevelNumberChecker();
+        switch (levelNum)
+        {
+            case 1:
+                levelName = "Leaving Town";
+                break;
+            case 2:
+                levelName = "Ice Caverns";
+                break;
+            case 3:
+                levelName = "Avalanche!";
+                break;
+            default:
+                levelName = "The Unknown";
+                break;
+
+        }
+        return levelName;
+    }
+
     private void readySetGo()
     {
         if (readySetGoTimer <= 180)
         {
+            UIController.levelNameHeaderText.text = "Level " + gameManager.LevelNumberChecker().ToString();
+            UIController.levelNameText.text = GetLevelName();
             if (readySetGoTimer == 0)
             {
                 MusicController.ReadySetGoFunction();
@@ -603,7 +630,9 @@ public class PlayerController : MonoBehaviour
             }
             else if (readySetGoTimer == 180)
             {
+                UIController.levelNameHeaderText.text = "";
                 UIController.readySetGoText.text = "";
+                UIController.levelNameText.text = "";
             }
             readySetGoTimer += 1;
         }
@@ -789,7 +818,7 @@ public class PlayerController : MonoBehaviour
 
     public void SceneDataLoader()
     {
-        if (gameManager.sceneHistory[gameManager.sceneHistory.Count - 1] == 0) //if the previous screen was the main menu
+        if (gameManager.sceneHistory[gameManager.sceneHistory.Count - 1] == 1 || gameManager.sceneHistory[gameManager.sceneHistory.Count - 1] == 2) //if the previous screen was the 1st or 2nd level
         {
             // do nothing except open up with default level values
         }
@@ -809,7 +838,7 @@ public class PlayerController : MonoBehaviour
     public void EndOfLevelResultsChecker()
     {
         // update game and session data based on level results
-        Debug.Log(ranker.levelRanking["Diamond"].levelTime);
+        //Debug.Log(ranker.levelRanking["Diamond"].levelTime);
         if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) // if the time for the level is less than the rank for Diamond
         {
             // add health to player inventory, but make sure it's not above 100

@@ -11,42 +11,61 @@ using System;
 public class UI_Assistant : MonoBehaviour {
 
     private Text dialogueText;
+    public GameManagerSupport gameManagerSupport;
     private TextWriter.TextWriterSingle textWriterSingle;
     private AudioSource dialogueAudioSource;
     public string[] dialogueArray;
     private int arrayTracker = 0;
     public Text continueText;
+    public GameObject canvas;
+    public Text contextText;
+    public Text theEndText;
 
     private void Awake() {
+        gameManagerSupport = GameObject.FindObjectOfType<GameManagerSupport>();
         dialogueText = transform.Find("Dialogue").Find("DialogueText").GetComponent<Text>();
+        /*if (SceneManager.GetActiveScene().buildIndex == 1) // This is all handled via script on text now
+        {
+            canvas = GameObject.Find("Canvas");
+            contextText = ObjectFinder.FindObject(canvas, "ContextText").GetComponent<Text>();
+        }*/
+        if (SceneManager.GetActiveScene().buildIndex == 7) // if final cutscene needs The End
+        {
+            canvas = GameObject.Find("Canvas");
+            theEndText = ObjectFinder.FindObject(canvas, "TheEndText").GetComponent<Text>();
+        }
         switch (SceneManager.GetActiveScene().buildIndex)
         {
             case 1:
                 dialogueArray = new string[]
             {
-                "Grandma was telling us all about the dog sled run across the vast ice of Alaska…1",
-                "“And then,” Grandma said, “he turned himself into a pickle.” She paused to laugh. “It was the funniest shit I’d ever seen.”",
+                "“Have you ever heard the tale of Darth Musher? It's not a story that anyone would tell y-”",
+                "“Come on, Grandpa! Just tell us the real story.”",
+                "“Alright, alright - I'll tell you about How I Met Your Grandmoth-”",
+                "“Grandpa!”",
+                "“... alright, here's the story - it was many years ago now”",
+                "“It was a day like any other, until I got the call to deliver medicine up to Nome”",
+                "“It wasn't going to be easy, but I packed and readied myself before leaving town”"
             };
                 break;
             case 3:
                 dialogueArray = new string[]
             {
-                "Grandma was telling us all about the dog sled run across the vast ice of Alaska…3",
-                "“And then,” Grandma said, “he turned himself into a pickle.” She paused to laugh. “It was the funniest shit I’d ever seen.”",
+                "“The easy part of the journey was over, next we'd have to make it through the Ice Caverns”"
             };
                 break;
             case 5:
                 dialogueArray = new string[]
             {
-                "Grandma was telling us all about the dog sled run across the vast ice of Alaska…5",
-                "“And then,” Grandma said, “he turned himself into a pickle.” She paused to laugh. “It was the funniest shit I’d ever seen.”",
+                "“We made it out just in time. The dogs and I were tired, but we'd have to make it through one last push to get to Nome”",
+                "“Unfortunate for us, this last sprint would really test our mettle”"
             };
                 break;
             case 7:
                 dialogueArray = new string[]
             {
-                "Grandma was telling us all about the dog sled run across the vast ice of Alaska…7",
-                "“And then,” Grandma said, “he turned himself into a pickle.” She paused to laugh. “It was the funniest shit I’d ever seen.”",
+                "“And that you see, is the story of how I beat the Elite Four”",
+                "“... Gramps, it's amazing how you can be so unfunny, yet still cool”",
             };
                 break;
         }
@@ -78,11 +97,12 @@ public class UI_Assistant : MonoBehaviour {
             {
                 if (SceneManager.GetActiveScene().buildIndex + 1 == 8)
                 {
-                    SceneManager.LoadScene(0);
+                    StartCoroutine(TheEndRoutine());
                 }
                 else
                 {
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                    gameManagerSupport.gameManagerLoader(SceneManager.GetActiveScene().buildIndex+1); // need to use this function to enable screen transitions + saving scene history
+                    //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
                 }
                 
             }
@@ -94,6 +114,21 @@ public class UI_Assistant : MonoBehaviour {
                 Invoke("turnContinueTextOn", 0.5f); //
             }
         }
+    }
+
+    /*IEnumerator ContextTextFade() // handled on script attached to object
+    {
+        yield return new WaitForSeconds(3F);
+        contextText.GetComponent<Animator>().SetTrigger("FadeOut");
+        yield return null;
+    }*/
+
+    IEnumerator TheEndRoutine()
+    {
+        theEndText.GetComponent<Animator>().SetTrigger("FadeIn");
+        yield return new WaitForSeconds(2.5F);
+        gameManagerSupport.gameManagerLoader(0);
+        yield return null;
     }
 
     public void turnContinueTextOn() {continueText.gameObject.SetActive(true);}
@@ -109,9 +144,6 @@ public class UI_Assistant : MonoBehaviour {
         //dialogueAudioSource.Stop();
         Debug.Log("you need audio");
     }
-
-    private void Start() {
-        //TextWriter.AddWriter_Static(messageText, "This is the assistant speaking, hello and goodbye, see you next time!", .1f, true);
-    }
+   
 
 }
