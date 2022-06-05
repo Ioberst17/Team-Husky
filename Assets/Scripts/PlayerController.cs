@@ -224,30 +224,30 @@ public class PlayerController : MonoBehaviour
                 accelerationInput = 0;
             }
 
-            //this is a testing functions to be removed later.
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                takeDamage(50, 0);
-            }
+            ////this is a testing functions to be removed later.
+            //if (Input.GetKeyDown(KeyCode.Q))
+            //{
+            //    takeDamage(50, 0);
+            //}
 
             // Powerup-related
 
-            if (Input.GetKeyDown(KeyCode.A) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
+            if (Input.GetKeyDown(KeyCode.S) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
             {
                 powerupInput = 1;
             }
 
-            if (Input.GetKeyDown(KeyCode.S) && invincibilityOn == false && inventory.characterItems[1].amount > 0) // for invincibility
+            if (Input.GetKeyDown(KeyCode.D) && invincibilityOn == false && inventory.characterItems[1].amount > 0) // for invincibility
             {
                 powerupInput = 2;
             }
 
-            if (Input.GetKeyDown(KeyCode.D) && goldenOn == false && inventory.characterItems[2].amount > 0) // for golden
+            if (Input.GetKeyDown(KeyCode.F) && goldenOn == false && inventory.characterItems[2].amount > 0) // for golden
             {
                 powerupInput = 3;
             }
 
-            if (Input.GetKeyDown(KeyCode.F) && inventory.characterItems[3].amount > 0) // for toolkit
+            if (Input.GetKeyDown(KeyCode.A) && inventory.characterItems[3].amount > 0) // for toolkit
             {
                 powerupInput = 4;
             }

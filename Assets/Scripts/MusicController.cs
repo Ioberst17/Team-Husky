@@ -89,11 +89,11 @@ public class MusicController : MonoBehaviour
     }
     public void JumpFunction()
     {
-        FXSource.PlayOneShot(JumpClip);
+        FXSource.PlayOneShot(JumpClip, 2f);
     }
     public void SpeedBoostFunction()
     {
-        FXSource.PlayOneShot(SpeedBoostClip);
+        FXSource.PlayOneShot(SpeedBoostClip, 2f);
     }
     public void ReadySetGoFunction()
     {
@@ -112,20 +112,20 @@ public class MusicController : MonoBehaviour
     
         public void PetTheDogPanting()
     {
-        FXSource.PlayOneShot(PetTheDogPantingClip, 0.7F);
+        FXSource.PlayOneShot(PetTheDogPantingClip, 1.7F);
     }
 
     public void Toolkit()
     {
-        FXSource.PlayOneShot(ToolKitClip, 0.7F);
+        FXSource.PlayOneShot(ToolKitClip, 3.7F);
     }
     public void GoldenSkates()
     {
-        FXSource.PlayOneShot(GoldenSkatesClip, 0.7F);
+        FXSource.PlayOneShot(GoldenSkatesClip, 5.7F);
     }
     public void PowerupPickup()
     {
-        FXSource.PlayOneShot(PowerupClip, 0.7F);
+        FXSource.PlayOneShot(PowerupClip, 3.7F);
         //Debug.Log("got powerup sound played");
     }
 }
