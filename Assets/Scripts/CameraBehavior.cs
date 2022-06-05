@@ -54,7 +54,7 @@ public class CameraBehavior : MonoBehaviour
             }
         }
 
-        Debug.Log(leadtimer);
+        //Debug.Log(leadtimer);
         transform.position = new Vector3(transform.position.x, player.position.y + (leadtimer / 2.5f), -5);
         previousPositionY = player.position.y;
 

@@ -55,19 +55,19 @@ public class MusicController : MonoBehaviour
     }
     public void snowDamage()
     {
-        FXSource.PlayOneShot(SnowDamageClip, 0.33f);
+        FXSource.PlayOneShot(SnowDamageClip, 15.33f);
     }
     public void rockDamage()
     {
-        FXSource.PlayOneShot(RockDamageClip, 0.33f);
+        FXSource.PlayOneShot(RockDamageClip, 8.33f);
     }
     public void hazardDamage()
     {
-        FXSource.PlayOneShot(HazardDamageClip, 0.33f);
+        //FXSource.PlayOneShot(HazardDamageClip, 10.33f);
     }
     public void iceDamage()
     {
-        FXSource.PlayOneShot(IceDamageClip, 0.33f);
+        FXSource.PlayOneShot(IceDamageClip, 10.33f);
     }
     public void levelEnd()
     {

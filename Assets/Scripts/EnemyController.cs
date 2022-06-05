@@ -5,11 +5,8 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     private SpriteRenderer obstacleSpriteRenderer;
-    private BoxCollider2D obstacleBoxCollider; // used if obstacle has box collider
-    private CircleCollider2D obstacleCircleCollider; // used if obstacle has box collider
-    private PolygonCollider2D obstaclePolygonCollider; // used if obstacle has box collider
     private PlayerController playerController;
-    private MusicController MusicController;
+    [SerializeField] private MusicController MusicController;
     // used to trigger particle effects on player
     private ParticleSystem invincibilityObstacleParticles;
     private ParticleSystem snowPileParticles;
@@ -36,6 +33,7 @@ public class EnemyController : MonoBehaviour
         obstacleSpriteRenderer = gameObject.GetComponent<SpriteRenderer>();
 
         playerController = GameObject.Find("PlayerModel").GetComponent<PlayerController>(); // need for collisions
+        
 
         invincibilityObstacleParticles = GameObject.Find("InvincibilityObstacleParticles").GetComponent<ParticleSystem>(); // need for particle effects
         snowPileParticles = GameObject.Find("SnowPileParticles").GetComponent<ParticleSystem>(); // need for particle effects
@@ -50,12 +48,7 @@ public class EnemyController : MonoBehaviour
         if (CompareTag("RoughTerrain")) { obstacleID = 4; }
         if (CompareTag("BoulderFall")) { obstacleID = 5; }
 
-        // get the right collider component depending on the obstacle
-        //if (gameObject.GetComponent<BoxCollider2D>() != null) { obstacleBoxCollider = gameObject.GetComponent<BoxCollider2D>(); }
-        //if (gameObject.GetComponent<CircleCollider2D>() != null) { obstacleCircleCollider = gameObject.GetComponent<CircleCollider2D>(); }
-        //if (gameObject.GetComponent<PolygonCollider2D>() != null) { obstaclePolygonCollider = gameObject.GetComponent<PolygonCollider2D>(); }
-
-        //obstacleBreakSound = gameObject.GetComponent<AudioSource>(); // need to add a AudioSource component + audio clip in inspector
+       
     }
 
     private void OnDisable()
@@ -108,9 +101,10 @@ public class EnemyController : MonoBehaviour
         {
             if (isHazard)
             {
-                if (!playerController.goldenOn)
+                if (!playerController.goldenOn || !playerController.invincibilityOn)
                 {
                     playerController.takeDamage(damageValue, 1);
+                    MusicController.hazardDamage();
                 }
                 
 
@@ -137,30 +131,23 @@ public class EnemyController : MonoBehaviour
                 var snowPart = snowPileParticles.main;
                 snowPart.startSpeed = playerController.rb.velocity.magnitude;
                 snowPileParticles.Play();
+                MusicController.snowDamage();
                 break;
             case 2:
                 var bolPart = boulderParticles.main;
                 bolPart.startSpeed = playerController.rb.velocity.magnitude;
                 snowPileParticles.Play();
                 boulderParticles.Play();
+                MusicController.rockDamage();
                 break;
             case 3:
                 invincPart = invincibilityObstacleParticles.main; //note you need to instantiate particle systems modules to access underlying variables in code
                 invincPart.startSpeed = playerController.rb.velocity.magnitude; // set particle system launch speed to velocity mag of player
                 invincibilityObstacleParticles.Play();
+                MusicController.iceDamage();
                 break;
         }
         obstacleID = temp;
-        //disable the right box collider (if it's there) - need to disable box collider to prevent double collisions
-        //if (obstacleBoxCollider != null) { obstacleBoxCollider.enabled = false; }
-        //if (obstacleCircleCollider != null) { obstacleCircleCollider.enabled = false; }
-        //if (obstaclePolygonCollider != null) { obstaclePolygonCollider.enabled = false; }
-
-        //yield return new WaitForSeconds(3F);
-        //if (obstacleBoxCollider != null) { obstacleBoxCollider.enabled = true; }
-        //if (obstacleCircleCollider != null) { obstacleCircleCollider.enabled = true; }
-        //if (obstaclePolygonCollider != null) { obstaclePolygonCollider.enabled = true; }
-        //gameObject.SetActive(false); // remove the obstacle
         yield return null;
     }
 

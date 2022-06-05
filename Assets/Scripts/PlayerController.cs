@@ -183,7 +183,7 @@ public class PlayerController : MonoBehaviour
     //update is largely focused on user input
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape) && gameState != "Starting")
         {
             Debug.Log("esc");
             pauseHandler();
