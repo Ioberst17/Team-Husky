@@ -280,7 +280,7 @@ public class PlayerController : MonoBehaviour
                                                             Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
                                                             (Stopwatch.GetMilliseconds() * 100.00f) % 100.00f);
                 // check rank and update UI
-                UIController.endOfLevelPlayerLevel.text = gameManager.gameData.playerEXP.ToString();
+                //UIController.endOfLevelPlayerLevel.text = gameManager.gameData.playerEXP.ToString();
                 EndOfLevelResultsChecker();
 
                 hasUpdatedRecords = true;
@@ -591,10 +591,35 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private string GetLevelName()
+    {
+        string levelName = "";
+        int levelNum = gameManager.LevelNumberChecker();
+        switch (levelNum)
+        {
+            case 1:
+                levelName = "Leaving Town";
+                break;
+            case 2:
+                levelName = "Ice Caverns";
+                break;
+            case 3:
+                levelName = "Avalanche!";
+                break;
+            default:
+                levelName = "The Unknown";
+                break;
+
+        }
+        return levelName;
+    }
+
     private void readySetGo()
     {
         if (readySetGoTimer <= 180)
         {
+            UIController.levelNameHeaderText.text = "Level " + gameManager.LevelNumberChecker().ToString();
+            UIController.levelNameText.text = GetLevelName();
             if (readySetGoTimer == 0)
             {
                 MusicController.ReadySetGoFunction();
@@ -612,7 +637,9 @@ public class PlayerController : MonoBehaviour
             }
             else if (readySetGoTimer == 180)
             {
+                UIController.levelNameHeaderText.text = "";
                 UIController.readySetGoText.text = "";
+                UIController.levelNameText.text = "";
             }
             readySetGoTimer += 1;
         }

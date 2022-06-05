@@ -9,6 +9,7 @@ public class MusicController : MonoBehaviour
     public float introDelayTime;
     public AudioSource MusicSource;
     public AudioSource MusicSource2;
+    public AudioSource InvincibilityThemeForLevel;
     public AudioSource FXSource;
     public AudioSource PetTheDogSource;
     public AudioClip MainMenuThemeClip;
