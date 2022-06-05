@@ -16,6 +16,7 @@ public class UIController : MonoBehaviour
     public Text timerText;
     public Text levelNameHeaderText;
     public Text levelNameText;
+    public int levelNameTextCount;
     public Text readySetGoText;
     public Stopwatch Stopwatch;
     public PlayerController PlayerController; // assigned in inspector
@@ -70,6 +71,7 @@ public class UIController : MonoBehaviour
 
     public void Start()
     {
+        levelNameTextCount = 0;
         gameManager = GameManager.Instance;
         levelSystem = PlayerController.gameObject.GetComponent<LevelSystem>();
         if(GameObject.Find("UI Canvas")) // if it is a playable level, i.e. has UI Canvas
@@ -193,6 +195,12 @@ public class UIController : MonoBehaviour
 
     public void Update()
     {
+        if(levelNameTextCount < 510)
+        {
+            levelNameTextCount += 1;
+            levelNameText.color = new Color(255, 255, 255, 255 - levelNameTextCount/2);
+            levelNameHeaderText.color = new Color(255, 255, 255, 255 - levelNameTextCount/2);
+        }
         // manages invincibility UI icon rotation on use
         if (PlayerController.invincibilityOn)
         {

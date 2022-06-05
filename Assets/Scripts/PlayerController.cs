@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int landingLag;
     [SerializeField] private float maxSpeedMult;
     float jumpsRemaining;
-    float moveVelocity = 0;
+    public float moveVelocity = 0;
     public ParticleSystem movementDustParticles;
 
     //getting references for different parts of the player entity
@@ -52,6 +52,7 @@ public class PlayerController : MonoBehaviour
 
     //Holds the state of the game from among: running, paused
     public string gameState;
+    public int ControlLockout;
     private bool pauseHelper;
     public bool hasUpdatedRecords = false; // used to call update end of level records only once (set positive to stop continuous update)
 
@@ -117,18 +118,18 @@ public class PlayerController : MonoBehaviour
     Animator toolkitUIButtonAnimation;
 
     //ReadySetGoParticles, assigned in inspector
-    public ParticleSystem readySetGoParticle1A; 
+    public ParticleSystem readySetGoParticle1A;
     public ParticleSystem readySetGoParticle2A;
     public ParticleSystem readySetGoParticle3A;
     public ParticleSystem readySetGoParticle4A;
-    public ParticleSystem readySetGoParticle1B; 
+    public ParticleSystem readySetGoParticle1B;
     public ParticleSystem readySetGoParticle2B;
     public ParticleSystem readySetGoParticle3B;
     public ParticleSystem readySetGoParticle4B;
     public bool readySetGoParticleFadeOut = false;
 
     //Obstacle break particles, assigned in inspector
-    public ParticleSystem snowPileParticles; 
+    public ParticleSystem snowPileParticles;
     public ParticleSystem boulderParticles;
 
     //Event reporting system
@@ -151,6 +152,7 @@ public class PlayerController : MonoBehaviour
         gameManager = GameManager.Instance;
         HPSliderMax = startingHP;
         HealthPoints = startingHP;
+        ControlLockout = 0;
 
         readySetGoParticle1B.Stop();
         readySetGoParticle2B.Stop();
@@ -160,6 +162,7 @@ public class PlayerController : MonoBehaviour
 
         playerState = "Start";
         gameState = "Starting";
+        //SceneDataLoader();
         levelComplete = false;
         if (previousPosition == null)
         {
@@ -174,9 +177,7 @@ public class PlayerController : MonoBehaviour
         readySetGoTimer = 0;
         powerupInput = 0; ;
         readySetGo();
-#if !UNITY_EDITOR
-        Invoke("SceneDataLoader", .01F);
-#endif
+
     }
 
     //update is largely focused on user input
@@ -197,25 +198,25 @@ public class PlayerController : MonoBehaviour
         if (gameState != "Paused" && !levelComplete && gameState != "Starting")
         {
             //Jumping
-            if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.UpArrow) || Input.GetKeyUp(KeyCode.Z) || Input.GetKeyUp(KeyCode.W))
+            if (Input.GetKeyUp(KeyCode.Space) || Input.GetKeyUp(KeyCode.UpArrow))
             {
                 jumpInput = false;
 
             }
-            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.Z) || Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.UpArrow))
             {
                 jumpInput = true;
             }
-            
+
             //Left Right acceleration 
-            if ((Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A)))
+            if ((Input.GetKey(KeyCode.LeftArrow)))
             {
-                
+
                 accelerationInput = -1;
             }
-            else if ((Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D)))
+            else if ((Input.GetKey(KeyCode.RightArrow)))
             {
-                
+
                 accelerationInput = 1;
             }
             else
@@ -231,28 +232,28 @@ public class PlayerController : MonoBehaviour
 
             // Powerup-related
 
-            if (Input.GetKeyDown(KeyCode.R) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
+            if (Input.GetKeyDown(KeyCode.A) && canMush == true && inventory.characterItems[0].amount > 0) // for mushing
             {
                 powerupInput = 1;
             }
 
-            if (Input.GetKeyDown(KeyCode.T) && invincibilityOn == false && inventory.characterItems[1].amount > 0) // for invincibility
+            if (Input.GetKeyDown(KeyCode.S) && invincibilityOn == false && inventory.characterItems[1].amount > 0) // for invincibility
             {
                 powerupInput = 2;
             }
 
-            if (Input.GetKeyDown(KeyCode.Y) && goldenOn == false && inventory.characterItems[2].amount > 0) // for golden
-            { 
+            if (Input.GetKeyDown(KeyCode.D) && goldenOn == false && inventory.characterItems[2].amount > 0) // for golden
+            {
                 powerupInput = 3;
             }
 
-            if (Input.GetKeyDown(KeyCode.E) && inventory.characterItems[3].amount > 0) // for toolkit
+            if (Input.GetKeyDown(KeyCode.F) && inventory.characterItems[3].amount > 0) // for toolkit
             {
                 powerupInput = 4;
             }
         }
 
-        if(rb.velocity.x > 1) // turn off player highlighter particles if not ready, set, go
+        if (rb.velocity.x > 1) // turn off player highlighter particles if not ready, set, go
         {
             ReadySetGoParticleFade();
         }
@@ -278,12 +279,11 @@ public class PlayerController : MonoBehaviour
                                                             Stopwatch.GetMinutes(),
                                                             Stopwatch.GetSeconds() - 60 * Stopwatch.GetMinutes(),
                                                             (Stopwatch.GetMilliseconds() * 100.00f) % 100.00f);
-                hasUpdatedRecords = true;
-
                 // check rank and update UI
+                UIController.endOfLevelPlayerLevel.text = gameManager.gameData.playerEXP.ToString();
                 EndOfLevelResultsChecker();
 
-                
+                hasUpdatedRecords = true;
             }
 
         }
@@ -292,11 +292,14 @@ public class PlayerController : MonoBehaviour
     //Fixed update is where all physics happens
     void FixedUpdate()
     {
-
+        if (ControlLockout > 0)
+        {
+            ControlLockout -= 1;
+        }
         //jumpInput = true;
         readySetGo();
         isGrounded();
-        if (canMush)
+        if (canMush && ControlLockout == 0)
         {
             //Controlls the base and maximum speed if not using a powerup
             if (moveVelocity < 0)
@@ -309,12 +312,12 @@ public class PlayerController : MonoBehaviour
             }
             Accelerate(accelerationInput);
         }
-        
+
         Jump(jumpInput);
         UsePowerup();
 
         //control the rotation of the player    
-        if(rb.rotation > 55)
+        if (rb.rotation > 55)
         {
             rb.rotation = 55;
         }
@@ -368,7 +371,7 @@ public class PlayerController : MonoBehaviour
                 moveVelocity = moveVelocity + speedMod;
             }
             //handles the animation states
-            if(landingTimer == 0 && invincibilityTimer == 0)
+            if (landingTimer == 0 && invincibilityTimer == 0)
             {
                 if (moveVelocity < 1)
                 {
@@ -381,14 +384,14 @@ public class PlayerController : MonoBehaviour
                 }
             }
             rb.AddForce(Vector2.down * 50);
-            
+
         }
         else
         {
             //Air control is reduced
             if (accelInput == -1 && moveVelocity > 0)
             {
-                moveVelocity = moveVelocity - speedMod/airControlMod;
+                moveVelocity = moveVelocity - speedMod / airControlMod;
                 if (moveVelocity < 0)
                 {
                     moveVelocity = 0;
@@ -396,7 +399,7 @@ public class PlayerController : MonoBehaviour
             }
             if (accelInput == 1 && moveVelocity < speed * maxSpeedMult)
             {
-                moveVelocity = moveVelocity + speedMod/airControlMod;
+                moveVelocity = moveVelocity + speedMod / airControlMod;
             }
         }
 
@@ -415,20 +418,20 @@ public class PlayerController : MonoBehaviour
             speedometer = Vector2.Distance(v1, v2);
             previousPosition = currentPosition;
             count = 0;
-            if(speedometer <= 0.5f && !grounded)
-            {
-                stuckCount += 2;
-            }
-            else if (stuckCount > 0)
-            {
-                stuckCount -= 1;
-            }
-            if(stuckCount >= 1)
-            {
-                //stuckCount = 0;
-                rb.velocity = new Vector2(-4, -4);
-                moveVelocity = 0;
-            }
+            //if(speedometer <= 0.5f && !grounded)
+            //{
+            //    stuckCount += 2;
+            //}
+            //else if (stuckCount > 0)
+            //{
+            //    stuckCount -= 1;
+            //}
+            //if(stuckCount >= 1)
+            //{
+            //    //stuckCount = 0;
+            //    rb.velocity = new Vector2(-4, -4);
+            //    moveVelocity = 0;
+            //}
         }
         else
         {
@@ -484,16 +487,16 @@ public class PlayerController : MonoBehaviour
         {
             rb.freezeRotation = false;
         }
-        if (grounded && jumpTimer == 0) 
+        if (grounded && jumpTimer == 0)
         {
             jumpsRemaining = jumpNumber;
             playerState = "grounded";
-            
+
             if (landingTimer > 0)
             {
                 landingTimer -= 1;
             }
-            
+
             if (isLanding)
             {
                 landingTimer = landingLag;
@@ -534,13 +537,15 @@ public class PlayerController : MonoBehaviour
                 CreateMovementDust();
                 rb.AddForce(Vector2.up * jumpPower);
                 rb.AddTorque(400);
-                if (!grounded && rb.rotation < 10)
-                {
-                    rb.rotation += 15;
-                }
                 jumpsRemaining -= 1;
                 jumpTimer = 15;
                 jumpInput = false;
+                if (!grounded && rb.rotation < 10)
+                {
+                    rb.rotation += 15;
+                    jumpsRemaining -= 1;
+                }
+
             }
         }
         if (jumpTimer > 0)
@@ -565,6 +570,7 @@ public class PlayerController : MonoBehaviour
             gameState = "paused";
             MusicController.MusicSource.Pause();
             MusicController.MusicSource2.Pause();
+            MusicController.FXSource.Pause();
 
         }
         else
@@ -580,39 +586,15 @@ public class PlayerController : MonoBehaviour
             }
             MusicController.MusicSource.UnPause();
             MusicController.MusicSource2.UnPause();
+            MusicController.FXSource.UnPause();
         }
 
-    }
-    
-    private string GetLevelName()
-    {
-        string levelName = "";
-        int levelNum = gameManager.LevelNumberChecker();
-        switch (levelNum)
-        {
-            case 1:
-                levelName = "Leaving Town";
-                break;
-            case 2:
-                levelName = "Ice Caverns";
-                break;
-            case 3:
-                levelName = "Avalanche!";
-                break;
-            default:
-                levelName = "The Unknown";
-                break;
-
-        }
-        return levelName;
     }
 
     private void readySetGo()
     {
         if (readySetGoTimer <= 180)
         {
-            UIController.levelNameHeaderText.text = "Level " + gameManager.LevelNumberChecker().ToString();
-            UIController.levelNameText.text = GetLevelName();
             if (readySetGoTimer == 0)
             {
                 MusicController.ReadySetGoFunction();
@@ -630,14 +612,12 @@ public class PlayerController : MonoBehaviour
             }
             else if (readySetGoTimer == 180)
             {
-                UIController.levelNameHeaderText.text = "";
                 UIController.readySetGoText.text = "";
-                UIController.levelNameText.text = "";
             }
             readySetGoTimer += 1;
         }
     }
-    
+
     //processes if the player should take damage, and if so, how much, then calculates for death. damageType Numbers: 0 is one hit damage, 1 is damage over time.
     public void takeDamage(int damageNumber, int damageType)
     {
@@ -652,7 +632,7 @@ public class PlayerController : MonoBehaviour
                         Death();
                         break;
                     }
-                    MusicController.DamageFunction();
+                    //MusicController.DamageFunction();
                     invincibilityTimer = invincibilityValue;
                     if (grounded)
                     {
@@ -664,7 +644,7 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 case 1:
-                    if(speedometer >= 1)
+                    if (speedometer >= 1)
                     {
                         HealthPoints -= damageNumber;
                         if (HealthPoints <= 0)
@@ -672,7 +652,7 @@ public class PlayerController : MonoBehaviour
                             Death();
                             break;
                         }
-                        MusicController.DamageFunction();
+                        //MusicController.DamageFunction();
                         invincibilityTimer = invincibilityValue / 2;
                         if (grounded)
                         {
@@ -686,12 +666,12 @@ public class PlayerController : MonoBehaviour
                     break;
             }
         }
-    UIController.updateHealth();
+        UIController.updateHealth();
     }
-    
+
     public void ReadySetGoParticleFade() // controls the fade of the ReadySetGo Particles after the player starts moving
     {
-        if(readySetGoParticleFadeOut == false)
+        if (readySetGoParticleFadeOut == false)
         {
             readySetGoParticle1A.gameObject.SetActive(false);
             readySetGoParticle2A.gameObject.SetActive(false);
@@ -798,7 +778,7 @@ public class PlayerController : MonoBehaviour
         invincibilityOn = false;
         invincibilityUse.Stop();
         yield return null;
-    } 
+    }
 
     IEnumerator GoldenRoutine()
     {
@@ -818,7 +798,7 @@ public class PlayerController : MonoBehaviour
 
     public void SceneDataLoader()
     {
-        if (gameManager.sceneHistory[gameManager.sceneHistory.Count - 1] == 1 || gameManager.sceneHistory[gameManager.sceneHistory.Count - 1] == 2) //if the previous screen was the 1st or 2nd level
+        if (gameManager.sceneHistory[gameManager.sceneHistory.Count - 1] == 0) //if the previous screen was the main menu
         {
             // do nothing except open up with default level values
         }
@@ -838,7 +818,7 @@ public class PlayerController : MonoBehaviour
     public void EndOfLevelResultsChecker()
     {
         // update game and session data based on level results
-        //Debug.Log(ranker.levelRanking["Diamond"].levelTime);
+        Debug.Log(ranker.levelRanking["Diamond"].levelTime);
         if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) // if the time for the level is less than the rank for Diamond
         {
             // add health to player inventory, but make sure it's not above 100
@@ -881,9 +861,9 @@ public class PlayerController : MonoBehaviour
         // update health and inventory ui
         UpdateHealthAndInventoryUI();
         UIController.EndOfLevelUIUpdates();
-        
+
     }
-    
+
 
     public void UpdateHealthAndInventoryUI()
     {
@@ -903,7 +883,7 @@ public class PlayerController : MonoBehaviour
             inventory.characterItems[1].amount,
             inventory.characterItems[2].amount,
             inventory.characterItems[3].amount);
-            }
+    }
 
     public void UpdatePlayerRankHistory()
     {
@@ -912,7 +892,7 @@ public class PlayerController : MonoBehaviour
         switch (levelNum)
         {
             case 1:
-                if(Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) { gameManager.gameData.level1DiamondRanks++; }
+                if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Diamond"].levelTime) { gameManager.gameData.level1DiamondRanks++; }
                 else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Gold"].levelTime) { gameManager.gameData.level1GoldRanks++; }
                 else if (Stopwatch.GetRawElapsedTime() <= ranker.levelRanking["Silver"].levelTime) { gameManager.gameData.level1SilverRanks++; }
                 else { gameManager.gameData.level1BronzeRanks++; }

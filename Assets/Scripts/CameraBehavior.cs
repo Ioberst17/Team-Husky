@@ -33,29 +33,29 @@ public class CameraBehavior : MonoBehaviour
 
         if (player.position.y > previousPositionY)
         {
-            if(leadtimer < 20)
+            if(leadtimer < 5)
             {
                 leadtimer += player.position.y - previousPositionY;
-                if (leadtimer > 20)
+                if (leadtimer > 5)
                 {
-                    leadtimer = 20;
+                    leadtimer = 5;
                 }
             }
         }
         if (player.position.y < previousPositionY)
         {
-            if (leadtimer > -20)
+            if (leadtimer > -5)
             {
                 leadtimer += player.position.y - previousPositionY;
-                if (leadtimer < -20)
+                if (leadtimer < -5)
                 {
-                    leadtimer = -20;
+                    leadtimer = -5;
                 }
             }
         }
 
         Debug.Log(leadtimer);
-        transform.position = new Vector3(transform.position.x, player.position.y + (leadtimer / 10), -5);
+        transform.position = new Vector3(transform.position.x, player.position.y + (leadtimer / 2.5f), -5);
         previousPositionY = player.position.y;
 
 

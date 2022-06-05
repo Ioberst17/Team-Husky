@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class MusicController : MonoBehaviour
 {
     //public AudioSource AudioSource;
+    public float introDelayTime;
     public AudioSource MusicSource;
     public AudioSource MusicSource2;
     public AudioSource FXSource;
@@ -29,34 +30,44 @@ public class MusicController : MonoBehaviour
     public AudioClip MainMenuToPlayGameDogBarkClip; //Pet the Dog (PTD) Sound - also used for Main Menu to Start
     public AudioClip PetTheDogPantingClip; // PTD Sound
 
-    private void Start()
-    {
-        if(SceneManager.GetActiveScene().buildIndex == 0 || SceneManager.GetActiveScene().buildIndex == 1) // if it's the main menu or first cut scene
-        {
-            levelStart();
-        }
+    [SerializeField] private AudioClip SnowDamageClip;
+    [SerializeField] private AudioClip RockDamageClip;
+    [SerializeField] private AudioClip HazardDamageClip;
+    [SerializeField] private AudioClip IceDamageClip;
 
-    }
 
     public void levelStart()
+    {
+
+    }
+    public void Start()
     {
         //this will need to be updated once we have more complex levels
         MusicSource.clip = LevelThemeIntro;
         MusicSource2.clip = LevelThemeLoop;
         MusicSource.Play();
-        if(SceneManager.GetActiveScene().buildIndex == 2) // level 1 has a slightly shorter / less tolerant uptake before it's level theme plays
-        {
-            MusicSource2.PlayDelayed(LevelThemeIntro.length-.2F);
-        }
-        else
-        {
-            MusicSource2.PlayDelayed(LevelThemeIntro.length - 0.25f);
-        }
+        MusicSource2.PlayDelayed(LevelThemeIntro.length-introDelayTime);
         MusicSource2.loop = true;
     }
     public void powerup()
     {
 
+    }
+    public void snowDamage()
+    {
+        FXSource.PlayOneShot(SnowDamageClip, 0.33f);
+    }
+    public void rockDamage()
+    {
+        FXSource.PlayOneShot(RockDamageClip, 0.33f);
+    }
+    public void hazardDamage()
+    {
+        FXSource.PlayOneShot(HazardDamageClip, 0.33f);
+    }
+    public void iceDamage()
+    {
+        FXSource.PlayOneShot(IceDamageClip, 0.33f);
     }
     public void levelEnd()
     {
