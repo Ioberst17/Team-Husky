@@ -138,6 +138,15 @@ public class GameManager : MonoBehaviour
         int levelNum = SceneManager.GetActiveScene().buildIndex / 2; // works because of build index structure where level number is 1/2 of build index
         return levelNum;
     }
+
+    public bool IsItAPlayableLevel()
+    {
+        int levelNum = LevelNumberChecker();
+        if (levelNum == 1 || levelNum == 2 || levelNum == 3) { return true; }
+        else return false;
+        ;
+    }
+
     public bool HighScoreChecker(GameData gameData, SessionData seshData, int levelNum, float time) // returns a true if level high score is achieved
     {
         // Check for New High Score

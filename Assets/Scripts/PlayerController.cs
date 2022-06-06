@@ -570,6 +570,7 @@ public class PlayerController : MonoBehaviour
             gameState = "paused";
             MusicController.MusicSource.Pause();
             MusicController.MusicSource2.Pause();
+            MusicController.InvincibleMusicSource.Pause();
             MusicController.FXSource.Pause();
 
         }
@@ -586,6 +587,7 @@ public class PlayerController : MonoBehaviour
             }
             MusicController.MusicSource.UnPause();
             MusicController.MusicSource2.UnPause();
+            MusicController.InvincibleMusicSource.UnPause();
             MusicController.FXSource.UnPause();
         }
 
@@ -757,6 +759,7 @@ public class PlayerController : MonoBehaviour
             case 2: //invincibility
                 invincibilityOn = true;
                 invincibilityUse.Play();
+                MusicController.InvincibileThemeOn();
                 StartCoroutine(InvincibilityRoutine());
                 invincibilityCounter = 0;
                 inventory.RemoveItem(1);
@@ -799,8 +802,10 @@ public class PlayerController : MonoBehaviour
             yield return new WaitWhile(() => gameState == "paused");
 
             invincibilityCounter += Time.deltaTime;
+            if (levelComplete) { MusicController.InvincibileThemeOff(); } // case of turn off if the level has completed
             yield return null;
         }
+        MusicController.InvincibileThemeOff();
         invincibilityCounter = 0; // needed here to confirm counter reset
         invincibilityOn = false;
         invincibilityUse.Stop();

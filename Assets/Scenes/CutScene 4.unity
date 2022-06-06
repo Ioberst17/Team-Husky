@@ -1022,13 +1022,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ae4ab89a1eff21419a67021f01399c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 0}
+  introDelayTime: 0
   MusicSource: {fileID: 1066218816}
   MusicSource2: {fileID: 1066218815}
+  InvincibleMusicSource: {fileID: 0}
   FXSource: {fileID: 1066218814}
   PetTheDogSource: {fileID: 1066218814}
   MainMenuThemeClip: {fileID: 0}
   LevelThemeIntro: {fileID: 8300000, guid: db88706219d57b74a8197116b71bb973, type: 3}
   LevelThemeLoop: {fileID: 8300000, guid: db88706219d57b74a8197116b71bb973, type: 3}
+  LevelThemeInvincibility: {fileID: 0}
   PowerupTheme: {fileID: 8300000, guid: 26cf3ef841ce04144b8eb2f3264e8aa0, type: 3}
   EndLevelThemeIntro: {fileID: 8300000, guid: 862eb863a58110043a1a3712ca0e6632, type: 3}
   EndLevelThemeLoop: {fileID: 8300000, guid: b33c248e2ce6a544a9b25e20fa4265c9, type: 3}
@@ -1046,6 +1050,10 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 38d8b498a42fb2c4fa0bd6985b0acc99, type: 3}
   MainMenuToPlayGameDogBarkClip: {fileID: 8300000, guid: d2946c395ce3362458f7e62b0b4e5bec, type: 3}
   PetTheDogPantingClip: {fileID: 8300000, guid: 38d8b498a42fb2c4fa0bd6985b0acc99, type: 3}
+  SnowDamageClip: {fileID: 0}
+  RockDamageClip: {fileID: 0}
+  HazardDamageClip: {fileID: 0}
+  IceDamageClip: {fileID: 0}
 --- !u!4 &1066218818
 Transform:
   m_ObjectHideFlags: 0
@@ -1297,7 +1305,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 926, y: 364}
+  m_AnchoredPosition: {x: 647, y: 360}
   m_SizeDelta: {x: 835.60004, y: 326}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1545429565
